@@ -9,6 +9,11 @@ import store from "../store";
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) => ({});
 
+import AuthRedirect from "./AuthRedirect";
+import UnauthRedirect from "./UnauthRedirect";
+import Payment from "./Payment";
+import Login from "./Login";
+
 function Home() {
   return <h2>Home</h2>;
 }
@@ -41,10 +46,22 @@ class App extends Component {
               <li>
                 <Link to="/users">Users</Link>
               </li>
+              <li>
+                <Link to="/payment">Access</Link>
+              </li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
             </ul>
           </nav>
 
           <Switch>
+            <Route path="/login">
+              <AuthRedirect component={Login} />
+            </Route>
+            <Route path="/payment">
+              <Payment />
+            </Route>
             <Route path="/about">
               <About />
             </Route>

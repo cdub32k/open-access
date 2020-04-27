@@ -1,9 +1,19 @@
 import DB from "../database";
 
-Promise.all([
-  DB.UserModel.create({
-    username: "member",
-    email: "member@mail.com",
-    passwordHash: "jkfd489tu894phpfc78v",
-  }),
-]).then(DB.disconnect);
+(async () => {
+  await DB.User.deleteMany({});
+  Promise.all([
+    DB.User.create({
+      username: "first_member",
+      email: "member@mail.com",
+      passwordHash:
+        "$2a$08$zQYLLxdHQdvhQKrC8drmIue.OzyopZwZd8x.KulGqWqj8ma1IaZPq",
+    }),
+    DB.User.create({
+      username: "member2",
+      email: "member2@mail.com",
+      passwordHash:
+        "$2a$08$zQYLLxdHQdvhQKrC8drmIue.OzyopZwZd8x.KulGqWqj8ma1IaZPq",
+    }),
+  ]).then(DB.disconnect);
+})();

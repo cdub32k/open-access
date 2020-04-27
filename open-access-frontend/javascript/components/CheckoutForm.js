@@ -1,10 +1,27 @@
 import React from "react";
+import { connect } from "react-redux";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
 
 import CardSection from "./CardSection";
 
-function CheckoutForm() {
+function stripePaymentMethodHandler(result, email) {
+  if (result.error) {
+    // show error in payment form
+  } else {
+    axios
+      .post("payment/create-customer", {
+        payment_method: result.paymentMethod.id,
+        email,
+      })
+      .then((res) => {
+        // customer has been created
+        console.log(res.data);
+      });
+  }
+}
+
+const CheckoutForm = (props) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -15,23 +32,15 @@ function CheckoutForm() {
       return;
     }
 
-    const result = await axios("/payment/initiate").then(async (res) => {
-      const result = await stripe.confirmCardPayment(res.data.client_secret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      });
-      return result;
+    const result = await stripe.createPaymentMethod({
+      type: "card",
+      card: elements.getElement(CardElement),
+      billing_details: {
+        email: "member@mail.com",
+      },
     });
 
-    if (result.error) {
-      //TODO: report error to customer
-      console.error(result.error.message);
-    } else {
-      if (result.paymentIntent.status == "succeeded") {
-        console.log("payment succeeded");
-      }
-    }
+    stripePaymentMethodHandler(result, props.email);
   };
 
   return (
@@ -42,6 +51,10 @@ function CheckoutForm() {
       </form>
     </div>
   );
-}
+};
 
-export default CheckoutForm;
+const mapStateToProps = (state) => ({
+  email: state.user.email,
+});
+
+export default connect(mapStateToProps)(CheckoutForm);

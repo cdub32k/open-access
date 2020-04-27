@@ -1,12 +1,7 @@
-const initialState = {
-  greeting: 'Hello, world!'
-};
+import { combineReducers } from "redux";
 
-const root = (state = initialState, action) => {
-  switch (action.type) {
-    default:
-      return { ...state }
-  }
-}
+import userReducer from "./user";
 
-export default root;
+export default combineReducers({
+  user: userReducer,
+});

@@ -26,7 +26,14 @@ class Database {
   }
 
   disconnect() {
-    mongoose.disconnect();
+    mongoose
+      .disconnect()
+      .then(() => {
+        console.log("Database disconnected successfully");
+      })
+      .catch((err) => {
+        console.error("Error while disconnecting from database");
+      });
   }
 }
 

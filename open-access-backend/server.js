@@ -9,9 +9,8 @@ import cors from "cors";
 import compression from "compression";
 import jwt from "jsonwebtoken";
 
-const stripe = require("stripe")(process.env.STRIPE_SK);
-
 import authRouter from "./routes/auth";
+import paymentRouter from "./routes/payment";
 
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
@@ -23,17 +22,7 @@ app.use(bodyParser.json());
 
 app.use("/auth", authRouter);
 
-app.use("/payment/initiate", async (req, res) => {
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: 2500,
-    currency: "usd",
-    metadata: { integration_check: "accept_a_payment" },
-  });
-
-  res.send({
-    client_secret: paymentIntent.client_secret,
-  });
-});
+app.use("/payment", paymentRouter);
 
 const server = new ApolloServer({
   typeDefs,

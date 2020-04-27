@@ -73,6 +73,7 @@ module.exports = (env) => ({
     compress: true,
     port: 9000,
     hot: true,
+    historyApiFallback: true,
   },
   optimization: {
     splitChunks: {
