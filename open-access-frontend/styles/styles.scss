@@ -1,0 +1,51 @@
+//@import url('https://fonts.googleapis.com/css?family=Mitr:300,400,600&display=swap');
+
+@font-face {
+  font-family: "Mitr";
+  src: url(./Mitr-Regular.ttf) format("ttf");
+}
+
+:root {
+  --body-background-color: rgba(0, 0, 0, 0.05);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Mitr", sans-serif !important;
+  font-weight: 600;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--body-background-color);
+}
+
+//Stripe form styles:
+.StripeElement {
+  height: 40px;
+  padding: 10px 12px;
+  width: 100%;
+  color: #32325d;
+  background-color: white;
+  border: 1px solid transparent;
+  border-radius: 4px;
+
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
