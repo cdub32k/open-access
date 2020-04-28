@@ -7,6 +7,8 @@ let userSchema = new mongoose.Schema({
   },
   email: String,
   passwordHash: String,
+  stripeCustomerId: String,
+  stripePaymentMethodId: String,
 });
 
 export default mongoose.model("user", userSchema);

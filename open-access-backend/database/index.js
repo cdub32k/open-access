@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import User from "./models/User";
+import User from "./models/user";
+import Charge from "./models/charge";
+import Subscription from "./models/subcription";
 
 dotenv.config();
 
@@ -8,6 +10,8 @@ class Database {
   constructor() {
     this._connect();
     this.User = User;
+    this.Charge = Charge;
+    this.Subscription = Subscription;
   }
 
   _connect() {

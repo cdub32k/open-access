@@ -14,7 +14,7 @@ const userReducer = (state = initialState, action) => {
     case ActionTypes.CLEAR_ERRORS:
       return { ...state, error: null };
     case ActionTypes.LOGIN_SUCCESS:
-      const { token } = action.payload;
+      let { token } = action.payload;
       localStorage.setItem("open-access-api-token", token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       let decodedToken = jwt_decode(token);
@@ -28,6 +28,8 @@ const userReducer = (state = initialState, action) => {
       localStorage.removeItem("open-access-api-token");
       return { ...state, loggedIn: false, error: action.error };
     case ActionTypes.AUTO_LOGIN:
+      token = localStorage.getItem("open-access-api-token");
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       return {
         ...state,
         loggedIn: true,

@@ -6,13 +6,13 @@ const router = require("express").Router();
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-import User from "../database/models/User";
+const { User } = require("../database");
 
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
-    if (!user) throw new res.status(404).send({ error: "User not found." });
+    if (!user) return res.status(404).send({ error: "User not found." });
     const passwordIsValid = bcrypt.compareSync(password, user.passwordHash);
     if (!passwordIsValid)
       return res.status(401).send({ auth: false, token: null });

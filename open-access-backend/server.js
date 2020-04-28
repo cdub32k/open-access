@@ -20,9 +20,29 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const verifyTokenMiddleware = (req, res, next) => {
+  let token = req.headers["authorization"];
+  if (!token) {
+    req.authorized = false;
+    return next();
+  }
+
+  token = token.replace("Bearer ", "");
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err || !decoded.username) {
+      req.authorized = false;
+      return next();
+    }
+    req.authorized = true;
+    req.username = decoded.username;
+    req.email = decoded.email;
+    return next();
+  });
+};
+
 app.use("/auth", authRouter);
 
-app.use("/payment", paymentRouter);
+app.use("/payment", verifyTokenMiddleware, paymentRouter);
 
 const server = new ApolloServer({
   typeDefs,
