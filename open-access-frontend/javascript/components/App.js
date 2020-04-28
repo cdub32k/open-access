@@ -2,17 +2,26 @@ import React, { Component } from "react";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
+import * as jwt_decode from "jwt-decode";
+
 import { ThemeProvider } from "@material-ui/styles";
 import theme from "../muiTheme";
+
 import { Provider, connect } from "react-redux";
 import store from "../store";
+import { ActionCreators } from "../actions";
 const mapStateToProps = (state) => ({});
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  autoLogin: (token) => dispatch(ActionCreators.autoLogin(token)),
+});
 
 import AuthRedirect from "./AuthRedirect";
 import UnauthRedirect from "./UnauthRedirect";
 import Payment from "./Payment";
 import Login from "./Login";
+import Logout from "./Logout";
+import SignUp from "./SignUp";
+import SiteNav from "./SiteNav";
 
 function Home() {
   return <h2>Home</h2>;
@@ -31,33 +40,32 @@ class App extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    const token = localStorage.getItem("open-access-api-token");
+    if (token) {
+      let decodedToken = jwt_decode(token);
+      let d = new Date(0);
+      d.setUTCSeconds(decodedToken.exp);
+      if (new Date() < d) this.props.autoLogin(decodedToken);
+    }
+  }
+
   render() {
+    const { classes } = this.props;
     return (
       <Router>
         <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
-              <li>
-                <Link to="/users">Users</Link>
-              </li>
-              <li>
-                <Link to="/payment">Access</Link>
-              </li>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-            </ul>
-          </nav>
+          <SiteNav />
 
           <Switch>
             <Route path="/login">
               <AuthRedirect component={Login} />
+            </Route>
+            <Route path="/logout">
+              <Logout />
+            </Route>
+            <Route path="/sign-up">
+              <AuthRedirect component={SignUp} />
             </Route>
             <Route path="/payment">
               <Payment />

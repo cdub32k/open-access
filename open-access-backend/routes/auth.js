@@ -45,7 +45,11 @@ router.post("/sign-up", async (req, res) => {
 
     if (!user) res.status(500).send({ error: "Error while creating user." });
 
-    return res.status(200).send({ user });
+    const token = jwt.sign({ username, email }, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
+
+    return res.status(200).send({ auth: true, token });
   } catch (err) {
     return res.status(500).send({ error: "Something went wrong." });
   }

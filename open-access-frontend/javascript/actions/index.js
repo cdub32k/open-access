@@ -5,6 +5,9 @@ export const ActionTypes = {
   LOGIN_ERROR: "LOGIN_ERROR",
   AUTO_LOGIN: "AUTO_LOGIN",
   LOGOUT: "LOGOUT",
+  SIGN_UP_START: "SIGN_UP_START",
+  SIGN_UP_SUCCESS: "SIGN_UP_SUCCESS",
+  SIGN_UP_ERROR: "SIGN_UP_ERROR",
 };
 
 export const ActionCreators = {
@@ -25,5 +28,11 @@ export const ActionCreators = {
   },
   logout: () => {
     return { type: ActionTypes.LOGOUT };
+  },
+  signupStart: (userInfo) => {
+    return { type: ActionTypes.SIGN_UP_START, payload: { userInfo } };
+  },
+  signupError: (error) => {
+    return { type: ActionTypes.SIGN_UP_ERROR, error };
   },
 };

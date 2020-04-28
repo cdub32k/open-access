@@ -12,8 +12,6 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import AuthRedirect from "./AuthRedirect";
-
 const useStyles = makeStyles((theme) => ({
   container: {
     position: "relative",
@@ -115,7 +113,7 @@ const Login = ({ error, loginStart }) => {
 };
 
 const mapStateToProps = (state) => ({
-  error: state.error,
+  error: state.user.error,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -23,6 +23,10 @@ body {
   background: var(--body-background-color);
 }
 
+a {
+  text-decoration: none;
+}
+
 //Stripe form styles:
 .StripeElement {
   height: 40px;

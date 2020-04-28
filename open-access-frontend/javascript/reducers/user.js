@@ -35,8 +35,8 @@ const userReducer = (state = initialState, action) => {
         email: action.payload.token.email,
       };
     case ActionTypes.LOGOUT:
-      localStorage.removeItem("url-gen-api-token");
-      return { ...state, loggedIn: false };
+      localStorage.removeItem("open-access-api-token");
+      return { ...state, loggedIn: false, username: "", email: "" };
     default:
       return { ...state };
   }
