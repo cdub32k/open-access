@@ -7,48 +7,7 @@ const stripe = require("stripe")(process.env.STRIPE_SK);
 
 const { User, Charge, Subscription } = require("../database");
 
-router.get("/intent", async (req, res) => {
-  try {
-    const { username } = req;
-    const user = await User.findOne({ username });
-    if (!user) return res.status(404).send({ error: "User not found." });
-
-    const intent = await stripe.paymentIntents.create({
-      amount: 2500,
-      currency: "usd",
-      metadata: { integration_check: "accept_a_payment" },
-    });
-
-    return res.send({ client_secret: intent.client_secret });
-  } catch (err) {
-    return res.status(500).send({ error: "Something went wrong." });
-  }
-});
-
-router.post("/save-charge", async (req, res) => {
-  try {
-    const { username } = req;
-    const {
-      stripePaymentIntentId,
-      stripePaymentMethodId,
-      amount,
-      createdAt,
-    } = req.body;
-    const charge = await Charge.create({
-      stripePaymentIntentId,
-      stripePaymentMethodId,
-      username,
-      amount,
-      createdAt,
-    });
-
-    return res.send({ charge });
-  } catch (err) {
-    return res.status(500).send({ error: "Something went wrong." });
-  }
-});
-
-router.post("/create-subscription", async (req, res) => {
+router.post("/process-payment", async (req, res) => {
   try {
     const {
       username,
@@ -60,38 +19,63 @@ router.post("/create-subscription", async (req, res) => {
     const user = await User.findOne({ username });
     if (!user) return res.status(404).send({ error: "User not found." });
 
-    const customer = await stripe.customers.create({
-      payment_method: payment_method,
-      email,
-      invoice_settings: {
-        default_payment_method: payment_method,
-      },
-    });
-    user.stripeCustomerId = customer.id;
-    user.stripePaymentMethodId = payment_method;
-    await user.save();
+    if (!user.stripeCustomerId) {
+      const customer = await stripe.customers.create({
+        payment_method,
+        email,
+        invoice_settings: {
+          default_payment_method: payment_method,
+        },
+      });
+      user.stripeCustomerId = customer.id;
+      user.stripePaymentMethodId = payment_method;
+      await user.save();
+    }
 
-    const subscription = await stripe.subscriptions.create({
-      customer: customer.id,
-      items: [{ plan: process.env.STRIPE_SUB_ID }],
-      expand: ["latest_invoice.payment_intent"],
-      trial_period_days: 0,
-    });
+    if (subscribed) {
+      const subscription = await stripe.subscriptions.create({
+        customer: user.stripeCustomerId,
+        items: [{ plan: process.env.STRIPE_SUB_ID }],
+        expand: ["latest_invoice.payment_intent"],
+        trial_period_days: 0,
+      });
 
-    await Subscription.create({
-      stripeSubscriptionId: subscription.id,
-      stripePlanId: subscription.plan.id,
-      stripeCustomerId: subscription.customer,
-      username,
-      amount: 2500,
-      createdAt: subscription.created,
-    });
+      await Subscription.create({
+        stripeSubscriptionId: subscription.id,
+        stripePlanId: subscription.plan.id,
+        stripeCustomerId: subscription.customer,
+        username,
+        amount: 2500,
+        createdAt: subscription.created,
+      });
 
-    return res.send({
-      subscription,
-    });
+      return res.send({
+        subscription,
+      });
+    } else {
+      const result = await stripe.paymentIntents.create({
+        customer: user.stripeCustomerId,
+        payment_method,
+        amount: 2500,
+        currency: "usd",
+        metadata: { integration_check: "accept_a_payment" },
+        confirm: true,
+      });
+
+      const { id, amount, created } = result;
+
+      const charge = await Charge.create({
+        stripePaymentIntentId: id,
+        stripePaymentMethodId: result.payment_method,
+        username,
+        amount,
+        createdAt: created,
+      });
+
+      return res.send({ charge });
+    }
   } catch (err) {
-    return res.status(500).send({ error: "Something went wrong." });
+    return res.status(500).send({ error: "Something went wrong." + err });
   }
 });
 

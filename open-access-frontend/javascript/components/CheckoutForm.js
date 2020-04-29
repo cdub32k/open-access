@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
@@ -15,13 +15,6 @@ const CheckoutForm = ({ email }) => {
   const elements = useElements();
 
   const [subscribed, setSubscribed] = useState(false);
-  const [clientSecret, setClientSecret] = useState(null);
-
-  useEffect(() => {
-    axios.get("payment/intent").then((res) => {
-      setClientSecret(res.data.client_secret);
-    });
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -30,14 +23,6 @@ const CheckoutForm = ({ email }) => {
       return;
     }
 
-    if (subscribed) {
-      createSubscription();
-    } else {
-      makeOneTimePayment();
-    }
-  };
-
-  const createSubscription = async () => {
     const result = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(CardElement),
@@ -47,44 +32,15 @@ const CheckoutForm = ({ email }) => {
     });
 
     if (result.error) {
-      // show error in payment form
     } else {
       axios
-        .post("payment/create-subscription", {
+        .post("payment/process-payment", {
           payment_method: result.paymentMethod.id,
+          subscribed,
         })
         .then((res) => {
-          // customer has been created
           console.log(res.data);
         });
-    }
-  };
-
-  const makeOneTimePayment = async () => {
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
-        billing_details: {
-          email,
-        },
-      },
-    });
-
-    if (result.error) {
-      console.log(result.error.message);
-    } else {
-      if (result.paymentIntent.status === "succeeded") {
-        const { id, amount, payment_method, created } = result.paymentIntent;
-        axios
-          .post("/payment/save-charge", {
-            stripePaymentIntentId: id,
-            stripePaymentMethodId: payment_method,
-            amount,
-            createdAt: created,
-          })
-          .then((res) => {})
-          .catch(console.error);
-      }
     }
   };
 
