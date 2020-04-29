@@ -9,7 +9,7 @@ let subscriptionSchema = new mongoose.Schema({
   cycle: { type: String, default: "monthly" },
   terminated: { type: Boolean, default: false },
   terminatedAt: Date,
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: +new Date() },
 });
 
 export default mongoose.model("subscription", subscriptionSchema);

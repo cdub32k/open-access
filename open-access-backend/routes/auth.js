@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import fs from "fs";
 const router = require("express").Router();
 
 import bcrypt from "bcryptjs";
@@ -44,6 +45,9 @@ router.post("/sign-up", async (req, res) => {
     });
 
     if (!user) res.status(500).send({ error: "Error while creating user." });
+
+    fs.mkdir(`public/videos/${username}`);
+    fs.mkdir(`public/images/${username}`);
 
     const token = jwt.sign({ username, email }, process.env.JWT_SECRET, {
       expiresIn: "24h",

@@ -9,8 +9,6 @@ const { User, Charge, Subscription } = require("../database");
 
 router.get("/intent", async (req, res) => {
   try {
-    if (!req.authorized) return res.status(403).send({ error: "Forbidden" });
-
     const { username } = req;
     const user = await User.findOne({ username });
     if (!user) return res.status(404).send({ error: "User not found." });
@@ -29,8 +27,6 @@ router.get("/intent", async (req, res) => {
 
 router.post("/save-charge", async (req, res) => {
   try {
-    if (!req.authorized) return res.status(403).send({ error: "Forbidden" });
-
     const { username } = req;
     const {
       stripePaymentIntentId,
@@ -54,8 +50,6 @@ router.post("/save-charge", async (req, res) => {
 
 router.post("/create-subscription", async (req, res) => {
   try {
-    if (!req.authorized) return res.status(403).send({ error: "Forbidden" });
-
     const {
       username,
       email,

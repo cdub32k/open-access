@@ -14,6 +14,16 @@ const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) => ({
   autoLogin: (token) => dispatch(ActionCreators.autoLogin(token)),
 });
+const initApp = () => {
+  const token = localStorage.getItem("open-access-api-token");
+  if (token) {
+    let decodedToken = jwt_decode(token);
+    let d = new Date(0);
+    d.setUTCSeconds(decodedToken.exp);
+    if (new Date() < d) store.dispatch(ActionCreators.autoLogin(decodedToken));
+  }
+};
+initApp();
 
 import AuthRedirect from "./AuthRedirect";
 import UnauthRedirect from "./UnauthRedirect";
@@ -22,6 +32,8 @@ import Login from "./Login";
 import Logout from "./Logout";
 import SignUp from "./SignUp";
 import SiteNav from "./SiteNav";
+import VideoPlayer from "./VideoPlayer";
+import VideoList from "./VideoList";
 
 function Home() {
   return <h2>Home</h2>;
@@ -40,15 +52,7 @@ class App extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    const token = localStorage.getItem("open-access-api-token");
-    if (token) {
-      let decodedToken = jwt_decode(token);
-      let d = new Date(0);
-      d.setUTCSeconds(decodedToken.exp);
-      if (new Date() < d) this.props.autoLogin(decodedToken);
-    }
-  }
+  componentDidMount() {}
 
   render() {
     const { classes } = this.props;
@@ -69,6 +73,12 @@ class App extends Component {
             </Route>
             <Route path="/payment">
               <Payment />
+            </Route>
+            <Route path="/video-player">
+              <VideoPlayer />
+            </Route>
+            <Route path="/video-list">
+              <VideoList />
             </Route>
             <Route path="/about">
               <About />

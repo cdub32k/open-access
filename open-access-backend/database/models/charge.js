@@ -7,7 +7,7 @@ let chargeSchema = new mongoose.Schema({
   amount: Number,
   refunded: { type: Boolean, default: false },
   refundedAt: Date,
-  createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: +new Date() },
 });
 
 export default mongoose.model("charge", chargeSchema);

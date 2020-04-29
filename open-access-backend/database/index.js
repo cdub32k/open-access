@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import User from "./models/user";
 import Charge from "./models/charge";
 import Subscription from "./models/subcription";
+import Video from "./models/video";
+import Image from "./models/image";
 
 dotenv.config();
 
@@ -12,6 +14,8 @@ class Database {
     this.User = User;
     this.Charge = Charge;
     this.Subscription = Subscription;
+    this.Video = Video;
+    this.Image = Image;
   }
 
   _connect() {

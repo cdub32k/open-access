@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 
 import authRouter from "./routes/auth";
 import paymentRouter from "./routes/payment";
+import videoRouter from "./routes/video";
 
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
@@ -19,19 +20,18 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 
 const verifyTokenMiddleware = (req, res, next) => {
   let token = req.headers["authorization"];
   if (!token) {
-    req.authorized = false;
-    return next();
+    return res.status(403).send({ error: "Forbidden" });
   }
 
   token = token.replace("Bearer ", "");
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err || !decoded.username) {
-      req.authorized = false;
-      return next();
+      return res.status(403).send({ error: "Forbidden" });
     }
     req.authorized = true;
     req.username = decoded.username;
@@ -43,6 +43,10 @@ const verifyTokenMiddleware = (req, res, next) => {
 app.use("/auth", authRouter);
 
 app.use("/payment", verifyTokenMiddleware, paymentRouter);
+
+app.use("/videos", verifyTokenMiddleware, videoRouter);
+
+app.use(express.static("public"));
 
 const server = new ApolloServer({
   typeDefs,
