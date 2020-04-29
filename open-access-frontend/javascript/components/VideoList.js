@@ -1,28 +1,14 @@
 import React, { Component } from "react";
 
-import axios from "axios";
-
 import VideoPlayer from "./VideoPlayer";
-import VideoUploader from "./VideoUploader";
 
 class VideoList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      videos: [],
-    };
-  }
-
-  componentDidMount() {
-    axios.get("/videos/user/first_member").then((res) => {
-      this.setState({
-        videos: res.data.videos,
-      });
-    });
   }
 
   render() {
-    const videoListHTML = this.state.videos.map((video, i) => {
+    const videoListHTML = this.props.videos.map((video, i) => {
       return (
         <VideoPlayer
           url={video.url}
@@ -34,14 +20,7 @@ class VideoList extends Component {
       );
     });
 
-    return (
-      <div>
-        <VideoUploader />
-        <br />
-        <br />
-        {videoListHTML}
-      </div>
-    );
+    return <div>{videoListHTML}</div>;
   }
 }
 

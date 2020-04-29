@@ -5,6 +5,7 @@ import Charge from "./models/charge";
 import Subscription from "./models/subcription";
 import Video from "./models/video";
 import Image from "./models/image";
+import Note from "./models/note";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ class Database {
     this.Subscription = Subscription;
     this.Video = Video;
     this.Image = Image;
+    this.Note = Note;
   }
 
   _connect() {

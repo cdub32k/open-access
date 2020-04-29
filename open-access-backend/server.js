@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 
 import authRouter from "./routes/auth";
 import paymentRouter from "./routes/payment";
+import imageRouter from "./routes/image";
 import videoRouter from "./routes/video";
 
 import typeDefs from "./typeDefs";
@@ -43,6 +44,8 @@ const verifyTokenMiddleware = (req, res, next) => {
 app.use("/auth", authRouter);
 
 app.use("/payment", verifyTokenMiddleware, paymentRouter);
+
+app.use("/images", verifyTokenMiddleware, imageRouter);
 
 app.use("/videos", verifyTokenMiddleware, videoRouter);
 

@@ -21,13 +21,18 @@ class VideoUploader extends Component {
     const data = new FormData();
     data.append("file", this.state.selectedFile);
 
-    axios.post("/video/upload", data).then((res) => {});
+    axios.post("/videos/upload", data).then((res) => {});
   };
 
   render() {
     return (
       <div>
-        <input type="file" name="file" onChange={this.onChangeHandler} />
+        <input
+          type="file"
+          name="file"
+          onChange={this.onChangeHandler}
+          accept="video/mp4,video/x-m4v,video/*"
+        />
         <Button type="button" onClick={this.onClickHandler}>
           Upload
         </Button>

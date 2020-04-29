@@ -7,23 +7,9 @@ const { Video } = require("../database");
 
 const router = require("express").Router();
 
-router.get("/user/:username", async (req, res) => {
-  try {
-    const videos = await Video.find({ username: req.params.username }).select({
-      url: 1,
-      uploadedAt: 1,
-      _id: 0,
-    });
-
-    res.send({ videos });
-  } catch (error) {
-    return res.status(500).send({ error: "Something went wrong" });
-  }
-});
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `public/videos/${req.username}`);
+    cb(null, `public/vid/${req.username}`);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);

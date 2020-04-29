@@ -32,8 +32,16 @@ import Login from "./Login";
 import Logout from "./Logout";
 import SignUp from "./SignUp";
 import SiteNav from "./SiteNav";
+import Profile from "./Profile";
+import Note from "./Note";
+import NoteUploader from "./NoteUploader";
+import NoteList from "./NoteList";
 import VideoPlayer from "./VideoPlayer";
+import VideoUploader from "./VideoUploader";
 import VideoList from "./VideoList";
+import Image from "./Image";
+import ImageUploader from "./ImageUploader";
+import ImageList from "./ImageList";
 
 function Home() {
   return <h2>Home</h2>;
@@ -65,30 +73,24 @@ class App extends Component {
             <Route path="/login">
               <AuthRedirect component={Login} />
             </Route>
-            <Route path="/logout">
-              <Logout />
-            </Route>
+            <Route path="/logout" component={Logout} />
             <Route path="/sign-up">
               <AuthRedirect component={SignUp} />
             </Route>
-            <Route path="/payment">
-              <Payment />
-            </Route>
-            <Route path="/video-player">
-              <VideoPlayer />
-            </Route>
-            <Route path="/video-list">
-              <VideoList />
-            </Route>
-            <Route path="/about">
-              <About />
-            </Route>
-            <Route path="/users">
-              <Users />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
+            <Route path="/payment" component={Payment} />
+            <Route path="/note" component={Note} />
+            <Route path="/note-list" component={NoteList} />
+            <Route path="/note-upload" component={NoteUploader} />
+            <Route path="/image" component={Image} />
+            <Route path="/image-list" component={ImageList} />
+            <Route path="/image-upload" component={ImageUploader} />
+            <Route path="/video-player" component={VideoPlayer} />
+            <Route path="/video-list" component={VideoList} />
+            <Route path="/video-upload" component={VideoUploader} />
+            <Route path="/profile/:username" component={Profile} />
+            <Route path="/about" component={About} />
+            <Route path="/users" component={Users} />
+            <Route path="/" component={Home} />
           </Switch>
         </div>
       </Router>

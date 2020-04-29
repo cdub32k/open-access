@@ -25,6 +25,27 @@ export default [
           })
           .catch((err) => next(ActionCreators.signupError(err)));
         break;
+      case ActionTypes.GET_USER_INFO_START:
+        axios
+          .post("api", {
+            query: `
+              {
+                user(username:"${action.payload.username}") {
+                  videos {
+                    title
+                    views
+                    url
+                    thumbUrl
+                  }
+                }
+              }
+            `,
+          })
+          .then((res) => {
+            next(ActionCreators.getUserInfoSuccess(res.data.data.user));
+          })
+          .catch((err) => next(ActionCreators.getUserInfoError(err)));
+        break;
       default:
         next(action);
         break;
