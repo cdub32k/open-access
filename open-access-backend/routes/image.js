@@ -9,10 +9,13 @@ const router = require("express").Router();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `public/img/${req.username}`);
+    const path = `public/img/${req.username}`;
+    cb(null, path);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+    var filename = file.originalname;
+    var fileExtension = filename.split(".")[filename.split(".").length - 1];
+    cb(null, Date.now() + "." + fileExtension);
   },
 });
 const upload = multer({ storage }).single("file");

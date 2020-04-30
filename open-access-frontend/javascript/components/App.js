@@ -36,7 +36,7 @@ import Profile from "./Profile";
 import Note from "./Note";
 import NoteUploader from "./NoteUploader";
 import NoteList from "./NoteList";
-import VideoPlayer from "./VideoPlayer";
+import VideoPage from "./VideoPage";
 import VideoUploader from "./VideoUploader";
 import VideoList from "./VideoList";
 import Image from "./Image";
@@ -84,7 +84,7 @@ class App extends Component {
             <Route path="/image" component={Image} />
             <Route path="/image-list" component={ImageList} />
             <Route path="/image-upload" component={ImageUploader} />
-            <Route path="/video-player" component={VideoPlayer} />
+            <Route path="/video-player/:videoId" component={VideoPage} />
             <Route path="/video-list" component={VideoList} />
             <Route path="/video-upload" component={VideoUploader} />
             <Route path="/profile/:username" component={Profile} />

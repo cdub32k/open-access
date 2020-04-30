@@ -3,6 +3,7 @@ import { gql } from "apollo-server-express";
 const typeDefs = gql`
   type Query {
     user(username: String!): User
+    video(id: String!): Video
   }
 
   type Mutation {
@@ -20,10 +21,12 @@ const typeDefs = gql`
   scalar Date
 
   type Note {
+    _id: String
     body: String
   }
 
   type Image {
+    _id: String
     url: String
     title: String
     caption: String
@@ -31,6 +34,7 @@ const typeDefs = gql`
   }
 
   type Video {
+    _id: String
     url: String
     thumbUrl: String
     title: String

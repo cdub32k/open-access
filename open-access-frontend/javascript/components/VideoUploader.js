@@ -2,24 +2,42 @@ import React, { Component } from "react";
 
 import axios from "axios";
 
+import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
 class VideoUploader extends Component {
   state = {
-    selectedFile: null,
+    videoFile: null,
+    thumbFile: null,
+    title: "",
+    caption: "",
   };
 
   constructor(props) {
     super(props);
   }
 
-  onChangeHandler = (e) => {
-    this.setState({ selectedFile: e.target.files[0], loaded: 0 });
+  videoHandler = (e) => {
+    this.setState({ videoFile: e.target.files[0], loaded: 0 });
   };
 
-  onClickHandler = (e) => {
+  thumbHandler = (e) => {
+    this.setState({ thumbFile: e.target.files[0], loaded: 0 });
+  };
+
+  onTextChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  onSubmitHandler = (e) => {
+    e.preventDefault();
     const data = new FormData();
-    data.append("file", this.state.selectedFile);
+    data.append("video", this.state.videoFile);
+    data.append("thumb", this.state.thumbFile);
+    data.append("title", this.state.title);
+    data.append("caption", this.state.caption);
 
     axios.post("/videos/upload", data).then((res) => {});
   };
@@ -27,15 +45,23 @@ class VideoUploader extends Component {
   render() {
     return (
       <div>
-        <input
-          type="file"
-          name="file"
-          onChange={this.onChangeHandler}
-          accept="video/mp4,video/x-m4v,video/*"
-        />
-        <Button type="button" onClick={this.onClickHandler}>
-          Upload
-        </Button>
+        <form onSubmit={this.onSubmitHandler}>
+          <input
+            type="file"
+            name="video"
+            onChange={this.videoHandler}
+            accept="video/mp4,video/x-m4v,video/*"
+          />
+          <input
+            type="file"
+            name="thumb"
+            onChange={this.thumbHandler}
+            accept="image/*"
+          />
+          <TextField name="title" onChange={this.onTextChange} />
+          <TextField name="caption" onChange={this.onTextChange} />
+          <Button type="submit">Upload</Button>
+        </form>
       </div>
     );
   }

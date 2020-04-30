@@ -5,38 +5,45 @@ import ReactPlayer from "react-player";
 import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
+import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
   container: {
     position: "relative",
-    width: 300,
-    height: "auto",
+    width: 800,
+    height: 600,
     margin: 24,
     display: "inline-block",
+  },
+  summary: {
+    display: "flex",
+    justifyContent: "space-between",
   },
 });
 
 class VideoPlayer extends Component {
   render() {
-    const { classes, url, title, width, height } = this.props;
+    const { classes, url, thumbUrl, title, views, caption } = this.props;
     return (
       <Card className={classes.container}>
-        <CardHeader
-          avatar={<Avatar>R</Avatar>}
-          title="VideoTitle"
-          subheader="1,230 views"
-        />
         <CardMedia>
           <ReactPlayer
-            width={width}
-            height={height}
+            width={800}
+            height={450}
             url={url}
+            light={thumbUrl}
             controls
             pip={false}
           />
         </CardMedia>
+        <CardHeader
+          avatar={<Avatar>R</Avatar>}
+          title={<span>{title}</span>}
+          subheader={<span>{views} views</span>}
+        />
+        <CardContent>{caption}</CardContent>
       </Card>
     );
   }

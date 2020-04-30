@@ -32,9 +32,9 @@ export default [
               {
                 user(username:"${action.payload.username}") {
                   videos {
+                    _id
                     title
                     views
-                    url
                     thumbUrl
                   }
                 }
@@ -45,6 +45,26 @@ export default [
             next(ActionCreators.getUserInfoSuccess(res.data.data.user));
           })
           .catch((err) => next(ActionCreators.getUserInfoError(err)));
+        break;
+      case ActionTypes.GET_VIDEO_INFO_START:
+        axios
+          .post("api", {
+            query: `
+              {
+                video(id:"${action.payload.videoId}") {
+                  title
+                  caption
+                  views
+                  url
+                  thumbUrl
+                  uploadedAt
+                }
+              }
+            `,
+          })
+          .then((res) => {
+            next(ActionCreators.getVideoInfoSuccess(res.data.data.video));
+          });
         break;
       default:
         next(action);

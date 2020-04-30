@@ -7,6 +7,10 @@ const resolvers = {
 
       return user;
     },
+    video: async (parent, { id }, context, info) => {
+      const video = await DB.Video.findOne({ _id: id });
+      return video;
+    },
   },
 
   Mutation: {
@@ -54,7 +58,7 @@ const resolvers = {
         caption: 1,
         views: 1,
         uploadedAt: 1,
-        _id: 0,
+        _id: 1,
       });
 
       return videos;
