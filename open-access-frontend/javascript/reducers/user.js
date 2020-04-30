@@ -10,6 +10,8 @@ const initialState = {
   viewed: {
     username: "",
     videos: [],
+    images: [],
+    notes: [],
   },
 };
 

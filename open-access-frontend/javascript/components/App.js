@@ -33,13 +33,13 @@ import Logout from "./Logout";
 import SignUp from "./SignUp";
 import SiteNav from "./SiteNav";
 import Profile from "./Profile";
-import Note from "./Note";
+import NotePage from "./NotePage";
 import NoteUploader from "./NoteUploader";
 import NoteList from "./NoteList";
 import VideoPage from "./VideoPage";
 import VideoUploader from "./VideoUploader";
 import VideoList from "./VideoList";
-import Image from "./Image";
+import ImagePage from "./ImagePage";
 import ImageUploader from "./ImageUploader";
 import ImageList from "./ImageList";
 
@@ -78,10 +78,10 @@ class App extends Component {
               <AuthRedirect component={SignUp} />
             </Route>
             <Route path="/payment" component={Payment} />
-            <Route path="/note" component={Note} />
+            <Route path="/note/:noteId" component={NotePage} />
             <Route path="/note-list" component={NoteList} />
             <Route path="/note-upload" component={NoteUploader} />
-            <Route path="/image" component={Image} />
+            <Route path="/image/:imageId" component={ImagePage} />
             <Route path="/image-list" component={ImageList} />
             <Route path="/image-upload" component={ImageUploader} />
             <Route path="/video-player/:videoId" component={VideoPage} />

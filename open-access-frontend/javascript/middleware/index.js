@@ -37,6 +37,14 @@ export default [
                     views
                     thumbUrl
                   }
+                  images {
+                    _id
+                    url
+                  }
+                  notes {
+                    _id
+                    body
+                  }
                 }
               }
             `,
@@ -52,6 +60,9 @@ export default [
             query: `
               {
                 video(id:"${action.payload.videoId}") {
+                  user {
+                    username
+                  }
                   title
                   caption
                   views
@@ -64,6 +75,46 @@ export default [
           })
           .then((res) => {
             next(ActionCreators.getVideoInfoSuccess(res.data.data.video));
+          });
+        break;
+      case ActionTypes.GET_IMAGE_INFO_START:
+        axios
+          .post("api", {
+            query: `
+              {
+                image(id:"${action.payload.imageId}") {
+                  user {
+                    username
+                  }
+                  title
+                  caption
+                  url
+                  uploadedAt
+                }
+              }
+            `,
+          })
+          .then((res) => {
+            next(ActionCreators.getImageInfoSuccess(res.data.data.image));
+          });
+        break;
+      case ActionTypes.GET_NOTE_INFO_START:
+        axios
+          .post("api", {
+            query: `
+              {
+                note(id:"${action.payload.noteId}") {
+                  user {
+                    username
+                  }
+                  body                  
+                  uploadedAt
+                }
+              }
+            `,
+          })
+          .then((res) => {
+            next(ActionCreators.getNoteInfoSuccess(res.data.data.note));
           });
         break;
       default:

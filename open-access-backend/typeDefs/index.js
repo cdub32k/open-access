@@ -4,6 +4,8 @@ const typeDefs = gql`
   type Query {
     user(username: String!): User
     video(id: String!): Video
+    image(id: String!): Image
+    note(id: String!): Note
   }
 
   type Mutation {
@@ -21,11 +23,14 @@ const typeDefs = gql`
   scalar Date
 
   type Note {
+    user: User
     _id: String
     body: String
+    uploadedAt: Date
   }
 
   type Image {
+    user: User
     _id: String
     url: String
     title: String
@@ -34,6 +39,7 @@ const typeDefs = gql`
   }
 
   type Video {
+    user: User
     _id: String
     url: String
     thumbUrl: String

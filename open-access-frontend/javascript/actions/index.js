@@ -14,6 +14,12 @@ export const ActionTypes = {
   GET_VIDEO_INFO_START: "GET_VIDEO_INFO_START",
   GET_VIDEO_INFO_SUCCESS: "GET_VIDEO_INFO_SUCCESS",
   GET_VIDEO_INFO_ERROR: "GET_VIDEO_INFO_ERROR",
+  GET_IMAGE_INFO_START: "GET_IMAGE_INFO_START",
+  GET_IMAGE_INFO_SUCCESS: "GET_IMAGE_INFO_SUCCESS",
+  GET_IMAGE_INFO_ERROR: "GET_IMAGE_INFO_ERROR",
+  GET_NOTE_INFO_START: "GET_NOTE_INFO_START",
+  GET_NOTE_INFO_SUCCESS: "GET_NOTE_INFO_SUCCESS",
+  GET_NOTE_INFO_ERROR: "GET_NOTE_INFO_ERROR",
 };
 
 export const ActionCreators = {
@@ -58,5 +64,23 @@ export const ActionCreators = {
   },
   getVideoInfoError: (error) => {
     return { type: ActionTypes.GET_VIDEO_INFO_ERROR, error };
+  },
+  getImageInfoStart: (imageId) => {
+    return { type: ActionTypes.GET_IMAGE_INFO_START, payload: { imageId } };
+  },
+  getImageInfoSuccess: (imageData) => {
+    return { type: ActionTypes.GET_IMAGE_INFO_SUCCESS, payload: { imageData } };
+  },
+  getImageInfoError: (error) => {
+    return { type: ActionTypes.GET_IMAGE_INFO_ERROR, error };
+  },
+  getNoteInfoStart: (noteId) => {
+    return { type: ActionTypes.GET_NOTE_INFO_START, payload: { noteId } };
+  },
+  getNoteInfoSuccess: (noteData) => {
+    return { type: ActionTypes.GET_NOTE_INFO_SUCCESS, payload: { noteData } };
+  },
+  getNoteInfoError: (error) => {
+    return { type: ActionTypes.GET_NOTE_INFO_ERROR, error };
   },
 };

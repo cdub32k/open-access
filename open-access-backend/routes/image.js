@@ -18,13 +18,15 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + "." + fileExtension);
   },
 });
-const upload = multer({ storage }).single("file");
+const upload = multer({ storage }).fields([{ name: "image", maxCount: 1 }]);
 
 router.post("/upload", upload, async (req, res) => {
   try {
     const image = await Image.create({
       username: req.username,
-      url: `http://localhost:5000/img/${req.username}/${req.file.filename}`,
+      url: `http://localhost:5000/img/${req.username}/${req.files["image"][0].filename}`,
+      title: req.body.title,
+      caption: req.body.caption,
     });
 
     return res.send({ image });

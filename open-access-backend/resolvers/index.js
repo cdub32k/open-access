@@ -11,6 +11,14 @@ const resolvers = {
       const video = await DB.Video.findOne({ _id: id });
       return video;
     },
+    image: async (parent, { id }, context, info) => {
+      const image = await DB.Image.findOne({ _id: id });
+      return image;
+    },
+    note: async (parent, { id }, context, info) => {
+      const note = await DB.Note.findOne({ _id: id });
+      return note;
+    },
   },
 
   Mutation: {
@@ -31,13 +39,36 @@ const resolvers = {
     },
   },
 
+  Note: {
+    user: async ({ username }, args, context, info) => {
+      const user = await DB.User.findOne({ username });
+      return user;
+    },
+  },
+
+  Image: {
+    user: async ({ username }, args, context, info) => {
+      const user = await DB.User.findOne({ username });
+      return user;
+    },
+  },
+
+  Video: {
+    user: async ({ username }, args, context, info) => {
+      const user = await DB.User.findOne({ username });
+      return user;
+    },
+  },
+
   User: {
     notes: async ({ username }, args, context, info) => {
       const notes = await DB.Note.find({ username }).select({
         body: 1,
         uploadedAt: 1,
-        _id: 0,
+        _id: 1,
       });
+
+      return notes;
     },
     images: async ({ username }, args, context, info) => {
       const images = await DB.Image.find({ username }).select({
@@ -45,7 +76,7 @@ const resolvers = {
         title: 1,
         caption: 1,
         uploadedAt: 1,
-        _id: 0,
+        _id: 1,
       });
 
       return images;

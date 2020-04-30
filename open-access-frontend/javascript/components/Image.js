@@ -13,22 +13,22 @@ const styles = (theme) => ({
     display: "inline-block",
   },
   img: {
-    width: 300,
-    height: 400,
+    width: 600,
+    height: 600,
   },
 });
 
 class Image_C extends Component {
   render() {
-    const { classes, url, title, width, height } = this.props;
+    const { classes, url, title, caption } = this.props;
     return (
       <Card className={classes.container}>
+        <CardMedia className={classes.img} image={url}></CardMedia>
         <CardHeader
           avatar={<Avatar>R</Avatar>}
-          title="Image Title"
-          subheader="Me and my friends"
+          title={title}
+          subheader={caption}
         />
-        <CardMedia className={classes.img} image={url}></CardMedia>
       </Card>
     );
   }
