@@ -10,6 +10,7 @@ import compression from "compression";
 import jwt from "jsonwebtoken";
 
 import authRouter from "./routes/auth";
+import userRouter from "./routes/user";
 import paymentRouter from "./routes/payment";
 import imageRouter from "./routes/image";
 import videoRouter from "./routes/video";
@@ -42,6 +43,8 @@ const verifyTokenMiddleware = (req, res, next) => {
 };
 
 app.use("/auth", authRouter);
+
+app.use("/users", verifyTokenMiddleware, userRouter);
 
 app.use("/payment", verifyTokenMiddleware, paymentRouter);
 

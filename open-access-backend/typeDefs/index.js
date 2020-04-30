@@ -16,6 +16,11 @@ const typeDefs = gql`
     profilePic: String
     username: String
     email: String
+    phoneNumber: String
+    country: String
+    city: String
+    state: String
+    bio: String
     notes: [Note]
     images: [Image]
     videos: [Video]

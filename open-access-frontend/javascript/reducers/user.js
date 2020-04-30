@@ -58,6 +58,26 @@ const userReducer = (state = initialState, action) => {
         ...state,
         viewed: { ...state.viewed, error: action.error },
       };
+    case ActionTypes.GET_USER_ACCOUNT_INFO_SUCCESS:
+      return {
+        ...state,
+        ...action.payload.userData,
+      };
+    case ActionTypes.GET_USER_ACCOUNT_INFO_ERROR:
+      return {
+        ...state,
+        error: action.error,
+      };
+    case ActionTypes.UPDATE_ACCOUNT_INFO_SUCCESS:
+      return {
+        ...state,
+        ...action.payload.userData,
+      };
+    case ActionTypes.UPDATE_ACCOUNT_INFO_ERROR:
+      return {
+        ...state,
+        error: action.error,
+      };
     default:
       return { ...state };
   }

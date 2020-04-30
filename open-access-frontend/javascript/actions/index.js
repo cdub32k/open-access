@@ -20,6 +20,12 @@ export const ActionTypes = {
   GET_NOTE_INFO_START: "GET_NOTE_INFO_START",
   GET_NOTE_INFO_SUCCESS: "GET_NOTE_INFO_SUCCESS",
   GET_NOTE_INFO_ERROR: "GET_NOTE_INFO_ERROR",
+  GET_USER_ACCOUNT_INFO_START: "GET_USER_ACCOUNT_INFO_START",
+  GET_USER_ACCOUNT_INFO_SUCCESS: "GET_USER_ACCOUNT_INFO_SUCCESS",
+  GET_USER_ACCOUNT_INFO_ERROR: "GET_USER_ACCOUNT_INFO_ERROR",
+  UPDATE_ACCOUNT_INFO_START: "UPDATE_ACCOUNT_INFO_START",
+  UPDATE_ACCOUNT_INFO_SUCCESS: "UPDATE_ACCOUNT_INFO_SUCCESS",
+  UPDATE_ACCOUNT_INFO_ERROR: "UPDATE_ACCOUNT_INFO_ERROR",
 };
 
 export const ActionCreators = {
@@ -82,5 +88,35 @@ export const ActionCreators = {
   },
   getNoteInfoError: (error) => {
     return { type: ActionTypes.GET_NOTE_INFO_ERROR, error };
+  },
+  getUserAccountInfoStart: (username) => {
+    return {
+      type: ActionTypes.GET_USER_ACCOUNT_INFO_START,
+      payload: { username },
+    };
+  },
+  getUserAccountInfoSuccess: (userData) => {
+    return {
+      type: ActionTypes.GET_USER_ACCOUNT_INFO_SUCCESS,
+      payload: { userData },
+    };
+  },
+  getUserAccountInfoError: (error) => {
+    return { type: ActionTypes.GET_USER_ACCOUNT_INFO_ERROR, error };
+  },
+  updateAccountInfoStart: (userInfo) => {
+    return {
+      type: ActionTypes.UPDATE_ACCOUNT_INFO_START,
+      payload: { userInfo },
+    };
+  },
+  updateAccountInfoSuccess: (userData) => {
+    return {
+      type: ActionTypes.UPDATE_ACCOUNT_INFO_SUCCESS,
+      payload: { userData },
+    };
+  },
+  updateAccountInfoError: (error) => {
+    return { type: ActionTypes.UPDATE_ACCOUNT_INFO_ERROR, error };
   },
 };

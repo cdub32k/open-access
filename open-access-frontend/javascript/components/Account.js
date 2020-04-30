@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { ActionCreators } from "../actions";
 
 import axios from "axios";
 
@@ -12,6 +13,10 @@ class Account extends Component {
     super(props);
 
     this.state = {};
+  }
+
+  componentDidMount() {
+    this.props.getUserAccountInfo(this.props.username);
   }
 
   imageHandler = (e) => {
@@ -33,10 +38,22 @@ class Account extends Component {
     });
   };
 
-  onSubmitHandler = (e) => {};
+  onSubmitHandler = (e) => {
+    e.preventDefault();
+
+    this.props.updateAccountInfo({ ...this.state, profilePic: null });
+  };
 
   render() {
-    const { username, email } = this.props;
+    const {
+      username,
+      email,
+      country,
+      state,
+      city,
+      phoneNumber,
+      bio,
+    } = this.props;
     return (
       <div>
         <h1>Your Account</h1>
@@ -56,10 +73,35 @@ class Account extends Component {
         <Typography>{username}</Typography>
         <Typography>{email}</Typography>
         <form onSubmit={this.onSubmitHandler}>
-          <TextField name="country" onChange={this.onTextChange} />
-          <TextField name="city" onChange={this.onTextChange} />
-          <TextField name="state" onChange={this.onTextChange} />
-          <TextField name="bio" onChange={this.onTextChange} />
+          <span>current:{phoneNumber}</span>
+          <TextField
+            label="Phone Number"
+            name="phoneNumber"
+            onChange={this.onTextChange}
+          />
+          <br />
+          <span>current:{country}</span>
+          <TextField
+            label="Country"
+            name="country"
+            onChange={this.onTextChange}
+          />
+          <br />
+          <span>current:{city}</span>
+          <TextField
+            placeholder={city}
+            label="City"
+            name="city"
+            onChange={this.onTextChange}
+          />
+          <br />
+          <span>current:{state}</span>
+          <TextField label="State" name="state" onChange={this.onTextChange} />
+          <br />
+          <span>current:{bio}</span>
+          <TextField label="Bio" name="bio" onChange={this.onTextChange} />
+          <br />
+          <Button type="submit">Update Info</Button>
         </form>
       </div>
     );
@@ -70,8 +112,18 @@ const mapStateToProps = (state) => ({
   profilePic: state.user.profilePic,
   username: state.user.username,
   email: state.user.email,
+  city: state.user.city,
+  state: state.user.state,
+  country: state.user.country,
+  phoneNumber: state.user.phoneNumber,
+  bio: state.user.bio,
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  getUserAccountInfo: (username) =>
+    dispatch(ActionCreators.getUserAccountInfoStart(username)),
+  updateAccountInfo: (userInfo) =>
+    dispatch(ActionCreators.updateAccountInfoStart(userInfo)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Account);

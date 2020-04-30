@@ -54,6 +54,37 @@ export default [
           })
           .catch((err) => next(ActionCreators.getUserInfoError(err)));
         break;
+      case ActionTypes.GET_USER_ACCOUNT_INFO_START:
+        axios
+          .post("/api", {
+            query: `
+          {
+            user(username:"${action.payload.username}") {
+              profilePic
+              email
+              username
+              phoneNumber
+              country
+              state
+              city
+              bio
+            }
+          }
+        `,
+          })
+          .then((res) => {
+            next(ActionCreators.getUserAccountInfoSuccess(res.data.data.user));
+          })
+          .catch((err) => next(ActionCreators.getUserAccountInfoError(err)));
+        break;
+      case ActionTypes.UPDATE_ACCOUNT_INFO_START:
+        axios
+          .put("/users", action.payload.userInfo)
+          .then((res) => {
+            next(ActionCreators.updateAccountInfoSuccess(res.data.user));
+          })
+          .catch((err) => next(ActionCreators.updateAccountInfoError(err)));
+        break;
       case ActionTypes.GET_VIDEO_INFO_START:
         axios
           .post("api", {
