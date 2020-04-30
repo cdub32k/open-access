@@ -2,6 +2,7 @@ import { ActionTypes } from "../actions";
 
 const initialState = {
   error: null,
+  user: {},
 };
 
 const noteReducer = (state = initialState, action) => {

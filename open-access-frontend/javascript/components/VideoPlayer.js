@@ -25,7 +25,7 @@ const styles = (theme) => ({
 
 class VideoPlayer extends Component {
   render() {
-    const { classes, url, thumbUrl, title, views, caption } = this.props;
+    const { classes, user, url, thumbUrl, title, views, caption } = this.props;
     return (
       <Card className={classes.container}>
         <CardMedia>
@@ -39,8 +39,14 @@ class VideoPlayer extends Component {
           />
         </CardMedia>
         <CardHeader
-          avatar={<Avatar>R</Avatar>}
-          title={<span>{title}</span>}
+          avatar={<Avatar src={user.profilePic}>R</Avatar>}
+          title={
+            <span style={{ fontSize: 12 }}>
+              <span style={{ fontSize: 18 }}>{title}</span>
+              <br />
+              by {user.username}
+            </span>
+          }
           subheader={<span>{views} views</span>}
         />
         <CardContent>{caption}</CardContent>

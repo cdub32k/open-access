@@ -3,6 +3,7 @@ import { ActionTypes } from "../actions";
 import axios from "axios";
 
 const initialState = {
+  profilePic: "",
   email: "",
   username: "",
   error: null,
@@ -29,6 +30,7 @@ const userReducer = (state = initialState, action) => {
         loggedIn: true,
         username: decodedToken.username,
         email: decodedToken.email,
+        profilePic: decodedToken.profilePic,
       };
     case ActionTypes.LOGIN_ERROR:
       localStorage.removeItem("open-access-api-token");
@@ -41,6 +43,7 @@ const userReducer = (state = initialState, action) => {
         loggedIn: true,
         username: action.payload.token.username,
         email: action.payload.token.email,
+        profilePic: action.payload.token.profilePic,
       };
     case ActionTypes.LOGOUT:
       localStorage.removeItem("open-access-api-token");

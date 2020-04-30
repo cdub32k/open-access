@@ -11,15 +11,19 @@ const styles = (theme) => ({
     position: "relative",
     margin: 24,
     display: "inline-block",
+    width: 320,
   },
 });
 
 class Image_C extends Component {
   render() {
-    const { classes, body, width, height } = this.props;
+    const { classes, user, body, width, height } = this.props;
     return (
       <Card className={classes.container}>
-        <CardHeader avatar={<Avatar>R</Avatar>} />
+        <CardHeader
+          avatar={<Avatar src={user.profilePic} />}
+          title={<span style={{ fontSize: 12 }}>by {user.username}</span>}
+        />
         <CardContent>{body}</CardContent>
       </Card>
     );

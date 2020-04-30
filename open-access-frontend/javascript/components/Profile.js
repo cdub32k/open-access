@@ -35,6 +35,7 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  profilePic: state.user.profilePic,
   username: state.user.viewed.username,
   videos: state.user.viewed.videos,
   images: state.user.viewed.images,

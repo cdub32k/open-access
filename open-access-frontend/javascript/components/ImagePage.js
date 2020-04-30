@@ -15,11 +15,12 @@ class ImagePage extends Component {
   }
 
   render() {
-    const { title, caption, url, uploadedAt } = this.props;
+    const { user, title, caption, url, uploadedAt } = this.props;
     return (
       <Grid container>
         <Grid item xs={12} md={8}>
           <Image_C
+            user={user}
             title={title}
             caption={caption}
             url={url}
@@ -33,6 +34,7 @@ class ImagePage extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  user: state.image.user,
   title: state.image.title,
   caption: state.image.caption,
   url: state.image.url,

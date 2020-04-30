@@ -49,9 +49,7 @@ class ImageUploader extends Component {
           />
           <TextField name="title" onChange={this.onTextChange} />
           <TextField name="caption" onChange={this.onTextChange} />
-          <Button type="submit" onClick={this.onClickHandler}>
-            Upload
-          </Button>
+          <Button type="submit">Upload</Button>
         </form>
       </div>
     );

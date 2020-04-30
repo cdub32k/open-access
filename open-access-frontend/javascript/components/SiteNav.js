@@ -76,8 +76,16 @@ const SiteNav = ({ loggedIn, username }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem
+        onClick={handleMenuClose}
+        component={Link}
+        to={`/profile/${username}`}
+      >
+        Profile
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose} component={Link} to="/my-account">
+        My account
+      </MenuItem>
       <MenuItem onClick={handleMenuClose} component={Link} to="/logout">
         Logout
       </MenuItem>

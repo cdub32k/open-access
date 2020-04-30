@@ -15,11 +15,11 @@ class NotePage extends Component {
   }
 
   render() {
-    const { body, uploadedAt } = this.props;
+    const { user, body, uploadedAt } = this.props;
     return (
       <Grid container>
         <Grid item xs={12} md={8}>
-          <Note body={body} uploadedAt={uploadedAt} />
+          <Note user={user} body={body} uploadedAt={uploadedAt} />
         </Grid>
         <Grid item xs={12} md={4}></Grid>
       </Grid>
@@ -28,6 +28,7 @@ class NotePage extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  user: state.note.user,
   body: state.note.body,
   uploadedAt: state.note.uploadedAt,
 });

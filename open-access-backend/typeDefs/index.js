@@ -13,6 +13,7 @@ const typeDefs = gql`
   }
 
   type User {
+    profilePic: String
     username: String
     email: String
     notes: [Note]

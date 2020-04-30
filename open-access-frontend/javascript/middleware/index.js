@@ -61,6 +61,7 @@ export default [
               {
                 video(id:"${action.payload.videoId}") {
                   user {
+                    profilePic
                     username
                   }
                   title
@@ -84,6 +85,7 @@ export default [
               {
                 image(id:"${action.payload.imageId}") {
                   user {
+                    profilePic
                     username
                   }
                   title
@@ -105,6 +107,7 @@ export default [
               {
                 note(id:"${action.payload.noteId}") {
                   user {
+                    profilePic
                     username
                   }
                   body                  

@@ -19,7 +19,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).send({ auth: false, token: null });
 
     const token = jwt.sign(
-      { username, email: user.email },
+      { username, email: user.email, profilePic: user.profilePic },
       process.env.JWT_SECRET,
       {
         expiresIn: "24h",
@@ -49,9 +49,13 @@ router.post("/sign-up", async (req, res) => {
     fs.mkdir(`public/videos/${username}`);
     fs.mkdir(`public/images/${username}`);
 
-    const token = jwt.sign({ username, email }, process.env.JWT_SECRET, {
-      expiresIn: "24h",
-    });
+    const token = jwt.sign(
+      { username, email, profilePic: user.profilePic },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "24h",
+      }
+    );
 
     return res.status(200).send({ auth: true, token });
   } catch (err) {

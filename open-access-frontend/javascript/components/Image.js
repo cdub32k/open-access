@@ -20,13 +20,19 @@ const styles = (theme) => ({
 
 class Image_C extends Component {
   render() {
-    const { classes, url, title, caption } = this.props;
+    const { classes, user, url, title, caption } = this.props;
     return (
       <Card className={classes.container}>
         <CardMedia className={classes.img} image={url}></CardMedia>
         <CardHeader
-          avatar={<Avatar>R</Avatar>}
-          title={title}
+          avatar={<Avatar src={user.profilePic} />}
+          title={
+            <span style={{ fontSize: 12 }}>
+              <span style={{ fontSize: 18 }}>{title}</span>
+              <br />
+              by {user.username}
+            </span>
+          }
           subheader={caption}
         />
       </Card>

@@ -27,6 +27,7 @@ initApp();
 
 import AuthRedirect from "./AuthRedirect";
 import UnauthRedirect from "./UnauthRedirect";
+import Account from "./Account";
 import Payment from "./Payment";
 import Login from "./Login";
 import Logout from "./Logout";
@@ -77,6 +78,7 @@ class App extends Component {
             <Route path="/sign-up">
               <AuthRedirect component={SignUp} />
             </Route>
+            <Route path="/my-account" component={Account} />
             <Route path="/payment" component={Payment} />
             <Route path="/note/:noteId" component={NotePage} />
             <Route path="/note-list" component={NoteList} />
