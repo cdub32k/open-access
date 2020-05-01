@@ -41,7 +41,7 @@ class Account extends Component {
   onSubmitHandler = (e) => {
     e.preventDefault();
 
-    this.props.updateAccountInfo({ ...this.state, profilePic: null });
+    this.props.updateAccountInfo({ ...this.state, profilePic: undefined });
   };
 
   render() {
@@ -52,6 +52,7 @@ class Account extends Component {
       state,
       city,
       phoneNumber,
+      displayName,
       bio,
     } = this.props;
     return (
@@ -73,6 +74,13 @@ class Account extends Component {
         <Typography>{username}</Typography>
         <Typography>{email}</Typography>
         <form onSubmit={this.onSubmitHandler}>
+          <span>current:{displayName}</span>
+          <TextField
+            label="Display Name"
+            name="displayName"
+            onChange={this.onTextChange}
+          />
+          <br />
           <span>current:{phoneNumber}</span>
           <TextField
             label="Phone Number"
@@ -112,6 +120,7 @@ const mapStateToProps = (state) => ({
   profilePic: state.user.profilePic,
   username: state.user.username,
   email: state.user.email,
+  displayName: state.user.displayName,
   city: state.user.city,
   state: state.user.state,
   country: state.user.country,

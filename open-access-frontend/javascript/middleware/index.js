@@ -33,17 +33,35 @@ export default [
                 user(username:"${action.payload.username}") {
                   videos {
                     _id
+                    user {
+                      username
+                      profilePic
+                    }
                     title
-                    views
+                    viewCount
                     thumbUrl
+                    uploadedAt
                   }
                   images {
                     _id
+                    user {
+                      username
+                      profilePic
+                    }
+                    title
+                    likeCount
                     url
+                    uploadedAt
                   }
                   notes {
                     _id
+                    user {
+                      username
+                      profilePic
+                    }
+                    commentCount
                     body
+                    uploadedAt
                   }
                 }
               }
@@ -63,6 +81,7 @@ export default [
               profilePic
               email
               username
+              displayName
               phoneNumber
               country
               state
@@ -97,7 +116,7 @@ export default [
                   }
                   title
                   caption
-                  views
+                  viewCount
                   url
                   thumbUrl
                   uploadedAt

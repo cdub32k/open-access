@@ -23,7 +23,7 @@ class Image_C extends Component {
     const { classes, user, url, title, caption } = this.props;
     return (
       <Card className={classes.container}>
-        <CardMedia className={classes.img} image={url}></CardMedia>
+        <CardMedia className={classes.img} image={url} />
         <CardHeader
           avatar={<Avatar src={user.profilePic} />}
           title={

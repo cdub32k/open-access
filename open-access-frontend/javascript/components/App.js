@@ -69,31 +69,32 @@ class App extends Component {
       <Router>
         <div>
           <SiteNav />
-
-          <Switch>
-            <Route path="/login">
-              <AuthRedirect component={Login} />
-            </Route>
-            <Route path="/logout" component={Logout} />
-            <Route path="/sign-up">
-              <AuthRedirect component={SignUp} />
-            </Route>
-            <Route path="/my-account" component={Account} />
-            <Route path="/payment" component={Payment} />
-            <Route path="/note/:noteId" component={NotePage} />
-            <Route path="/note-list" component={NoteList} />
-            <Route path="/note-upload" component={NoteUploader} />
-            <Route path="/image/:imageId" component={ImagePage} />
-            <Route path="/image-list" component={ImageList} />
-            <Route path="/image-upload" component={ImageUploader} />
-            <Route path="/video-player/:videoId" component={VideoPage} />
-            <Route path="/video-list" component={VideoList} />
-            <Route path="/video-upload" component={VideoUploader} />
-            <Route path="/profile/:username" component={Profile} />
-            <Route path="/about" component={About} />
-            <Route path="/users" component={Users} />
-            <Route path="/" component={Home} />
-          </Switch>
+          <div className="site-content">
+            <Switch>
+              <Route path="/login">
+                <AuthRedirect component={Login} />
+              </Route>
+              <Route path="/logout" component={Logout} />
+              <Route path="/sign-up">
+                <AuthRedirect component={SignUp} />
+              </Route>
+              <Route path="/my-account" component={Account} />
+              <Route path="/payment" component={Payment} />
+              <Route path="/note/:noteId" component={NotePage} />
+              <Route path="/note-list" component={NoteList} />
+              <Route path="/note-upload" component={NoteUploader} />
+              <Route path="/image/:imageId" component={ImagePage} />
+              <Route path="/image-list" component={ImageList} />
+              <Route path="/image-upload" component={ImageUploader} />
+              <Route path="/video-player/:videoId" component={VideoPage} />
+              <Route path="/video-list" component={VideoList} />
+              <Route path="/video-upload" component={VideoUploader} />
+              <Route path="/profile/:username" component={Profile} />
+              <Route path="/about" component={About} />
+              <Route path="/users" component={Users} />
+              <Route path="/" component={Home} />
+            </Switch>
+          </div>
         </div>
       </Router>
     );

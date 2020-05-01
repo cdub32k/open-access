@@ -1,9 +1,4 @@
-//@import url('https://fonts.googleapis.com/css?family=Mitr:300,400,600&display=swap');
-
-@font-face {
-  font-family: "Mitr";
-  src: url(./Mitr-Regular.ttf) format("ttf");
-}
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&display=swap");
 
 :root {
   --body-background-color: rgba(0, 0, 0, 0.05);
@@ -13,7 +8,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Mitr", sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
   font-weight: 600;
 }
 
@@ -25,6 +20,11 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.site-content {
+  max-width: 1450px;
+  margin: auto;
 }
 
 //Stripe form styles:

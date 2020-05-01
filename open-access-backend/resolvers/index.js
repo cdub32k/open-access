@@ -63,6 +63,10 @@ const resolvers = {
   User: {
     notes: async ({ username }, args, context, info) => {
       const notes = await DB.Note.find({ username }).select({
+        likeCount: 1,
+        dislikeCount: 1,
+        commentCount: 1,
+        username: 1,
         body: 1,
         uploadedAt: 1,
         _id: 1,
@@ -72,6 +76,10 @@ const resolvers = {
     },
     images: async ({ username }, args, context, info) => {
       const images = await DB.Image.find({ username }).select({
+        likeCount: 1,
+        dislikeCount: 1,
+        commentCount: 1,
+        username: 1,
         url: 1,
         title: 1,
         caption: 1,
@@ -83,11 +91,15 @@ const resolvers = {
     },
     videos: async ({ username }, args, context, info) => {
       const videos = await DB.Video.find({ username }).select({
+        likeCount: 1,
+        dislikeCount: 1,
+        commentCount: 1,
+        username: 1,
         url: 1,
         thumbUrl: 1,
         title: 1,
         caption: 1,
-        views: 1,
+        viewCount: 1,
         uploadedAt: 1,
         _id: 1,
       });

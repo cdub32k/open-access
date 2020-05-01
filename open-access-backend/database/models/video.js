@@ -5,7 +5,10 @@ let videoSchema = new mongoose.Schema({
   thumbUrl: String,
   title: String,
   caption: String,
-  views: { type: Number, default: 0 },
+  viewCount: { type: Number, default: 0 },
+  likeCount: { type: Number, default: 0 },
+  dislikeCount: { type: Number, default: 0 },
+  commentCount: { type: Number, default: 0 },
   username: String,
   uploadedAt: { type: Date, default: +new Date() },
 });

@@ -16,6 +16,7 @@ const typeDefs = gql`
     profilePic: String
     username: String
     email: String
+    displayName: String
     phoneNumber: String
     country: String
     city: String
@@ -32,6 +33,9 @@ const typeDefs = gql`
     user: User
     _id: String
     body: String
+    likeCount: Int
+    dislikeCount: Int
+    commentCount: Int
     uploadedAt: Date
   }
 
@@ -41,6 +45,9 @@ const typeDefs = gql`
     url: String
     title: String
     caption: String
+    likeCount: Int
+    dislikeCount: Int
+    commentCount: Int
     uploadedAt: Date
   }
 
@@ -51,7 +58,10 @@ const typeDefs = gql`
     thumbUrl: String
     title: String
     caption: String
-    views: Int
+    viewCount: Int
+    likeCount: Int
+    dislikeCount: Int
+    commentCount: Int
     uploadedAt: Date
   }
 `;

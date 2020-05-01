@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import ImagePreview from "./ImagePreview";
+import ContentPreview from "./ContentPreview";
 
 class ImageList extends Component {
   constructor(props) {
@@ -10,7 +10,18 @@ class ImageList extends Component {
 
   render() {
     const imageListHTML = this.props.images.map((image, i) => {
-      return <ImagePreview id={image._id} url={image.url} key={i} />;
+      return (
+        <ContentPreview
+          contentType="image"
+          user={image.user}
+          id={image._id}
+          title={image.title}
+          thumbUrl={image.url}
+          likeCount={image.likeCount}
+          uploadedAt={image.uploadedAt}
+          key={i}
+        />
+      );
     });
 
     return <div>{imageListHTML}</div>;

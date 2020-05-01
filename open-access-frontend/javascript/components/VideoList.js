@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import VideoPreview from "./VideoPreview";
+import ContentPreview from "./ContentPreview";
 
 class VideoList extends Component {
   constructor(props) {
@@ -10,11 +10,14 @@ class VideoList extends Component {
   render() {
     const videoListHTML = this.props.videos.map((video, i) => {
       return (
-        <VideoPreview
-          videoId={video._id}
+        <ContentPreview
+          contentType="video"
+          user={video.user}
+          id={video._id}
           thumbUrl={video.thumbUrl}
           title={video.title}
-          views={video.views}
+          viewCount={video.viewCount}
+          uploadedAt={video.uploadedAt}
           key={i}
         />
       );

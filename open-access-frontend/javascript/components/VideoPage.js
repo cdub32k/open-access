@@ -15,7 +15,15 @@ class VideoPage extends Component {
   }
 
   render() {
-    const { user, title, caption, views, url, thumbUrl } = this.props;
+    const {
+      user,
+      title,
+      caption,
+      viewCount,
+      url,
+      thumbUrl,
+      uploadedAt,
+    } = this.props;
     return (
       <Grid container>
         <Grid item xs={12} md={8}>
@@ -23,9 +31,10 @@ class VideoPage extends Component {
             user={user}
             title={title}
             caption={caption}
-            views={views}
+            viewCount={viewCount}
             url={url}
             thumbUrl={thumbUrl}
+            uploadedAt={uploadedAt}
           />
         </Grid>
         <Grid item xs={12} md={4}></Grid>
@@ -38,7 +47,7 @@ const mapStateToProps = (state) => ({
   user: state.video.user,
   title: state.video.title,
   caption: state.video.caption,
-  views: state.video.views,
+  viewCount: state.video.viewCount,
   url: state.video.url,
   thumbUrl: state.video.thumbUrl,
   uploadedAt: state.video.uploadedAt,
