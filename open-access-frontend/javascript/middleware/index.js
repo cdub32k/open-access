@@ -26,11 +26,21 @@ export default [
           .catch((err) => next(ActionCreators.signupError(err)));
         break;
       case ActionTypes.GET_USER_INFO_START:
+        next(ActionCreators.userInfoLoading());
+
         axios
           .post("api", {
             query: `
               {
                 user(username:"${action.payload.username}") {
+                  username
+                  profilePic
+                  displayName
+                  bio
+                  country
+                  city
+                  state
+                  joinedAt
                   videos {
                     _id
                     user {
@@ -117,6 +127,9 @@ export default [
                   title
                   caption
                   viewCount
+                  likeCount
+                  dislikeCount
+                  commentCount
                   url
                   thumbUrl
                   uploadedAt
@@ -141,6 +154,9 @@ export default [
                   title
                   caption
                   url
+                  likeCount
+                  dislikeCount
+                  commentCount
                   uploadedAt
                 }
               }
@@ -160,7 +176,10 @@ export default [
                     profilePic
                     username
                   }
-                  body                  
+                  body      
+                  likeCount
+                  dislikeCount
+                  commentCount            
                   uploadedAt
                 }
               }

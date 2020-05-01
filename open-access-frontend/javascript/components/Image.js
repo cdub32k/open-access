@@ -4,26 +4,65 @@ import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
+import CardContent from "@material-ui/core/CardContent";
+import CardActions from "@material-ui/core/CardActions";
+import IconButton from "@material-ui/core/IconButton";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import AddCommentIcon from "@material-ui/icons/AddComment";
 import { withStyles } from "@material-ui/core/styles";
+
+import { num2str, date2rel } from "../util/helpers";
 
 const styles = (theme) => ({
   container: {
     position: "relative",
+    width: "calc(100% - 48px);",
     margin: 24,
     display: "inline-block",
   },
+  summary: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  imageContainer: {
+    paddingBottom: "100%",
+    position: "relative",
+  },
   img: {
-    width: 600,
-    height: 600,
+    position: "absolute",
+    width: "100% !important",
+    height: "100% !important",
+    left: 0,
+    bottom: 0,
+  },
+  caption: {
+    fontSize: 15,
+    fontWeight: 400,
+  },
+  metric: {
+    fontSize: 14,
+    marginRight: 12,
   },
 });
 
 class Image_C extends Component {
   render() {
-    const { classes, user, url, title, caption } = this.props;
+    const {
+      classes,
+      user,
+      url,
+      title,
+      caption,
+      likeCount,
+      dislikeCount,
+      commentCount,
+      uploadedAt,
+    } = this.props;
+
     return (
       <Card className={classes.container}>
-        <CardMedia>
+        <CardMedia className={classes.imageContainer}>
           <img className={classes.img} src={url} />
         </CardMedia>
         <CardHeader
@@ -33,10 +72,26 @@ class Image_C extends Component {
               <span style={{ fontSize: 18 }}>{title}</span>
               <br />
               by {user.username}
+              <br />
+              {date2rel(uploadedAt)}
             </span>
           }
-          subheader={caption}
         />
+        <CardContent className={classes.caption}>{caption}</CardContent>
+        <CardActions disableSpacing>
+          <IconButton>
+            <FavoriteIcon />
+          </IconButton>
+          <span className={classes.metric}>{num2str(likeCount)}</span>
+          <IconButton>
+            <ThumbDownIcon />
+          </IconButton>
+          <span className={classes.metric}>{num2str(dislikeCount)}</span>
+          <IconButton>
+            <AddCommentIcon />
+          </IconButton>
+          <span className={classes.metric}>{num2str(commentCount)}</span>
+        </CardActions>
       </Card>
     );
   }

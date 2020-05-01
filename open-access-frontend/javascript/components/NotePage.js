@@ -15,11 +15,25 @@ class NotePage extends Component {
   }
 
   render() {
-    const { user, body, uploadedAt } = this.props;
+    const {
+      user,
+      body,
+      likeCount,
+      dislikeCount,
+      commentCount,
+      uploadedAt,
+    } = this.props;
     return (
       <Grid container>
-        <Grid item xs={12} md={8}>
-          <Note user={user} body={body} uploadedAt={uploadedAt} />
+        <Grid item xs={12} md={6}>
+          <Note
+            user={user}
+            body={body}
+            uploadedAt={uploadedAt}
+            likeCount={likeCount}
+            dislikeCount={dislikeCount}
+            commentCount={commentCount}
+          />
         </Grid>
         <Grid item xs={12} md={4}></Grid>
       </Grid>
@@ -30,6 +44,9 @@ class NotePage extends Component {
 const mapStateToProps = (state) => ({
   user: state.note.user,
   body: state.note.body,
+  likeCount: state.note.likeCount,
+  dislikeCount: state.note.dislikeCount,
+  commentCount: state.note.commentCount,
   uploadedAt: state.note.uploadedAt,
 });
 

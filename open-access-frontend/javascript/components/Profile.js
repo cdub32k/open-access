@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import { ActionCreators } from "../actions";
 
+import ProfileHeader from "./ProfileHeader";
 import VideoList from "./VideoList";
 import ImageList from "./ImageList";
 import NoteList from "./NoteList";
@@ -17,25 +18,26 @@ class Profile extends Component {
 
   render() {
     const { username } = this.props.match.params;
-    const { videos, images, notes } = this.props;
+    const { loading, videos, images, notes } = this.props;
+
     return (
       <div>
-        <h1>Hi {username}!</h1>
+        <ProfileHeader loading={loading} />
         <h3>Videos</h3>
-        <VideoList videos={videos} />
+        <VideoList videos={videos} loading={loading} />
         <br />
         <h3>Images</h3>
-        <ImageList images={images} />
+        <ImageList images={images} loading={loading} />
         <br />
         <h3>Notes</h3>
-        <NoteList notes={notes} />
+        <NoteList notes={notes} loading={loading} />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  profilePic: state.user.profilePic,
+  loading: state.user.viewed.loading,
   username: state.user.viewed.username,
   videos: state.user.viewed.videos,
   images: state.user.viewed.images,

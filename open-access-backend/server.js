@@ -61,6 +61,7 @@ const server = new ApolloServer({
     let token = req.headers["authorization"];
     if (!token) {
       req.authorized = false;
+      return null;
     }
 
     token = token.replace("Bearer ", "");

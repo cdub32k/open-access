@@ -12,6 +12,8 @@ const typeDefs = gql`
     postNote(body: String): Note
   }
 
+  scalar Date
+
   type User {
     profilePic: String
     username: String
@@ -22,12 +24,11 @@ const typeDefs = gql`
     city: String
     state: String
     bio: String
+    joinedAt: Date
     notes: [Note]
     images: [Image]
     videos: [Video]
   }
-
-  scalar Date
 
   type Note {
     user: User

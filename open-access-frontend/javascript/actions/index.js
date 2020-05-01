@@ -8,6 +8,7 @@ export const ActionTypes = {
   SIGN_UP_START: "SIGN_UP_START",
   SIGN_UP_SUCCESS: "SIGN_UP_SUCCESS",
   SIGN_UP_ERROR: "SIGN_UP_ERROR",
+  USER_INFO_LOADING: "USER_INFO_LOADING",
   GET_USER_INFO_START: "GET_USER_INFO_START",
   GET_USER_INFO_SUCCESS: "GET_USER_INFO_SUCCESS",
   GET_USER_INFO_ERROR: "GET_USER_INFO_ERROR",
@@ -52,6 +53,9 @@ export const ActionCreators = {
   },
   signupError: (error) => {
     return { type: ActionTypes.SIGN_UP_ERROR, error };
+  },
+  userInfoLoading: () => {
+    return { type: ActionTypes.USER_INFO_LOADING };
   },
   getUserInfoStart: (username) => {
     return { type: ActionTypes.GET_USER_INFO_START, payload: { username } };

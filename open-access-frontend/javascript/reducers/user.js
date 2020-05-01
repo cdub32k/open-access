@@ -9,6 +9,7 @@ const initialState = {
   error: null,
   loggedIn: false,
   viewed: {
+    loading: false,
     username: "",
     videos: [],
     images: [],
@@ -48,6 +49,8 @@ const userReducer = (state = initialState, action) => {
     case ActionTypes.LOGOUT:
       localStorage.removeItem("open-access-api-token");
       return { ...state, loggedIn: false, username: "", email: "" };
+    case ActionTypes.USER_INFO_LOADING:
+      return { ...state, viewed: { ...state.viewed, loading: true } };
     case ActionTypes.GET_USER_INFO_SUCCESS:
       return {
         ...state,

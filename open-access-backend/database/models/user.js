@@ -19,6 +19,7 @@ let userSchema = new mongoose.Schema({
   passwordHash: String,
   stripeCustomerId: String,
   stripePaymentMethodId: String,
+  joinedAt: { type: Date, default: +new Date() },
 });
 
 export default mongoose.model("user", userSchema);

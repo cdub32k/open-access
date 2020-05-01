@@ -9,7 +9,9 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import { withStyles } from "@material-ui/core/styles";
 
-import { num2str, date2rel } from "../util/helpers";
+import ContentActions from "./ContentActions";
+
+import { date2rel, thousandsSeparators } from "../util/helpers";
 
 const styles = (theme) => ({
   container: {
@@ -33,18 +35,12 @@ const styles = (theme) => ({
     left: 0,
     bottom: 0,
   },
-  previewDetails: {
-    display: "flex",
-    justifyContent: "space-between",
-    fontSize: "10px",
-    maxWidth: "75%",
-    marginTop: 8,
-  },
 });
 
 class VideoPlayer extends Component {
   render() {
     const {
+      id,
       classes,
       contentType,
       user,
@@ -52,11 +48,12 @@ class VideoPlayer extends Component {
       thumbUrl,
       title,
       viewCount,
+      likeCount,
+      dislikeCount,
+      commentCount,
       caption,
       uploadedAt,
     } = this.props;
-
-    let metric = `${num2str(viewCount)} views`;
 
     return (
       <Card className={classes.container}>
@@ -77,16 +74,25 @@ class VideoPlayer extends Component {
               <span style={{ fontSize: 18 }}>{title}</span>
               <br />
               by {user.username}
+              <br />
+              {date2rel(uploadedAt)}
             </span>
           }
-          subheader={
-            <div className={classes.previewDetails}>
-              <div>{metric}</div>
-              <div>{date2rel(uploadedAt)}</div>
-            </div>
-          }
         />
-        <CardContent>{caption}</CardContent>
+        <CardContent style={{ paddingTop: 0 }}>
+          <div style={{ fontWeight: 400 }}>
+            {thousandsSeparators(viewCount)} views
+          </div>
+          <br />
+          {caption}
+        </CardContent>
+        <ContentActions
+          contentType="video"
+          id={id}
+          likeCount={likeCount}
+          dislikeCount={dislikeCount}
+          commentCount={commentCount}
+        />
       </Card>
     );
   }

@@ -1,7 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
+import { withStyles } from "@material-ui/core/styles";
+
 import ContentPreview from "./ContentPreview";
+import PreviewPlaceholder from "./PreviewPlaceholder";
+
+const styles = (theme) => ({
+  contentList: {
+    display: "flex",
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+  },
+});
 
 class ImageList extends Component {
   constructor(props) {
@@ -9,23 +20,29 @@ class ImageList extends Component {
   }
 
   render() {
-    const imageListHTML = this.props.images.map((image, i) => {
-      return (
-        <ContentPreview
-          contentType="image"
-          user={image.user}
-          id={image._id}
-          title={image.title}
-          thumbUrl={image.url}
-          likeCount={image.likeCount}
-          uploadedAt={image.uploadedAt}
-          key={i}
-        />
-      );
-    });
+    const { classes, loading } = this.props;
 
-    return <div>{imageListHTML}</div>;
+    const imageListHTML = loading
+      ? Array.from({ length: 8 }).map((preview, i) => {
+          return <PreviewPlaceholder key={i} />;
+        })
+      : this.props.images.map((image, i) => {
+          return (
+            <ContentPreview
+              contentType="image"
+              user={image.user}
+              id={image._id}
+              title={image.title}
+              thumbUrl={image.url}
+              likeCount={image.likeCount}
+              uploadedAt={image.uploadedAt}
+              key={i}
+            />
+          );
+        });
+
+    return <div className={classes.contentList}>{imageListHTML}</div>;
   }
 }
 
-export default ImageList;
+export default withStyles(styles)(ImageList);
