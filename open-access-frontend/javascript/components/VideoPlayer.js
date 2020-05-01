@@ -9,7 +9,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import { withStyles } from "@material-ui/core/styles";
 
-import ContentDetails from "./ContentDetails";
+import { num2str, date2rel } from "../util/helpers";
 
 const styles = (theme) => ({
   container: {
@@ -33,12 +33,20 @@ const styles = (theme) => ({
     left: 0,
     bottom: 0,
   },
+  previewDetails: {
+    display: "flex",
+    justifyContent: "space-between",
+    fontSize: "10px",
+    maxWidth: "75%",
+    marginTop: 8,
+  },
 });
 
 class VideoPlayer extends Component {
   render() {
     const {
       classes,
+      contentType,
       user,
       url,
       thumbUrl,
@@ -47,6 +55,9 @@ class VideoPlayer extends Component {
       caption,
       uploadedAt,
     } = this.props;
+
+    let metric = `${num2str(viewCount)} views`;
+
     return (
       <Card className={classes.container}>
         <CardMedia className={classes.playerContainer}>
@@ -69,7 +80,10 @@ class VideoPlayer extends Component {
             </span>
           }
           subheader={
-            <ContentDetails viewCount={viewCount} uploadedAt={uploadedAt} />
+            <div className={classes.previewDetails}>
+              <div>{metric}</div>
+              <div>{date2rel(uploadedAt)}</div>
+            </div>
           }
         />
         <CardContent>{caption}</CardContent>
