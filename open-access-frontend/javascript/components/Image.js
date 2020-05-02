@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { ActionCreators } from "../actions";
 
 import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
@@ -61,6 +63,8 @@ class Image_C extends Component {
       dislikeCount,
       commentCount,
       uploadedAt,
+      likeImage,
+      dislikeImage,
     } = this.props;
 
     return (
@@ -87,10 +91,18 @@ class Image_C extends Component {
           likeCount={likeCount}
           dislikeCount={dislikeCount}
           commentCount={commentCount}
+          like={() => likeImage(id)}
+          dislike={() => dislikeImage(id)}
         />
       </Card>
     );
   }
 }
 
-export default withStyles(styles)(Image_C);
+const mapDispatchToProps = (dispatch) => ({
+  likeImage: (imageId) => dispatch(ActionCreators.likeImageStart(imageId)),
+  dislikeImage: (imageId) =>
+    dispatch(ActionCreators.dislikeImageStart(imageId)),
+});
+
+export default withStyles(styles)(connect(null, mapDispatchToProps)(Image_C));

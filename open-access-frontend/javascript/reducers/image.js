@@ -13,6 +13,14 @@ const imageReducer = (state = initialState, action) => {
       return { ...state, ...action.payload.imageData };
     case ActionTypes.GET_IMAGE_INFO_ERROR:
       return { ...state, error: action.error };
+    case ActionTypes.LIKE_IMAGE_SUCCESS:
+      return { ...state };
+    case ActionTypes.LIKE_IMAGE_ERROR:
+      return { ...state };
+    case ActionTypes.DISLIKE_IMAGE_SUCCESS:
+      return { ...state };
+    case ActionTypes.DISLIKE_IMAGE_ERROR:
+      return { ...state };
     default:
       return state;
   }

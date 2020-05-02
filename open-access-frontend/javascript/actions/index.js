@@ -18,9 +18,21 @@ export const ActionTypes = {
   RECORD_VIDEO_VIEW_START: "RECORD_VIDEO_VIEW_START",
   RECORD_VIDEO_VIEW_SUCCESS: "RECORD_VIDEO_VIEW_SUCCESS",
   RECORD_VIDEO_VIEW_ERROR: "RECORD_VIDEO_VIEW_ERROR",
+  LIKE_VIDEO_START: "LIKE_VIDEO_START",
+  LIKE_VIDEO_SUCCESS: "LIKE_VIDEO_SUCCESS",
+  LIKE_VIDEO_ERROR: "LIKE_VIDEO_ERROR",
+  DISLIKE_VIDEO_START: "DISLIKE_VIDEO_START",
+  DISLIKE_VIDEO_SUCCESS: "DISLIKE_VIDEO_SUCCESS",
+  DISLIKE_VIDEO_ERROR: "DISLIKE_VIDEO_ERROR",
   GET_IMAGE_INFO_START: "GET_IMAGE_INFO_START",
   GET_IMAGE_INFO_SUCCESS: "GET_IMAGE_INFO_SUCCESS",
   GET_IMAGE_INFO_ERROR: "GET_IMAGE_INFO_ERROR",
+  LIKE_IMAGE_START: "LIKE_IMAGE_START",
+  LIKE_IMAGE_SUCCESS: "LIKE_IMAGE_SUCCESS",
+  LIKE_IMAGE_ERROR: "LIKE_IMAGE_ERROR",
+  DISLIKE_IMAGE_START: "DISLIKE_IMAGE_START",
+  DISLIKE_IMAGE_SUCCESS: "DISLIKE_IMAGE_SUCCESS",
+  DISLIKE_IMAGE_ERROR: "DISLIKE_IMAGE_ERROR",
   GET_NOTE_INFO_START: "GET_NOTE_INFO_START",
   GET_NOTE_INFO_SUCCESS: "GET_NOTE_INFO_SUCCESS",
   GET_NOTE_INFO_ERROR: "GET_NOTE_INFO_ERROR",
@@ -87,6 +99,24 @@ export const ActionCreators = {
   recordVideoViewError: (error) => {
     return { type: ActionTypes.RECORD_VIDEO_VIEW_ERROR, error };
   },
+  likeVideoStart: (videoId) => {
+    return { type: ActionTypes.LIKE_VIDEO_START, payload: { videoId } };
+  },
+  likeVideoSuccess: () => {
+    return { type: ActionTypes.LIKE_VIDEO_SUCCESS };
+  },
+  likeVideoError: (error) => {
+    return { type: ActionTypes.LIKE_VIDEO_ERROR, error };
+  },
+  dislikeVideoStart: (videoId) => {
+    return { type: ActionTypes.DISLIKE_VIDEO_START, payload: { videoId } };
+  },
+  dislikeVideoSuccess: () => {
+    return { type: ActionTypes.DISLIKE_VIDEO_SUCCESS };
+  },
+  dislikeVideoError: (error) => {
+    return { type: ActionTypes.DISLIKE_VIDEO_ERROR, error };
+  },
   getImageInfoStart: (imageId) => {
     return { type: ActionTypes.GET_IMAGE_INFO_START, payload: { imageId } };
   },
@@ -95,6 +125,24 @@ export const ActionCreators = {
   },
   getImageInfoError: (error) => {
     return { type: ActionTypes.GET_IMAGE_INFO_ERROR, error };
+  },
+  likeImageStart: (imageId) => {
+    return { type: ActionTypes.LIKE_IMAGE_START, payload: { imageId } };
+  },
+  likeImageSuccess: () => {
+    return { type: ActionTypes.LIKE_IMAGE_SUCCESS };
+  },
+  likeImageError: (error) => {
+    return { type: ActionTypes.LIKE_IMAGE_ERROR, error };
+  },
+  dislikeImageStart: (imageId) => {
+    return { type: ActionTypes.DISLIKE_IMAGE_START, payload: { imageId } };
+  },
+  dislikeImageSuccess: () => {
+    return { type: ActionTypes.DISLIKE_IMAGE_SUCCESS };
+  },
+  dislikeImageError: (error) => {
+    return { type: ActionTypes.DISLIKE_IMAGE_ERROR, error };
   },
   getNoteInfoStart: (noteId) => {
     return { type: ActionTypes.GET_NOTE_INFO_START, payload: { noteId } };

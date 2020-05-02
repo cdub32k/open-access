@@ -19,18 +19,21 @@ const styles = (theme) => ({
 const ContentActions = ({
   classes,
   contentType,
-  id,
+  liked,
+  disliked,
   likeCount,
   dislikeCount,
   commentCount,
+  like,
+  dislike,
 }) => {
   return (
     <CardActions disableSpacing>
-      <IconButton>
+      <IconButton onClick={like}>
         <FavoriteIcon />
       </IconButton>
       <span className={classes.metric}>{num2str(likeCount)}</span>
-      <IconButton>
+      <IconButton onClick={dislike}>
         <ThumbDownIcon />
       </IconButton>
       <span className={classes.metric}>{num2str(dislikeCount)}</span>

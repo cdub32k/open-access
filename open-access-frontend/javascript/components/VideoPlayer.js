@@ -39,10 +39,6 @@ const styles = (theme) => ({
 });
 
 class VideoPlayer extends Component {
-  recordView = (id) => {
-    this.props.recordView(id);
-  };
-
   render() {
     const {
       id,
@@ -58,6 +54,9 @@ class VideoPlayer extends Component {
       commentCount,
       caption,
       uploadedAt,
+      recordView,
+      likeVideo,
+      dislikeVideo,
     } = this.props;
 
     return (
@@ -70,7 +69,7 @@ class VideoPlayer extends Component {
             playing
             controls
             pip={false}
-            onStart={() => this.recordView(id)}
+            onStart={() => recordView(id)}
           />
         </CardMedia>
         <CardHeader
@@ -94,7 +93,8 @@ class VideoPlayer extends Component {
         </CardContent>
         <ContentActions
           contentType="video"
-          id={id}
+          like={() => likeVideo(id)}
+          dislike={() => dislikeVideo(id)}
           likeCount={likeCount}
           dislikeCount={dislikeCount}
           commentCount={commentCount}
@@ -107,6 +107,9 @@ class VideoPlayer extends Component {
 const mapDispatchToProps = (dispatch) => ({
   recordView: (videoId) =>
     dispatch(ActionCreators.recordVideoViewStart(videoId)),
+  likeVideo: (videoId) => dispatch(ActionCreators.likeVideoStart(videoId)),
+  dislikeVideo: (videoId) =>
+    dispatch(ActionCreators.dislikeVideoStart(videoId)),
 });
 
 export default withStyles(styles)(

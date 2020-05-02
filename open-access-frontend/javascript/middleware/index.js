@@ -114,6 +114,36 @@ export default [
           })
           .catch((err) => next(ActionCreators.updateAccountInfoError(err)));
         break;
+      case ActionTypes.LIKE_IMAGE_START:
+        axios
+          .post("/api", {
+            query: `
+                mutation {
+                  likeImage(id:"${action.payload.imageId}")
+                }
+              `,
+          })
+          .then((res) => {
+            if (res.data.data.likeImage)
+              next(ActionCreators.likeImageSuccess());
+            else next(ActionCreators.likeImageError());
+          });
+        break;
+      case ActionTypes.DISLIKE_IMAGE_START:
+        axios
+          .post("/api", {
+            query: `
+                mutation {
+                  dislikeImage(id:"${action.payload.imageId}")
+                }
+              `,
+          })
+          .then((res) => {
+            if (res.data.data.dislikeImage)
+              next(ActionCreators.dislikeImageSuccess());
+            else next(ActionCreators.dislikeImageError());
+          });
+        break;
       case ActionTypes.GET_VIDEO_INFO_START:
         axios
           .post("api", {
@@ -154,6 +184,36 @@ export default [
             if (res.data.data.viewVideo)
               next(ActionCreators.recordVideoViewSuccess());
             else next(ActionCreators.recordVideoViewError());
+          });
+        break;
+      case ActionTypes.LIKE_VIDEO_START:
+        axios
+          .post("/api", {
+            query: `
+              mutation {
+                likeVideo(id:"${action.payload.videoId}")
+              }
+            `,
+          })
+          .then((res) => {
+            if (res.data.data.likeVideo)
+              next(ActionCreators.likeVideoSuccess());
+            else next(ActionCreators.likeVideoError());
+          });
+        break;
+      case ActionTypes.DISLIKE_VIDEO_START:
+        axios
+          .post("/api", {
+            query: `
+              mutation {
+                dislikeVideo(id:"${action.payload.videoId}")
+              }
+            `,
+          })
+          .then((res) => {
+            if (res.data.data.dislikeVideo)
+              next(ActionCreators.dislikeVideoSuccess());
+            else next(ActionCreators.dislikeVideoError());
           });
         break;
       case ActionTypes.GET_IMAGE_INFO_START:

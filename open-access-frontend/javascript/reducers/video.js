@@ -17,6 +17,14 @@ const videoReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.RECORD_VIDEO_VIEW_ERROR:
       return { ...state };
+    case ActionTypes.LIKE_VIDEO_SUCCESS:
+      return { ...state };
+    case ActionTypes.LIKE_VIDEO_ERROR:
+      return { ...state };
+    case ActionTypes.DISLIKE_VIDEO_SUCCESS:
+      return { ...state };
+    case ActionTypes.DISLIKE_VIDEO_ERROR:
+      return { ...state };
     default:
       return state;
   }

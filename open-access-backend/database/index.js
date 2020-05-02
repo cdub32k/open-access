@@ -10,6 +10,9 @@ import VideoLike from "./models/videoLike";
 import VideoDislike from "./models/videoDislike";
 import VideoView from "./models/videoView";
 import VideoComment from "./models/videoComment";
+import ImageLike from "./models/imageLike";
+import ImageDislike from "./models/imageDislike";
+import ImageComment from "./models/imageComment";
 
 dotenv.config();
 
@@ -26,6 +29,9 @@ class Database {
     this.VideoDislike = VideoDislike;
     this.VideoView = VideoView;
     this.VideoComment = VideoComment;
+    this.ImageLike = ImageLike;
+    this.ImageDislike = ImageDislike;
+    this.ImageComment = ImageComment;
   }
 
   _connect() {

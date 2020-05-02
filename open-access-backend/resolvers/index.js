@@ -37,17 +37,89 @@ const resolvers = {
 
       return note;
     },
+    likeImage: async (
+      parent,
+      { id },
+      { req: { username, authorized } },
+      info
+    ) => {
+      try {
+        const liked = await DB.ImageLike.findOne({ username, imageId: id });
+        const image = await DB.Image.findOne({ _id: id });
+        if (!liked) {
+          await DB.ImageLike.create({
+            username,
+            imageId: id,
+          });
+          image.likeCount++;
+          await image.save();
+        } else {
+          await DB.ImageLike.deleteOne({ username, imageId: id });
+          image.likeCount--;
+          await image.save();
+        }
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    dislikeImage: async (
+      parent,
+      { id },
+      { req: { username, authorized } },
+      info
+    ) => {
+      try {
+        const disliked = await DB.ImageDislike.findOne({
+          username,
+          imageId: id,
+        });
+        const image = await DB.Image.findOne({ _id: id });
+
+        if (!disliked) {
+          await DB.ImageDislike.create({
+            username,
+            imageId: id,
+          });
+          image.dislikeCount++;
+          await image.save();
+        } else {
+          await DB.ImageDislike.deleteOne({ username, imageId: id });
+          image.dislikeCount--;
+          await image.save();
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
     likeVideo: async (
       parent,
       { id },
       { req: { username, authorized } },
       info
     ) => {
-      const liked = await DB.VideoLike.create({
-        username,
-        videoId: id,
-      });
-      return !!liked;
+      try {
+        const liked = await DB.VideoLike.findOne({ username, videoId: id });
+        const video = await DB.Video.findOne({ _id: id });
+        if (!liked) {
+          await DB.VideoLike.create({
+            username,
+            videoId: id,
+          });
+          video.likeCount++;
+          await video.save();
+        } else {
+          await DB.VideoLike.deleteOne({ username, videoId: id });
+          video.likeCount--;
+          await video.save();
+        }
+
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
     dislikeVideo: async (
       parent,
@@ -55,11 +127,29 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
-      const dislike = await DB.VideoDislike.create({
-        username,
-        videoId: id,
-      });
-      return !!dislike;
+      try {
+        const disliked = await DB.VideoDislike.findOne({
+          username,
+          videoId: id,
+        });
+        const video = await DB.Video.findOne({ _id: id });
+
+        if (!disliked) {
+          await DB.VideoDislike.create({
+            username,
+            videoId: id,
+          });
+          video.dislikeCount++;
+          await video.save();
+        } else {
+          await DB.VideoDislike.deleteOne({ username, videoId: id });
+          video.dislikeCount--;
+          await video.save();
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
     viewVideo: async (
       parent,
@@ -67,15 +157,19 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
-      const viewed = await DB.VideoView.findOne({ username, videoId: id });
+      try {
+        const viewed = await DB.VideoView.findOne({ username, videoId: id });
 
-      if (viewed) return true;
+        if (viewed) return true;
 
-      const view = await DB.VideoView.create({
-        username,
-        videoId: id,
-      });
-      return !!view;
+        await DB.VideoView.create({
+          username,
+          videoId: id,
+        });
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
     commentVideo: async (
       parent,
@@ -83,12 +177,16 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
-      const comment = await DB.VideoComment.create({
-        username,
-        videoId: id,
-        body,
-      });
-      return !!comment;
+      try {
+        const comment = await DB.VideoComment.create({
+          username,
+          videoId: id,
+          body,
+        });
+        return true;
+      } catch (error) {
+        return false;
+      }
     },
   },
 
