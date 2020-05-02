@@ -114,6 +114,8 @@ const typeDefs = gql`
     likes: [NoteLike]
     dislikes: [NoteDislike]
     comments: [NoteComment]
+    liked: Boolean
+    disliked: Boolean
   }
 
   type Image {
@@ -129,6 +131,8 @@ const typeDefs = gql`
     likes: [ImageLike]
     dislikes: [ImageDislike]
     comments: [ImageComment]
+    liked: Boolean
+    disliked: Boolean
   }
 
   type Video {
@@ -147,6 +151,8 @@ const typeDefs = gql`
     dislikes: [VideoDislike]
     views: [VideoView]
     comments: [VideoComment]
+    liked: Boolean
+    disliked: Boolean
   }
 `;
 

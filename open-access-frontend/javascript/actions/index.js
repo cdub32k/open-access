@@ -12,6 +12,7 @@ export const ActionTypes = {
   GET_USER_INFO_START: "GET_USER_INFO_START",
   GET_USER_INFO_SUCCESS: "GET_USER_INFO_SUCCESS",
   GET_USER_INFO_ERROR: "GET_USER_INFO_ERROR",
+  VIDEO_LOADING: "VIDEO_LOADING",
   GET_VIDEO_INFO_START: "GET_VIDEO_INFO_START",
   GET_VIDEO_INFO_SUCCESS: "GET_VIDEO_INFO_SUCCESS",
   GET_VIDEO_INFO_ERROR: "GET_VIDEO_INFO_ERROR",
@@ -24,6 +25,7 @@ export const ActionTypes = {
   DISLIKE_VIDEO_START: "DISLIKE_VIDEO_START",
   DISLIKE_VIDEO_SUCCESS: "DISLIKE_VIDEO_SUCCESS",
   DISLIKE_VIDEO_ERROR: "DISLIKE_VIDEO_ERROR",
+  IMAGE_LOADING: "IMAGE_LOADING",
   GET_IMAGE_INFO_START: "GET_IMAGE_INFO_START",
   GET_IMAGE_INFO_SUCCESS: "GET_IMAGE_INFO_SUCCESS",
   GET_IMAGE_INFO_ERROR: "GET_IMAGE_INFO_ERROR",
@@ -33,6 +35,7 @@ export const ActionTypes = {
   DISLIKE_IMAGE_START: "DISLIKE_IMAGE_START",
   DISLIKE_IMAGE_SUCCESS: "DISLIKE_IMAGE_SUCCESS",
   DISLIKE_IMAGE_ERROR: "DISLIKE_IMAGE_ERROR",
+  NOTE_LOADING: "NOTE_LOADING",
   GET_NOTE_INFO_START: "GET_NOTE_INFO_START",
   GET_NOTE_INFO_SUCCESS: "GET_NOTE_INFO_SUCCESS",
   GET_NOTE_INFO_ERROR: "GET_NOTE_INFO_ERROR",
@@ -87,6 +90,9 @@ export const ActionCreators = {
   getUserInfoError: (error) => {
     return { type: ActionTypes.GET_USER_INFO_ERROR, error };
   },
+  videoLoading: () => {
+    return { type: ActionTypes.VIDEO_LOADING };
+  },
   getVideoInfoStart: (videoId) => {
     return { type: ActionTypes.GET_VIDEO_INFO_START, payload: { videoId } };
   },
@@ -122,6 +128,9 @@ export const ActionCreators = {
   },
   dislikeVideoError: (error) => {
     return { type: ActionTypes.DISLIKE_VIDEO_ERROR, error };
+  },
+  imageLoading: () => {
+    return { type: ActionTypes.IMAGE_LOADING };
   },
   getImageInfoStart: (imageId) => {
     return { type: ActionTypes.GET_IMAGE_INFO_START, payload: { imageId } };
@@ -167,6 +176,9 @@ export const ActionCreators = {
   },
   dislikeNoteError: (error) => {
     return { type: ActionTypes.DISLIKE_NOTE_ERROR, error };
+  },
+  noteLoading: () => {
+    return { type: ActionTypes.NOTE_LOADING };
   },
   getNoteInfoStart: (noteId) => {
     return { type: ActionTypes.GET_NOTE_INFO_START, payload: { noteId } };

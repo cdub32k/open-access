@@ -7,6 +7,8 @@ import Avatar from "@material-ui/core/Avatar";
 
 import dayjs from "dayjs";
 
+import PreviewProfileHeader from "./PreviewProfileHeader";
+
 const useStyles = makeStyles((theme) => ({
   container: {
     marginBottom: 32,
@@ -31,7 +33,7 @@ const ProfileHeader = ({
   const classes = useStyles();
 
   return loading ? (
-    <div>Loading...</div>
+    <PreviewProfileHeader />
   ) : (
     <div className={classes.container}>
       <Avatar src={profilePic} className={classes.large} />

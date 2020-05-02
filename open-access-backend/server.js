@@ -57,22 +57,23 @@ app.use(express.static("public"));
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => {
+  context: async ({ req }) => {
     let token = req.headers["authorization"];
     if (!token) {
       req.authorized = false;
-      return null;
+      return { req };
     }
 
     token = token.replace("Bearer ", "");
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err || !decoded.username) {
-        req.authorized = false;
-      }
-      req.authorized = true;
-      req.username = decoded.username;
-    });
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
+    if (!decoded.username) {
+      req.authorized = false;
+      return { req };
+    }
+
+    req.authorized = true;
+    req.username = decoded.username;
     return { req };
   },
 });

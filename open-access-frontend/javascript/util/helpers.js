@@ -2,6 +2,9 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 export function num2str(val) {
+  if (val < 999) return val;
+  if (!val) return "-";
+
   var s = ["", "k", "m", "b", "t"];
 
   var sNum = Math.floor(("" + val).length / 3);

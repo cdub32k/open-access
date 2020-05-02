@@ -7,6 +7,7 @@ import { ActionCreators } from "../actions";
 import Grid from "@material-ui/core/Grid";
 
 import Note from "./Note";
+import PreviewNote from "./PreviewNote";
 
 class NotePage extends Component {
   componentDidMount() {
@@ -16,12 +17,15 @@ class NotePage extends Component {
 
   render() {
     const {
+      loading,
       user,
       body,
       likeCount,
       dislikeCount,
       commentCount,
       uploadedAt,
+      liked,
+      disliked,
       match: {
         params: { noteId },
       },
@@ -29,15 +33,21 @@ class NotePage extends Component {
     return (
       <Grid container>
         <Grid item xs={12} md={6}>
-          <Note
-            id={noteId}
-            user={user}
-            body={body}
-            uploadedAt={uploadedAt}
-            likeCount={likeCount}
-            dislikeCount={dislikeCount}
-            commentCount={commentCount}
-          />
+          {loading ? (
+            <PreviewNote />
+          ) : (
+            <Note
+              id={noteId}
+              user={user}
+              body={body}
+              uploadedAt={uploadedAt}
+              likeCount={likeCount}
+              dislikeCount={dislikeCount}
+              commentCount={commentCount}
+              liked={liked}
+              disliked={disliked}
+            />
+          )}
         </Grid>
         <Grid item xs={12} md={4}></Grid>
       </Grid>
@@ -46,12 +56,15 @@ class NotePage extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  loading: state.note.loading,
   user: state.note.user,
   body: state.note.body,
   likeCount: state.note.likeCount,
   dislikeCount: state.note.dislikeCount,
   commentCount: state.note.commentCount,
   uploadedAt: state.note.uploadedAt,
+  liked: state.note.liked,
+  disliked: state.note.disliked,
 });
 
 const mapDispatchToProps = (dispatch) => ({

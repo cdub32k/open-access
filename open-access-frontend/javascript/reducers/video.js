@@ -3,26 +3,33 @@ import { ActionTypes } from "../actions";
 const initialState = {
   error: null,
   user: {},
+  loading: false,
 };
 
 const videoReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.CLEAR_ERRORS:
       return { ...state, error: null };
+    case ActionTypes.VIDEO_LOADING:
+      return { ...state, loading: true };
     case ActionTypes.GET_VIDEO_INFO_SUCCESS:
-      return { ...state, ...action.payload.videoData };
+      return { ...state, ...action.payload.videoData, loading: false };
     case ActionTypes.GET_VIDEO_INFO_ERROR:
-      return { ...state, error: action.error };
+      return { ...state, error: action.error, loading: false };
     case ActionTypes.RECORD_VIDEO_VIEW_SUCCESS:
       return { ...state };
     case ActionTypes.RECORD_VIDEO_VIEW_ERROR:
       return { ...state };
     case ActionTypes.LIKE_VIDEO_SUCCESS:
-      return { ...state };
+      let newCount = state.liked ? state.likeCount - 1 : state.likeCount + 1;
+      return { ...state, liked: !state.liked, likeCount: newCount };
     case ActionTypes.LIKE_VIDEO_ERROR:
       return { ...state };
     case ActionTypes.DISLIKE_VIDEO_SUCCESS:
-      return { ...state };
+      newCount = state.disliked
+        ? state.dislikeCount - 1
+        : state.dislikeCount + 1;
+      return { ...state, disliked: !state.disliked, dislikeCount: newCount };
     case ActionTypes.DISLIKE_VIDEO_ERROR:
       return { ...state };
     default:

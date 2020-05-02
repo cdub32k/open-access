@@ -7,11 +7,11 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { num2str, date2rel } from "../util/helpers";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     height: 240,
     width: 300,
@@ -45,9 +45,10 @@ const styles = (theme) => ({
     marginTop: 8,
     backgroundColor: "rgba(0, 0, 0, 0.08)",
   },
-});
+}));
 
-const PreviewPlaceholder = ({ classes }) => {
+const PreviewPlaceholder = () => {
+  const classes = useStyles();
   return (
     <Card className={classes.container}>
       <CardContent className={classes.thumb} />
@@ -66,4 +67,4 @@ const PreviewPlaceholder = ({ classes }) => {
   );
 };
 
-export default withStyles(styles)(PreviewPlaceholder);
+export default PreviewPlaceholder;

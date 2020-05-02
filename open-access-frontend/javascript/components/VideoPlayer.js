@@ -57,6 +57,8 @@ class VideoPlayer extends Component {
       recordView,
       likeVideo,
       dislikeVideo,
+      liked,
+      disliked,
     } = this.props;
 
     return (
@@ -93,6 +95,8 @@ class VideoPlayer extends Component {
         </CardContent>
         <ContentActions
           contentType="video"
+          liked={liked}
+          disliked={disliked}
           like={() => likeVideo(id)}
           dislike={() => dislikeVideo(id)}
           likeCount={likeCount}

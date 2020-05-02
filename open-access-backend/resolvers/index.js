@@ -252,6 +252,26 @@ const resolvers = {
       const user = await DB.User.findOne({ username });
       return user;
     },
+    liked: async ({ _id }, args, { req: { username } }, info) => {
+      const liked = await DB.NoteLike.findOne({ username, noteId: _id });
+      return !!liked;
+    },
+    disliked: async ({ _id }, args, { req: { username } }, info) => {
+      const disliked = await DB.NoteDislike.findOne({ username, noteId: _id });
+      return !!disliked;
+    },
+    likes: async ({ _id }, args, context, info) => {
+      const likes = await DB.NoteLike.find({ noteId: _id });
+      return likes;
+    },
+    dislikes: async ({ _id }, args, context, info) => {
+      const dislikes = await DB.NoteDislike.find({ noteId: _id });
+      return dislikes;
+    },
+    comments: async ({ _id }, args, context, info) => {
+      const comments = await DB.NoteComment.find({ noteId: _id });
+      return comments;
+    },
   },
 
   Image: {
@@ -259,12 +279,47 @@ const resolvers = {
       const user = await DB.User.findOne({ username });
       return user;
     },
+    liked: async ({ _id }, args, { req: { username } }, info) => {
+      const liked = await DB.ImageLike.findOne({ username, imageId: _id });
+      return !!liked;
+    },
+    disliked: async ({ _id }, args, { req: { username } }, info) => {
+      const disliked = await DB.ImageDislike.findOne({
+        username,
+        imageId: _id,
+      });
+      return !!disliked;
+    },
+    likes: async ({ _id }, args, context, info) => {
+      const likes = await DB.ImageLike.find({ imageId: _id });
+      return likes;
+    },
+    dislikes: async ({ _id }, args, context, info) => {
+      const dislikes = await DB.ImageDislike.find({ imageId: _id });
+      return dislikes;
+    },
+    comments: async ({ _id }, args, context, info) => {
+      const comments = await DB.ImageComment.find({ imageId: _id });
+      return comments;
+    },
   },
 
   Video: {
     user: async ({ username }, args, context, info) => {
       const user = await DB.User.findOne({ username });
       return user;
+    },
+    liked: async ({ _id }, args, { req: { username } }, info) => {
+      const liked = await DB.VideoLike.findOne({ username, videoId: _id });
+      return !!liked;
+    },
+    disliked: async ({ _id }, args, { req: { username } }, info) => {
+      const disliked = await DB.VideoDislike.findOne({
+        username,
+        videoId: _id,
+      });
+
+      return !!disliked;
     },
     likes: async ({ _id }, args, context, info) => {
       const likes = await DB.VideoLike.find({ videoId: _id });

@@ -65,6 +65,8 @@ class Image_C extends Component {
       uploadedAt,
       likeImage,
       dislikeImage,
+      liked,
+      disliked,
     } = this.props;
 
     return (
@@ -93,6 +95,8 @@ class Image_C extends Component {
           commentCount={commentCount}
           like={() => likeImage(id)}
           dislike={() => dislikeImage(id)}
+          liked={liked}
+          disliked={disliked}
         />
       </Card>
     );

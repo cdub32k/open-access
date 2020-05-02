@@ -51,6 +51,8 @@ export default [
                     viewCount
                     thumbUrl
                     uploadedAt
+                    liked
+                    disliked
                   }
                   images {
                     _id
@@ -62,6 +64,8 @@ export default [
                     likeCount
                     url
                     uploadedAt
+                    liked
+                    disliked
                   }
                   notes {
                     _id
@@ -72,6 +76,8 @@ export default [
                     commentCount
                     body
                     uploadedAt
+                    liked
+                    disliked
                   }
                 }
               }
@@ -174,6 +180,7 @@ export default [
           });
         break;
       case ActionTypes.GET_VIDEO_INFO_START:
+        next(ActionCreators.videoLoading());
         axios
           .post("api", {
             query: `
@@ -192,6 +199,8 @@ export default [
                   url
                   thumbUrl
                   uploadedAt
+                  liked
+                  disliked
                 }
               }
             `,
@@ -246,6 +255,7 @@ export default [
           });
         break;
       case ActionTypes.GET_IMAGE_INFO_START:
+        next(ActionCreators.imageLoading());
         axios
           .post("api", {
             query: `
@@ -262,6 +272,8 @@ export default [
                   dislikeCount
                   commentCount
                   uploadedAt
+                  liked
+                  disliked
                 }
               }
             `,
@@ -271,6 +283,7 @@ export default [
           });
         break;
       case ActionTypes.GET_NOTE_INFO_START:
+        next(ActionCreators.noteLoading());
         axios
           .post("api", {
             query: `
@@ -285,6 +298,8 @@ export default [
                   dislikeCount
                   commentCount            
                   uploadedAt
+                  liked
+                  disliked
                 }
               }
             `,

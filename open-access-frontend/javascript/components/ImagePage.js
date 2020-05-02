@@ -7,6 +7,7 @@ import { ActionCreators } from "../actions";
 import Grid from "@material-ui/core/Grid";
 
 import Image_C from "./Image";
+import PreviewImage from "./PreviewImage";
 
 class ImagePage extends Component {
   componentDidMount() {
@@ -16,6 +17,7 @@ class ImagePage extends Component {
 
   render() {
     const {
+      loading,
       user,
       title,
       caption,
@@ -24,6 +26,8 @@ class ImagePage extends Component {
       dislikeCount,
       commentCount,
       uploadedAt,
+      liked,
+      disliked,
       match: {
         params: { imageId },
       },
@@ -31,17 +35,23 @@ class ImagePage extends Component {
     return (
       <Grid container>
         <Grid item xs={12} md={6}>
-          <Image_C
-            id={imageId}
-            user={user}
-            title={title}
-            caption={caption}
-            url={url}
-            uploadedAt={uploadedAt}
-            likeCount={likeCount}
-            dislikeCount={dislikeCount}
-            commentCount={commentCount}
-          />
+          {loading ? (
+            <PreviewImage />
+          ) : (
+            <Image_C
+              id={imageId}
+              user={user}
+              title={title}
+              caption={caption}
+              url={url}
+              uploadedAt={uploadedAt}
+              likeCount={likeCount}
+              dislikeCount={dislikeCount}
+              commentCount={commentCount}
+              liked={liked}
+              disliked={disliked}
+            />
+          )}
         </Grid>
         <Grid item xs={12} md={4}></Grid>
       </Grid>
@@ -50,6 +60,7 @@ class ImagePage extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  loading: state.image.loading,
   user: state.image.user,
   title: state.image.title,
   caption: state.image.caption,
@@ -58,6 +69,8 @@ const mapStateToProps = (state) => ({
   dislikeCount: state.image.dislikeCount,
   commentCount: state.image.commentCount,
   uploadedAt: state.image.uploadedAt,
+  liked: state.image.liked,
+  disliked: state.image.disliked,
 });
 
 const mapDispatchToProps = (dispatch) => ({

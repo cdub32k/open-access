@@ -61,6 +61,8 @@ class Note extends Component {
       uploadedAt,
       likeNote,
       dislikeNote,
+      liked,
+      disliked,
     } = this.props;
     return (
       <Card className={classes.container}>
@@ -87,6 +89,8 @@ class Note extends Component {
           commentCount={commentCount}
           like={() => likeNote(id)}
           dislike={() => dislikeNote(id)}
+          liked={liked}
+          disliked={disliked}
         />
       </Card>
     );
