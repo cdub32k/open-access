@@ -36,6 +36,12 @@ export const ActionTypes = {
   GET_NOTE_INFO_START: "GET_NOTE_INFO_START",
   GET_NOTE_INFO_SUCCESS: "GET_NOTE_INFO_SUCCESS",
   GET_NOTE_INFO_ERROR: "GET_NOTE_INFO_ERROR",
+  LIKE_NOTE_START: "LIKE_NOTE_START",
+  LIKE_NOTE_SUCCESS: "LIKE_NOTE_SUCCESS",
+  LIKE_NOTE_ERROR: "LIKE_NOTE_ERROR",
+  DISLIKE_NOTE_START: "DISLIKE_NOTE_START",
+  DISLIKE_NOTE_SUCCESS: "DISLIKE_NOTE_SUCCESS",
+  DISLIKE_NOTE_ERROR: "DISLIKE_NOTE_ERROR",
   GET_USER_ACCOUNT_INFO_START: "GET_USER_ACCOUNT_INFO_START",
   GET_USER_ACCOUNT_INFO_SUCCESS: "GET_USER_ACCOUNT_INFO_SUCCESS",
   GET_USER_ACCOUNT_INFO_ERROR: "GET_USER_ACCOUNT_INFO_ERROR",
@@ -143,6 +149,24 @@ export const ActionCreators = {
   },
   dislikeImageError: (error) => {
     return { type: ActionTypes.DISLIKE_IMAGE_ERROR, error };
+  },
+  likeNoteStart: (noteId) => {
+    return { type: ActionTypes.LIKE_NOTE_START, payload: { noteId } };
+  },
+  likeNoteSuccess: () => {
+    return { type: ActionTypes.LIKE_NOTE_SUCCESS };
+  },
+  likeNoteError: (error) => {
+    return { type: ActionTypes.LIKE_NOTE_ERROR, error };
+  },
+  dislikeNoteStart: (noteId) => {
+    return { type: ActionTypes.DISLIKE_NOTE_START, payload: { noteId } };
+  },
+  dislikeNoteSuccess: () => {
+    return { type: ActionTypes.DISLIKE_NOTE_SUCCESS };
+  },
+  dislikeNoteError: (error) => {
+    return { type: ActionTypes.DISLIKE_NOTE_ERROR, error };
   },
   getNoteInfoStart: (noteId) => {
     return { type: ActionTypes.GET_NOTE_INFO_START, payload: { noteId } };

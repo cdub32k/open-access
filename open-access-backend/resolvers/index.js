@@ -37,6 +37,63 @@ const resolvers = {
 
       return note;
     },
+    likeNote: async (
+      parent,
+      { id },
+      { req: { username, authorized } },
+      info
+    ) => {
+      try {
+        const liked = await DB.NoteLike.findOne({ username, noteId: id });
+        const note = await DB.Note.findOne({ _id: id });
+        if (!liked) {
+          await DB.NoteLike.create({
+            username,
+            noteId: id,
+          });
+          note.likeCount++;
+          await note.save();
+        } else {
+          await DB.NoteLike.deleteOne({ username, noteId: id });
+          note.likeCount--;
+          await note.save();
+        }
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    dislikeNote: async (
+      parent,
+      { id },
+      { req: { username, authorized } },
+      info
+    ) => {
+      try {
+        const disliked = await DB.NoteDislike.findOne({
+          username,
+          noteId: id,
+        });
+        const note = await DB.Note.findOne({ _id: id });
+
+        if (!disliked) {
+          await DB.NoteDislike.create({
+            username,
+            noteId: id,
+          });
+          note.dislikeCount++;
+          await note.save();
+        } else {
+          await DB.NoteDislike.deleteOne({ username, noteId: id });
+          note.dislikeCount--;
+          await note.save();
+        }
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
     likeImage: async (
       parent,
       { id },

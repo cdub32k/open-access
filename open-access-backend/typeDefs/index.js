@@ -17,6 +17,9 @@ const typeDefs = gql`
     likeImage(id: String!): Boolean
     dislikeImage(id: String!): Boolean
     commentImage(id: String!, body: String!): Boolean
+    likeNote(id: String!): Boolean
+    dislikeNote(id: String!): Boolean
+    commentNote(id: String!, body: String!): Boolean
   }
 
   scalar Date
@@ -81,6 +84,25 @@ const typeDefs = gql`
     createdAt: Date
   }
 
+  type NoteLike {
+    user: User
+    Note: Note
+    createdAt: Date
+  }
+
+  type NoteDislike {
+    user: User
+    Note: Note
+    createdAt: Date
+  }
+
+  type NoteComment {
+    user: User
+    Note: Note
+    body: String
+    createdAt: Date
+  }
+
   type Note {
     user: User
     _id: String
@@ -89,6 +111,9 @@ const typeDefs = gql`
     dislikeCount: Int
     commentCount: Int
     uploadedAt: Date
+    likes: [NoteLike]
+    dislikes: [NoteDislike]
+    comments: [NoteComment]
   }
 
   type Image {

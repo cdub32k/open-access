@@ -114,6 +114,35 @@ export default [
           })
           .catch((err) => next(ActionCreators.updateAccountInfoError(err)));
         break;
+      case ActionTypes.LIKE_NOTE_START:
+        axios
+          .post("/api", {
+            query: `
+                mutation {
+                  likeNote(id:"${action.payload.noteId}")
+                }
+              `,
+          })
+          .then((res) => {
+            if (res.data.data.likeNote) next(ActionCreators.likeNoteSuccess());
+            else next(ActionCreators.likeNoteError());
+          });
+        break;
+      case ActionTypes.DISLIKE_NOTE_START:
+        axios
+          .post("/api", {
+            query: `
+                mutation {
+                  dislikeNote(id:"${action.payload.noteId}")
+                }
+              `,
+          })
+          .then((res) => {
+            if (res.data.data.dislikeNote)
+              next(ActionCreators.dislikeNoteSuccess());
+            else next(ActionCreators.dislikeNoteError());
+          });
+        break;
       case ActionTypes.LIKE_IMAGE_START:
         axios
           .post("/api", {
