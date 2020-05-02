@@ -94,6 +94,28 @@ const resolvers = {
         return false;
       }
     },
+    commentNote: async (
+      parent,
+      { id, body },
+      { req: { username, authorized } },
+      info
+    ) => {
+      try {
+        const comment = await DB.NoteComment.create({
+          username,
+          noteId: id,
+          body,
+        });
+
+        const note = await DB.Note.findOne({ _id: id });
+        note.commentCount++;
+        await note.save();
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
     likeImage: async (
       parent,
       { id },
@@ -146,6 +168,28 @@ const resolvers = {
           image.dislikeCount--;
           await image.save();
         }
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    commentImage: async (
+      parent,
+      { id, body },
+      { req: { username, authorized } },
+      info
+    ) => {
+      try {
+        const comment = await DB.ImageComment.create({
+          username,
+          imageId: id,
+          body,
+        });
+
+        const image = await DB.Image.findOne({ _id: id });
+        image.commentCount++;
+        await image.save();
+
         return true;
       } catch (error) {
         return false;
@@ -240,6 +284,11 @@ const resolvers = {
           videoId: id,
           body,
         });
+
+        const video = await DB.Video.findOne({ _id: id });
+        video.commentCount++;
+        await video.save();
+
         return true;
       } catch (error) {
         return false;
@@ -269,8 +318,17 @@ const resolvers = {
       return dislikes;
     },
     comments: async ({ _id }, args, context, info) => {
-      const comments = await DB.NoteComment.find({ noteId: _id });
+      const comments = await DB.NoteComment.find({ noteId: _id }).sort({
+        createdAt: -1,
+      });
       return comments;
+    },
+  },
+
+  NoteComment: {
+    user: async ({ username }) => {
+      const user = await DB.User.findOne({ username });
+      return user;
     },
   },
 
@@ -299,8 +357,17 @@ const resolvers = {
       return dislikes;
     },
     comments: async ({ _id }, args, context, info) => {
-      const comments = await DB.ImageComment.find({ imageId: _id });
+      const comments = await DB.ImageComment.find({ imageId: _id }).sort({
+        createdAt: -1,
+      });
       return comments;
+    },
+  },
+
+  ImageComment: {
+    user: async ({ username }) => {
+      const user = await DB.User.findOne({ username });
+      return user;
     },
   },
 
@@ -334,8 +401,17 @@ const resolvers = {
       return views;
     },
     comments: async ({ _id }, args, context, info) => {
-      const comments = await DB.VideoComment.find({ videoId: _id });
+      const comments = await DB.VideoComment.find({ videoId: _id }).sort({
+        createdAt: -1,
+      });
       return comments;
+    },
+  },
+
+  VideoComment: {
+    user: async ({ username }) => {
+      const user = await DB.User.findOne({ username });
+      return user;
     },
   },
 

@@ -4,6 +4,7 @@ const initialState = {
   error: null,
   user: {},
   loading: false,
+  comments: [],
 };
 
 const noteReducer = (state = initialState, action) => {
@@ -30,6 +31,21 @@ const noteReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.DISLIKE_NOTE_ERROR:
       return { ...state };
+    case ActionTypes.POST_NOTE_COMMENT_SUCCESS:
+      const newComment = {
+        body: action.payload.body,
+        user: {
+          username: action.payload.username,
+          profilePic: action.payload.profilePic,
+        },
+      };
+      return {
+        ...state,
+        comments: [newComment, ...state.comments],
+        commentCount: state.commentCount + 1,
+      };
+    case ActionTypes.POST_NOTE_COMMENT_ERROR:
+      return { ...state, error: action.error };
     default:
       return state;
   }

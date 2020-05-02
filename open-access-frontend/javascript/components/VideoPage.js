@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 
 import VideoPlayer from "./VideoPlayer";
 import PreviewVideoPlayer from "./PreviewVideoPlayer";
+import CommentForm from "./CommentForm";
 
 class VideoPage extends Component {
   componentDidMount() {
@@ -30,6 +31,7 @@ class VideoPage extends Component {
       uploadedAt,
       liked,
       disliked,
+      comments,
       match: {
         params: { videoId },
       },
@@ -57,7 +59,17 @@ class VideoPage extends Component {
             />
           )}
         </Grid>
-        <Grid item xs={12} md={4}></Grid>
+        <Grid item xs={12} md={4}>
+          <CommentForm contentType="video" id={videoId} />
+          <hr />
+          {comments.map((comment, i) => {
+            return (
+              <div key={i}>
+                {comment.body} by {comment.user.username}
+              </div>
+            );
+          })}
+        </Grid>
       </Grid>
     );
   }
@@ -77,6 +89,7 @@ const mapStateToProps = (state) => ({
   url: state.video.url,
   thumbUrl: state.video.thumbUrl,
   uploadedAt: state.video.uploadedAt,
+  comments: state.video.comments,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -19,6 +19,9 @@ export const ActionTypes = {
   RECORD_VIDEO_VIEW_START: "RECORD_VIDEO_VIEW_START",
   RECORD_VIDEO_VIEW_SUCCESS: "RECORD_VIDEO_VIEW_SUCCESS",
   RECORD_VIDEO_VIEW_ERROR: "RECORD_VIDEO_VIEW_ERROR",
+  POST_VIDEO_COMMENT_START: "POST_VIDEO_COMMENT_START",
+  POST_VIDEO_COMMENT_SUCCESS: "POST_VIDEO_COMMENT_SUCCESS",
+  POST_VIDEO_COMMENT_ERROR: "POST_VIDEO_COMMENT_ERROR",
   LIKE_VIDEO_START: "LIKE_VIDEO_START",
   LIKE_VIDEO_SUCCESS: "LIKE_VIDEO_SUCCESS",
   LIKE_VIDEO_ERROR: "LIKE_VIDEO_ERROR",
@@ -35,6 +38,9 @@ export const ActionTypes = {
   DISLIKE_IMAGE_START: "DISLIKE_IMAGE_START",
   DISLIKE_IMAGE_SUCCESS: "DISLIKE_IMAGE_SUCCESS",
   DISLIKE_IMAGE_ERROR: "DISLIKE_IMAGE_ERROR",
+  POST_IMAGE_COMMENT_START: "POST_IMAGE_COMMENT_START",
+  POST_IMAGE_COMMENT_SUCCESS: "POST_IMAGE_COMMENT_SUCCESS",
+  POST_IMAGE_COMMENT_ERROR: "POST_IMAGE_COMMENT_ERROR",
   NOTE_LOADING: "NOTE_LOADING",
   GET_NOTE_INFO_START: "GET_NOTE_INFO_START",
   GET_NOTE_INFO_SUCCESS: "GET_NOTE_INFO_SUCCESS",
@@ -45,6 +51,9 @@ export const ActionTypes = {
   DISLIKE_NOTE_START: "DISLIKE_NOTE_START",
   DISLIKE_NOTE_SUCCESS: "DISLIKE_NOTE_SUCCESS",
   DISLIKE_NOTE_ERROR: "DISLIKE_NOTE_ERROR",
+  POST_NOTE_COMMENT_START: "POST_NOTE_COMMENT_START",
+  POST_NOTE_COMMENT_SUCCESS: "POST_NOTE_COMMENT_SUCCESS",
+  POST_NOTE_COMMENT_ERROR: "POST_NOTE_COMMENT_ERROR",
   GET_USER_ACCOUNT_INFO_START: "GET_USER_ACCOUNT_INFO_START",
   GET_USER_ACCOUNT_INFO_SUCCESS: "GET_USER_ACCOUNT_INFO_SUCCESS",
   GET_USER_ACCOUNT_INFO_ERROR: "GET_USER_ACCOUNT_INFO_ERROR",
@@ -129,6 +138,21 @@ export const ActionCreators = {
   dislikeVideoError: (error) => {
     return { type: ActionTypes.DISLIKE_VIDEO_ERROR, error };
   },
+  postVideoCommentStart: (videoId, body) => {
+    return {
+      type: ActionTypes.POST_VIDEO_COMMENT_START,
+      payload: { videoId, body },
+    };
+  },
+  postVideoCommentSuccess: (body, username, profilePic) => {
+    return {
+      type: ActionTypes.POST_VIDEO_COMMENT_SUCCESS,
+      payload: { body, username, profilePic },
+    };
+  },
+  postVideoCommentError: (error) => {
+    return { type: ActionTypes.POST_VIDEO_COMMENT_ERROR, error };
+  },
   imageLoading: () => {
     return { type: ActionTypes.IMAGE_LOADING };
   },
@@ -159,6 +183,21 @@ export const ActionCreators = {
   dislikeImageError: (error) => {
     return { type: ActionTypes.DISLIKE_IMAGE_ERROR, error };
   },
+  postImageCommentStart: (imageId, body) => {
+    return {
+      type: ActionTypes.POST_IMAGE_COMMENT_START,
+      payload: { imageId, body },
+    };
+  },
+  postImageCommentSuccess: (body, username, profilePic) => {
+    return {
+      type: ActionTypes.POST_IMAGE_COMMENT_SUCCESS,
+      payload: { body, username, profilePic },
+    };
+  },
+  postImageCommentError: (error) => {
+    return { type: ActionTypes.POST_IMAGE_COMMENT_ERROR, error };
+  },
   likeNoteStart: (noteId) => {
     return { type: ActionTypes.LIKE_NOTE_START, payload: { noteId } };
   },
@@ -180,6 +219,21 @@ export const ActionCreators = {
   noteLoading: () => {
     return { type: ActionTypes.NOTE_LOADING };
   },
+  postNoteCommentStart: (noteId, body) => {
+    return {
+      type: ActionTypes.POST_NOTE_COMMENT_START,
+      payload: { noteId, body },
+    };
+  },
+  postNoteCommentSuccess: (body, username, profilePic) => {
+    return {
+      type: ActionTypes.POST_NOTE_COMMENT_SUCCESS,
+      payload: { body, username, profilePic },
+    };
+  },
+  postNoteCommentError: (error) => {
+    return { type: ActionTypes.POST_NOTE_COMMENT_ERROR, error };
+  },
   getNoteInfoStart: (noteId) => {
     return { type: ActionTypes.GET_NOTE_INFO_START, payload: { noteId } };
   },
@@ -189,6 +243,7 @@ export const ActionCreators = {
   getNoteInfoError: (error) => {
     return { type: ActionTypes.GET_NOTE_INFO_ERROR, error };
   },
+
   getUserAccountInfoStart: (username) => {
     return {
       type: ActionTypes.GET_USER_ACCOUNT_INFO_START,

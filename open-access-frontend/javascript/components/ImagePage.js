@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 
 import Image_C from "./Image";
 import PreviewImage from "./PreviewImage";
+import CommentForm from "./CommentForm";
 
 class ImagePage extends Component {
   componentDidMount() {
@@ -28,6 +29,7 @@ class ImagePage extends Component {
       uploadedAt,
       liked,
       disliked,
+      comments,
       match: {
         params: { imageId },
       },
@@ -53,7 +55,17 @@ class ImagePage extends Component {
             />
           )}
         </Grid>
-        <Grid item xs={12} md={4}></Grid>
+        <Grid item xs={12} md={4}>
+          <CommentForm contentType="image" id={imageId} />
+          <hr />
+          {comments.map((comment, i) => {
+            return (
+              <div key={i}>
+                {comment.body} by {comment.user.username}
+              </div>
+            );
+          })}
+        </Grid>
       </Grid>
     );
   }
@@ -71,6 +83,7 @@ const mapStateToProps = (state) => ({
   uploadedAt: state.image.uploadedAt,
   liked: state.image.liked,
   disliked: state.image.disliked,
+  comments: state.image.comments,
 });
 
 const mapDispatchToProps = (dispatch) => ({

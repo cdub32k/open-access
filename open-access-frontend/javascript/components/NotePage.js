@@ -8,6 +8,7 @@ import Grid from "@material-ui/core/Grid";
 
 import Note from "./Note";
 import PreviewNote from "./PreviewNote";
+import CommentForm from "./CommentForm";
 
 class NotePage extends Component {
   componentDidMount() {
@@ -26,6 +27,7 @@ class NotePage extends Component {
       uploadedAt,
       liked,
       disliked,
+      comments,
       match: {
         params: { noteId },
       },
@@ -49,7 +51,17 @@ class NotePage extends Component {
             />
           )}
         </Grid>
-        <Grid item xs={12} md={4}></Grid>
+        <Grid item xs={12} md={4}>
+          <CommentForm contentType="note" id={noteId} />
+          <hr />
+          {comments.map((comment, i) => {
+            return (
+              <div key={i}>
+                {comment.body} by {comment.user.username}
+              </div>
+            );
+          })}
+        </Grid>
       </Grid>
     );
   }
@@ -65,6 +77,7 @@ const mapStateToProps = (state) => ({
   uploadedAt: state.note.uploadedAt,
   liked: state.note.liked,
   disliked: state.note.disliked,
+  comments: state.note.comments,
 });
 
 const mapDispatchToProps = (dispatch) => ({

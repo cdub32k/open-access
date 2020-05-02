@@ -4,6 +4,7 @@ const initialState = {
   error: null,
   user: {},
   loading: false,
+  comments: [],
 };
 
 const imageReducer = (state = initialState, action) => {
@@ -30,6 +31,21 @@ const imageReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.DISLIKE_IMAGE_ERROR:
       return { ...state };
+    case ActionTypes.POST_IMAGE_COMMENT_SUCCESS:
+      const newComment = {
+        body: action.payload.body,
+        user: {
+          username: action.payload.username,
+          profilePic: action.payload.profilePic,
+        },
+      };
+      return {
+        ...state,
+        comments: [newComment, ...state.comments],
+        commentCount: state.commentCount + 1,
+      };
+    case ActionTypes.POST_IMAGE_COMMENT_ERROR:
+      return { ...state, error: action.error };
     default:
       return state;
   }

@@ -190,6 +190,13 @@ export default [
                     profilePic
                     username
                   }
+                  comments {
+                    user {
+                      username
+                      profilePic
+                    }
+                    body
+                  }
                   title
                   caption
                   viewCount
@@ -254,6 +261,27 @@ export default [
             else next(ActionCreators.dislikeVideoError());
           });
         break;
+      case ActionTypes.POST_VIDEO_COMMENT_START:
+        axios
+          .post("/api", {
+            query: `
+            mutation {
+              commentVideo(id:"${action.payload.videoId}",body:"${action.payload.body}")
+            }
+          `,
+          })
+          .then((res) => {
+            if (res.data.data.commentVideo)
+              next(
+                ActionCreators.postVideoCommentSuccess(
+                  action.payload.body,
+                  store.getState().user.username,
+                  store.getState().user.profilePic
+                )
+              );
+            else next(ActionCreators.postVideoCommentError());
+          });
+        break;
       case ActionTypes.GET_IMAGE_INFO_START:
         next(ActionCreators.imageLoading());
         axios
@@ -264,6 +292,13 @@ export default [
                   user {
                     profilePic
                     username
+                  }
+                  comments {
+                    user {
+                      username
+                      profilePic
+                    }
+                    body
                   }
                   title
                   caption
@@ -282,6 +317,27 @@ export default [
             next(ActionCreators.getImageInfoSuccess(res.data.data.image));
           });
         break;
+      case ActionTypes.POST_IMAGE_COMMENT_START:
+        axios
+          .post("/api", {
+            query: `
+              mutation {
+                commentImage(id:"${action.payload.imageId}",body:"${action.payload.body}")
+              }
+            `,
+          })
+          .then((res) => {
+            if (res.data.data.commentImage)
+              next(
+                ActionCreators.postImageCommentSuccess(
+                  action.payload.body,
+                  store.getState().user.username,
+                  store.getState().user.profilePic
+                )
+              );
+            else next(ActionCreators.postImageCommentError());
+          });
+        break;
       case ActionTypes.GET_NOTE_INFO_START:
         next(ActionCreators.noteLoading());
         axios
@@ -292,6 +348,13 @@ export default [
                   user {
                     profilePic
                     username
+                  }
+                  comments {
+                    user {
+                      username
+                      profilePic
+                    }
+                    body
                   }
                   body      
                   likeCount
@@ -306,6 +369,27 @@ export default [
           })
           .then((res) => {
             next(ActionCreators.getNoteInfoSuccess(res.data.data.note));
+          });
+        break;
+      case ActionTypes.POST_NOTE_COMMENT_START:
+        axios
+          .post("/api", {
+            query: `
+            mutation {
+              commentNote(id:"${action.payload.noteId}",body:"${action.payload.body}")
+            }
+          `,
+          })
+          .then((res) => {
+            if (res.data.data.commentNote)
+              next(
+                ActionCreators.postNoteCommentSuccess(
+                  action.payload.body,
+                  store.getState().user.username,
+                  store.getState().user.profilePic
+                )
+              );
+            else next(ActionCreators.postNoteCommentError());
           });
         break;
       default:

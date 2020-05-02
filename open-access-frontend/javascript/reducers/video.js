@@ -4,6 +4,7 @@ const initialState = {
   error: null,
   user: {},
   loading: false,
+  comments: [],
 };
 
 const videoReducer = (state = initialState, action) => {
@@ -32,6 +33,21 @@ const videoReducer = (state = initialState, action) => {
       return { ...state, disliked: !state.disliked, dislikeCount: newCount };
     case ActionTypes.DISLIKE_VIDEO_ERROR:
       return { ...state };
+    case ActionTypes.POST_VIDEO_COMMENT_SUCCESS:
+      const newComment = {
+        body: action.payload.body,
+        user: {
+          username: action.payload.username,
+          profilePic: action.payload.profilePic,
+        },
+      };
+      return {
+        ...state,
+        comments: [newComment, ...state.comments],
+        commentCount: state.commentCount + 1,
+      };
+    case ActionTypes.POST_VIDEO_COMMENT_ERROR:
+      return { ...state, error: action.error };
     default:
       return state;
   }
