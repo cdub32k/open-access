@@ -141,6 +141,21 @@ export default [
             next(ActionCreators.getVideoInfoSuccess(res.data.data.video));
           });
         break;
+      case ActionTypes.RECORD_VIDEO_VIEW_START:
+        axios
+          .post("/api", {
+            query: `
+              mutation {
+                viewVideo(id:"${action.payload.videoId}")
+              }
+            `,
+          })
+          .then((res) => {
+            if (res.data.data.viewVideo)
+              next(ActionCreators.recordVideoViewSuccess());
+            else next(ActionCreators.recordVideoViewError());
+          });
+        break;
       case ActionTypes.GET_IMAGE_INFO_START:
         axios
           .post("api", {

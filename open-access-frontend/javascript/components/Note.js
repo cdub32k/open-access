@@ -11,6 +11,8 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import AddCommentIcon from "@material-ui/icons/AddComment";
 import { withStyles } from "@material-ui/core/styles";
 
+import ContentActions from "./ContentActions";
+
 import { num2str, date2rel } from "../util/helpers";
 
 const styles = (theme) => ({
@@ -48,6 +50,7 @@ class Note extends Component {
   render() {
     const {
       classes,
+      id,
       user,
       body,
       likeCount,
@@ -72,20 +75,13 @@ class Note extends Component {
             </span>
           }
         />
-        <CardActions disableSpacing>
-          <IconButton>
-            <FavoriteIcon />
-          </IconButton>
-          <span className={classes.metric}>{num2str(likeCount)}</span>
-          <IconButton>
-            <ThumbDownIcon />
-          </IconButton>
-          <span className={classes.metric}>{num2str(dislikeCount)}</span>
-          <IconButton>
-            <AddCommentIcon />
-          </IconButton>
-          <span className={classes.metric}>{num2str(commentCount)}</span>
-        </CardActions>
+        <ContentActions
+          contentType="note"
+          id={id}
+          likeCount={likeCount}
+          dislikeCount={dislikeCount}
+          commentCount={commentCount}
+        />
       </Card>
     );
   }

@@ -22,11 +22,15 @@ class NotePage extends Component {
       dislikeCount,
       commentCount,
       uploadedAt,
+      match: {
+        params: { noteId },
+      },
     } = this.props;
     return (
       <Grid container>
         <Grid item xs={12} md={6}>
           <Note
+            id={noteId}
             user={user}
             body={body}
             uploadedAt={uploadedAt}

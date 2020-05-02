@@ -6,6 +6,10 @@ import Subscription from "./models/subcription";
 import Video from "./models/video";
 import Image from "./models/image";
 import Note from "./models/note";
+import VideoLike from "./models/videoLike";
+import VideoDislike from "./models/videoDislike";
+import VideoView from "./models/videoView";
+import VideoComment from "./models/videoComment";
 
 dotenv.config();
 
@@ -18,6 +22,10 @@ class Database {
     this.Video = Video;
     this.Image = Image;
     this.Note = Note;
+    this.VideoLike = VideoLike;
+    this.VideoDislike = VideoDislike;
+    this.VideoView = VideoView;
+    this.VideoComment = VideoComment;
   }
 
   _connect() {

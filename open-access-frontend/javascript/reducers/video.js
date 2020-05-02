@@ -13,6 +13,10 @@ const videoReducer = (state = initialState, action) => {
       return { ...state, ...action.payload.videoData };
     case ActionTypes.GET_VIDEO_INFO_ERROR:
       return { ...state, error: action.error };
+    case ActionTypes.RECORD_VIDEO_VIEW_SUCCESS:
+      return { ...state };
+    case ActionTypes.RECORD_VIDEO_VIEW_ERROR:
+      return { ...state };
     default:
       return state;
   }

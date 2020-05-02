@@ -26,7 +26,9 @@ class VideoPage extends Component {
       url,
       thumbUrl,
       uploadedAt,
-      match: { params: videoId },
+      match: {
+        params: { videoId },
+      },
     } = this.props;
     return (
       <Grid container>

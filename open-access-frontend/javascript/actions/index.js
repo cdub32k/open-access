@@ -15,6 +15,9 @@ export const ActionTypes = {
   GET_VIDEO_INFO_START: "GET_VIDEO_INFO_START",
   GET_VIDEO_INFO_SUCCESS: "GET_VIDEO_INFO_SUCCESS",
   GET_VIDEO_INFO_ERROR: "GET_VIDEO_INFO_ERROR",
+  RECORD_VIDEO_VIEW_START: "RECORD_VIDEO_VIEW_START",
+  RECORD_VIDEO_VIEW_SUCCESS: "RECORD_VIDEO_VIEW_SUCCESS",
+  RECORD_VIDEO_VIEW_ERROR: "RECORD_VIDEO_VIEW_ERROR",
   GET_IMAGE_INFO_START: "GET_IMAGE_INFO_START",
   GET_IMAGE_INFO_SUCCESS: "GET_IMAGE_INFO_SUCCESS",
   GET_IMAGE_INFO_ERROR: "GET_IMAGE_INFO_ERROR",
@@ -74,6 +77,15 @@ export const ActionCreators = {
   },
   getVideoInfoError: (error) => {
     return { type: ActionTypes.GET_VIDEO_INFO_ERROR, error };
+  },
+  recordVideoViewStart: (videoId) => {
+    return { type: ActionTypes.RECORD_VIDEO_VIEW_START, payload: { videoId } };
+  },
+  recordVideoViewSuccess: () => {
+    return { type: ActionTypes.RECORD_VIDEO_VIEW_SUCCESS };
+  },
+  recordVideoViewError: (error) => {
+    return { type: ActionTypes.RECORD_VIDEO_VIEW_ERROR, error };
   },
   getImageInfoStart: (imageId) => {
     return { type: ActionTypes.GET_IMAGE_INFO_START, payload: { imageId } };

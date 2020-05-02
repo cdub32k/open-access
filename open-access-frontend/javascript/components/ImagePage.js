@@ -24,11 +24,15 @@ class ImagePage extends Component {
       dislikeCount,
       commentCount,
       uploadedAt,
+      match: {
+        params: { imageId },
+      },
     } = this.props;
     return (
       <Grid container>
         <Grid item xs={12} md={6}>
           <Image_C
+            id={imageId}
             user={user}
             title={title}
             caption={caption}

@@ -9,7 +9,11 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    postNote(body: String): Note
+    postNote(body: String!): Note
+    likeVideo(id: String!): Boolean
+    dislikeVideo(id: String!): Boolean
+    viewVideo(id: String!): Boolean
+    commentVideo(id: String!, body: String!): Boolean
   }
 
   scalar Date
@@ -28,6 +32,31 @@ const typeDefs = gql`
     notes: [Note]
     images: [Image]
     videos: [Video]
+  }
+
+  type VideoLike {
+    user: User
+    Video: Video
+    createdAt: Date
+  }
+
+  type VideoDislike {
+    user: User
+    Video: Video
+    createdAt: Date
+  }
+
+  type VideoView {
+    user: User
+    Video: Video
+    createdAt: Date
+  }
+
+  type VideoComment {
+    user: User
+    Video: Video
+    body: String
+    createdAt: Date
   }
 
   type Note {
@@ -64,6 +93,10 @@ const typeDefs = gql`
     dislikeCount: Int
     commentCount: Int
     uploadedAt: Date
+    likes: [VideoLike]
+    dislikes: [VideoDislike]
+    views: [VideoView]
+    comments: [VideoComment]
   }
 `;
 

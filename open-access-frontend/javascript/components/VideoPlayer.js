@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { ActionCreators } from "../actions";
 import ReactPlayer from "react-player";
 
 import Avatar from "@material-ui/core/Avatar";
@@ -38,6 +39,10 @@ const styles = (theme) => ({
 });
 
 class VideoPlayer extends Component {
+  recordView = (id) => {
+    this.props.recordView(id);
+  };
+
   render() {
     const {
       id,
@@ -65,6 +70,7 @@ class VideoPlayer extends Component {
             playing
             controls
             pip={false}
+            onStart={() => this.recordView(id)}
           />
         </CardMedia>
         <CardHeader
@@ -98,4 +104,11 @@ class VideoPlayer extends Component {
   }
 }
 
-export default withStyles(styles)(VideoPlayer);
+const mapDispatchToProps = (dispatch) => ({
+  recordView: (videoId) =>
+    dispatch(ActionCreators.recordVideoViewStart(videoId)),
+});
+
+export default withStyles(styles)(
+  connect(null, mapDispatchToProps)(VideoPlayer)
+);
