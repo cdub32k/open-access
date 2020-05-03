@@ -47,6 +47,8 @@ const imageReducer = (state = initialState, action) => {
       };
     case ActionTypes.POST_IMAGE_COMMENT_ERROR:
       return { ...state, error: action.error };
+    case ActionTypes.CLEAR_IMAGE_DATA:
+      return { ...initialState };
     default:
       return state;
   }

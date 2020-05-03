@@ -16,6 +16,10 @@ class Profile extends Component {
     this.props.getUserInfo(username);
   }
 
+  componentWillUnmount() {
+    this.props.clearUserData();
+  }
+
   render() {
     const { username } = this.props.match.params;
     const { loading, videos, images, notes } = this.props;
@@ -47,6 +51,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getUserInfo: (username) =>
     dispatch(ActionCreators.getUserInfoStart(username)),
+  clearUserData: () => {
+    dispatch(ActionCreators.clearUserData());
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

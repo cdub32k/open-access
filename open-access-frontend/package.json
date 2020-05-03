@@ -48,7 +48,7 @@
     "react-router-dom": "^5.1.2",
     "react-transition-group": "^4.3.0",
     "redux": "^4.0.4",
-    "tachyons-sass": "^4.9.5"
+    "tachyons-sass": "4.9.5"
   },
   "development": [
     "ie 11",

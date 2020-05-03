@@ -6,8 +6,8 @@ $purple: #b891d8;
 $yellow: #d6c284;
 
 :root {
-  --body-background-color: rgba(0, 0, 0, 0.01);
-  --content-background-color: rgba(0, 0, 0, 0.02);
+  --body-background-color: rgba(0, 0, 0, 0.02);
+  --content-background-color: rgba(0, 0, 0, 0.04);
 }
 
 * {
@@ -18,8 +18,12 @@ $yellow: #d6c284;
   font-weight: 600;
 }
 
-html,
+html {
+  height: 100%;
+}
+
 body {
+  min-height: 100%;
   background: var(--body-background-color);
 }
 

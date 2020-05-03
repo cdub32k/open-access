@@ -47,6 +47,8 @@ const noteReducer = (state = initialState, action) => {
       };
     case ActionTypes.POST_NOTE_COMMENT_ERROR:
       return { ...state, error: action.error };
+    case ActionTypes.CLEAR_NOTE_DATA:
+      return { ...initialState };
     default:
       return state;
   }

@@ -16,6 +16,10 @@ class ImagePage extends Component {
     this.props.getImageInfo(imageId);
   }
 
+  componentWillUnmount() {
+    this.props.clearImageData();
+  }
+
   render() {
     const {
       loading,
@@ -85,6 +89,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getImageInfo: (imageId) =>
     dispatch(ActionCreators.getImageInfoStart(imageId)),
+  clearImageData: () => dispatch(ActionCreators.clearImageData()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImagePage);

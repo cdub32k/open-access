@@ -17,6 +17,10 @@ class NotePage extends Component {
     this.props.getNoteInfo(noteId);
   }
 
+  componentWillUnmount() {
+    this.props.clearNoteData();
+  }
+
   render() {
     const {
       loading,
@@ -75,6 +79,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getNoteInfo: (noteId) => dispatch(ActionCreators.getNoteInfoStart(noteId)),
+  clearNoteData: () => dispatch(ActionCreators.clearNoteData()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotePage);

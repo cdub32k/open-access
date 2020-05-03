@@ -49,6 +49,8 @@ const videoReducer = (state = initialState, action) => {
       };
     case ActionTypes.POST_VIDEO_COMMENT_ERROR:
       return { ...state, error: action.error };
+    case ActionTypes.CLEAR_VIDEO_DATA:
+      return { ...initialState };
     default:
       return state;
   }

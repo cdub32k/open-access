@@ -16,6 +16,10 @@ class VideoPage extends Component {
     this.props.getVideoInfo(videoId);
   }
 
+  componentWillUnmount() {
+    this.props.clearVideoData();
+  }
+
   render() {
     const {
       loading,
@@ -91,6 +95,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getVideoInfo: (videoId) =>
     dispatch(ActionCreators.getVideoInfoStart(videoId)),
+
+  clearVideoData: () => dispatch(ActionCreators.clearVideoData()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(VideoPage);
