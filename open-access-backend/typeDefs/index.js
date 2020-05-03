@@ -13,13 +13,13 @@ const typeDefs = gql`
     likeVideo(id: String!): Boolean
     dislikeVideo(id: String!): Boolean
     viewVideo(id: String!): Boolean
-    commentVideo(id: String!, body: String!): Boolean
+    commentVideo(id: String!, body: String!): String
     likeImage(id: String!): Boolean
     dislikeImage(id: String!): Boolean
-    commentImage(id: String!, body: String!): Boolean
+    commentImage(id: String!, body: String!): String
     likeNote(id: String!): Boolean
     dislikeNote(id: String!): Boolean
-    commentNote(id: String!, body: String!): Boolean
+    commentNote(id: String!, body: String!): String
   }
 
   scalar Date
@@ -41,24 +41,28 @@ const typeDefs = gql`
   }
 
   type VideoLike {
+    _id: String
     user: User
     Video: Video
     createdAt: Date
   }
 
   type VideoDislike {
+    _id: String
     user: User
     Video: Video
     createdAt: Date
   }
 
   type VideoView {
+    _id: String
     user: User
     Video: Video
     createdAt: Date
   }
 
   type VideoComment {
+    _id: String
     user: User
     Video: Video
     body: String
@@ -66,18 +70,21 @@ const typeDefs = gql`
   }
 
   type ImageLike {
+    _id: String
     user: User
     Image: Image
     createdAt: Date
   }
 
   type ImageDislike {
+    _id: String
     user: User
     Image: Image
     createdAt: Date
   }
 
   type ImageComment {
+    _id: String
     user: User
     Image: Image
     body: String
@@ -85,18 +92,21 @@ const typeDefs = gql`
   }
 
   type NoteLike {
+    _id: String
     user: User
     Note: Note
     createdAt: Date
   }
 
   type NoteDislike {
+    _id: String
     user: User
     Note: Note
     createdAt: Date
   }
 
   type NoteComment {
+    _id: String
     user: User
     Note: Note
     body: String

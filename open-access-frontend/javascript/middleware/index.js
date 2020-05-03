@@ -191,11 +191,13 @@ export default [
                     username
                   }
                   comments {
+                    _id
                     user {
                       username
                       profilePic
                     }
                     body
+                    createdAt
                   }
                   title
                   caption
@@ -274,6 +276,7 @@ export default [
             if (res.data.data.commentVideo)
               next(
                 ActionCreators.postVideoCommentSuccess(
+                  res.data.data.commentVideo,
                   action.payload.body,
                   store.getState().user.username,
                   store.getState().user.profilePic
@@ -294,11 +297,13 @@ export default [
                     username
                   }
                   comments {
+                    _id
                     user {
                       username
                       profilePic
                     }
                     body
+                    createdAt
                   }
                   title
                   caption
@@ -330,6 +335,7 @@ export default [
             if (res.data.data.commentImage)
               next(
                 ActionCreators.postImageCommentSuccess(
+                  res.data.data.commentImage,
                   action.payload.body,
                   store.getState().user.username,
                   store.getState().user.profilePic
@@ -350,11 +356,13 @@ export default [
                     username
                   }
                   comments {
+                    _id
                     user {
                       username
                       profilePic
                     }
                     body
+                    createdAt
                   }
                   body      
                   likeCount
@@ -384,6 +392,7 @@ export default [
             if (res.data.data.commentNote)
               next(
                 ActionCreators.postNoteCommentSuccess(
+                  res.data.data.commentNote,
                   action.payload.body,
                   store.getState().user.username,
                   store.getState().user.profilePic

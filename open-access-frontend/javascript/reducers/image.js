@@ -33,6 +33,7 @@ const imageReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.POST_IMAGE_COMMENT_SUCCESS:
       const newComment = {
+        _id: action.payload.commentId,
         body: action.payload.body,
         user: {
           username: action.payload.username,

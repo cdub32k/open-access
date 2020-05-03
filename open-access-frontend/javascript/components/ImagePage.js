@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 
 import Image_C from "./Image";
 import PreviewImage from "./PreviewImage";
-import CommentForm from "./CommentForm";
+import CommentsSection from "./CommentsSection";
 
 class ImagePage extends Component {
   componentDidMount() {
@@ -56,15 +56,11 @@ class ImagePage extends Component {
           )}
         </Grid>
         <Grid item xs={12} md={4}>
-          <CommentForm contentType="image" id={imageId} />
-          <hr />
-          {comments.map((comment, i) => {
-            return (
-              <div key={i}>
-                {comment.body} by {comment.user.username}
-              </div>
-            );
-          })}
+          <CommentsSection
+            comments={comments}
+            contentType="image"
+            id={imageId}
+          />
         </Grid>
       </Grid>
     );

@@ -144,10 +144,10 @@ export const ActionCreators = {
       payload: { videoId, body },
     };
   },
-  postVideoCommentSuccess: (body, username, profilePic) => {
+  postVideoCommentSuccess: (commentId, body, username, profilePic) => {
     return {
       type: ActionTypes.POST_VIDEO_COMMENT_SUCCESS,
-      payload: { body, username, profilePic },
+      payload: { commentId, body, username, profilePic },
     };
   },
   postVideoCommentError: (error) => {
@@ -189,10 +189,10 @@ export const ActionCreators = {
       payload: { imageId, body },
     };
   },
-  postImageCommentSuccess: (body, username, profilePic) => {
+  postImageCommentSuccess: (commentId, body, username, profilePic) => {
     return {
       type: ActionTypes.POST_IMAGE_COMMENT_SUCCESS,
-      payload: { body, username, profilePic },
+      payload: { commentId, body, username, profilePic },
     };
   },
   postImageCommentError: (error) => {
@@ -225,10 +225,10 @@ export const ActionCreators = {
       payload: { noteId, body },
     };
   },
-  postNoteCommentSuccess: (body, username, profilePic) => {
+  postNoteCommentSuccess: (commentId, body, username, profilePic) => {
     return {
       type: ActionTypes.POST_NOTE_COMMENT_SUCCESS,
-      payload: { body, username, profilePic },
+      payload: { commentId, body, username, profilePic },
     };
   },
   postNoteCommentError: (error) => {

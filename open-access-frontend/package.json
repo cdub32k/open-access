@@ -46,7 +46,9 @@
     "react-player": "^2.0.1",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
-    "redux": "^4.0.4"
+    "react-transition-group": "^4.3.0",
+    "redux": "^4.0.4",
+    "tachyons-sass": "^4.9.5"
   },
   "development": [
     "ie 11",

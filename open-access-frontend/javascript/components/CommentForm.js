@@ -31,6 +31,7 @@ const CommentForm = ({
   const postComment = (e) => {
     e.preventDefault();
     action(id, body);
+    setBody("");
   };
 
   return (
@@ -41,7 +42,9 @@ const CommentForm = ({
         rows={3}
         name="body"
       />
-      <Button type="submit">Post comment</Button>
+      <Button variant="contained" color="secondary" type="submit">
+        Post comment
+      </Button>
     </form>
   );
 };

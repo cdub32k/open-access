@@ -1,4 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap");
+@import "../node_modules/tachyons-sass/tachyons.scss";
+
+// Tachyons colors
+$purple: #b891d8;
+$yellow: #d6c284;
 
 :root {
   --body-background-color: rgba(0, 0, 0, 0.01);
@@ -57,4 +62,20 @@ a {
 
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
+}
+
+//CSSTransition styles
+.comment-enter {
+  opacity: 0;
+}
+.comment-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+.comment-exit {
+  opacity: 1;
+}
+.comment-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
 }

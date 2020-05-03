@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Note from "./Note";
 import PreviewNote from "./PreviewNote";
 import CommentForm from "./CommentForm";
+import CommentsSection from "./CommentsSection";
 
 class NotePage extends Component {
   componentDidMount() {
@@ -52,15 +53,7 @@ class NotePage extends Component {
           )}
         </Grid>
         <Grid item xs={12} md={4}>
-          <CommentForm contentType="note" id={noteId} />
-          <hr />
-          {comments.map((comment, i) => {
-            return (
-              <div key={i}>
-                {comment.body} by {comment.user.username}
-              </div>
-            );
-          })}
+          <CommentsSection comments={comments} contentType="note" id={noteId} />
         </Grid>
       </Grid>
     );

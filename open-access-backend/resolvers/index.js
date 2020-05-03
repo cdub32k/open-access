@@ -111,9 +111,9 @@ const resolvers = {
         note.commentCount++;
         await note.save();
 
-        return true;
+        return comment._id;
       } catch (error) {
-        return false;
+        return null;
       }
     },
     likeImage: async (
@@ -190,9 +190,9 @@ const resolvers = {
         image.commentCount++;
         await image.save();
 
-        return true;
+        return comment._id;
       } catch (error) {
-        return false;
+        return null;
       }
     },
     likeVideo: async (
@@ -289,9 +289,9 @@ const resolvers = {
         video.commentCount++;
         await video.save();
 
-        return true;
+        return comment._id;
       } catch (error) {
-        return false;
+        return null;
       }
     },
   },

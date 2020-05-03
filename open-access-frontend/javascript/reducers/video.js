@@ -35,6 +35,7 @@ const videoReducer = (state = initialState, action) => {
       return { ...state };
     case ActionTypes.POST_VIDEO_COMMENT_SUCCESS:
       const newComment = {
+        _id: action.payload.commentId,
         body: action.payload.body,
         user: {
           username: action.payload.username,

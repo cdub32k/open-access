@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 
 import VideoPlayer from "./VideoPlayer";
 import PreviewVideoPlayer from "./PreviewVideoPlayer";
-import CommentForm from "./CommentForm";
+import CommentsSection from "./CommentsSection";
 
 class VideoPage extends Component {
   componentDidMount() {
@@ -60,15 +60,11 @@ class VideoPage extends Component {
           )}
         </Grid>
         <Grid item xs={12} md={4}>
-          <CommentForm contentType="video" id={videoId} />
-          <hr />
-          {comments.map((comment, i) => {
-            return (
-              <div key={i}>
-                {comment.body} by {comment.user.username}
-              </div>
-            );
-          })}
+          <CommentsSection
+            comments={comments}
+            contentType="video"
+            id={videoId}
+          />
         </Grid>
       </Grid>
     );
