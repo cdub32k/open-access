@@ -40,7 +40,7 @@ class ImagePage extends Component {
     } = this.props;
     return (
       <Grid container>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={8} style={{ paddingRight: 32 }}>
           {loading ? (
             <PreviewImage />
           ) : (

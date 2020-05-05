@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomButton = ({ onClick, text }) => {
+const CustomButton = ({ onClick, text, ...rest }) => {
   const classes = useStyles();
   return (
     <Button
@@ -20,6 +20,7 @@ const CustomButton = ({ onClick, text }) => {
       variant="contained"
       color="primary"
       size="large"
+      {...rest}
     >
       {text}
     </Button>

@@ -81,6 +81,48 @@ const userReducer = (state = initialState, action) => {
         ...state,
         error: action.error,
       };
+    case ActionTypes.LOAD_USER_VIDEO_PAGE_SUCCESS:
+      return {
+        ...state,
+        viewed: {
+          ...state.viewed,
+          videos: [...state.viewed.videos, ...action.payload.videos],
+          hasMoreVideos: action.payload.hasMoreVideos,
+        },
+      };
+    case ActionTypes.LOAD_USER_VIDEO_PAGE_ERROR:
+      return {
+        ...state,
+        error: action.error,
+      };
+    case ActionTypes.LOAD_USER_IMAGE_PAGE_SUCCESS:
+      return {
+        ...state,
+        viewed: {
+          ...state.viewed,
+          images: [...state.viewed.images, ...action.payload.images],
+          hasMoreImages: action.payload.hasMoreImages,
+        },
+      };
+    case ActionTypes.LOAD_USER_IMAGE_PAGE_ERROR:
+      return {
+        ...state,
+        error: action.error,
+      };
+    case ActionTypes.LOAD_USER_NOTE_PAGE_SUCCESS:
+      return {
+        ...state,
+        viewed: {
+          ...state.viewed,
+          notes: [...state.viewed.notes, ...action.payload.notes],
+          hasMoreNotes: action.payload.hasMoreNotes,
+        },
+      };
+    case ActionTypes.LOAD_USER_NOTE_PAGE_ERROR:
+      return {
+        ...state,
+        error: action.error,
+      };
     case ActionTypes.CLEAR_USER_DATA:
       return {
         ...state,

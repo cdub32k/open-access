@@ -41,12 +41,35 @@ const theme = createMuiTheme({
     tonalOffset: 0.2,
   },
   typography: {
+    h1: { color: dark },
+    h2: { color: dark },
+    h3: { color: dark },
     h4: {
+      fontSize: 18,
       fontWeight: 700,
+      color: dark,
     },
+    h5: { color: dark },
+    h6: { color: dark },
+    subtitle1: { color: dark },
+    subtitle2: { color: dark, fontSize: 10 },
+    body1: { color: dark, fontSize: 12 },
+    body2: { color: dark, fontSize: 11 },
+    button: { color: dark },
+    caption: { color: dark },
+    overline: { color: dark },
+
     fontFamily: ["Montserrat", "sans-serif"].join(","),
   },
-  overrides: {},
+  globalClasses: {
+    icon: {
+      fill: dark,
+    },
+    badge: {
+      backgroundColor: alert,
+      color: "white",
+    },
+  },
 });
 
 export default theme;

@@ -14,7 +14,7 @@ import CustomButton from "./CustomButton";
 const useStyles = makeStyles((theme) => ({
   container: {
     position: "relative",
-    paddingTop: theme.spacing(8),
+    paddingTop: theme.spacing(2),
     maxWidth: 400,
   },
   error: {
@@ -57,7 +57,7 @@ const SignUp = ({ error, signupStart }) => {
   return (
     <Grid className={classes.container} container justify="center">
       <Grid item xs={12} style={{ marginBottom: 18 }}>
-        <Typography variant="h4" color="primary">
+        <Typography variant="h3" color="primary">
           Sign up
         </Typography>
       </Grid>

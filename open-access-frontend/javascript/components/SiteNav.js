@@ -17,34 +17,37 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    backgroundColor: "transparent",
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    color: theme.palette.secondary.main,
-  },
-  title: {
-    flexGrow: 1,
-    color: theme.palette.primary.main,
-  },
-  sectionDesktop: {
-    display: "none",
-    [theme.breakpoints.up("md")]: {
-      display: "flex",
+const useStyles = makeStyles((theme) => {
+  return {
+    container: {
+      backgroundColor: "transparent",
     },
-  },
-  sectionMobile: {
-    display: "flex",
-    [theme.breakpoints.up("md")]: {
+    grow: {
+      flexGrow: 1,
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+      color: theme.palette.secondary.main,
+    },
+    title: {
+      flexGrow: 1,
+      color: theme.palette.primary.main,
+    },
+    sectionDesktop: {
       display: "none",
+      [theme.breakpoints.up("md")]: {
+        display: "flex",
+      },
     },
-  },
-}));
+    sectionMobile: {
+      display: "flex",
+      [theme.breakpoints.up("md")]: {
+        display: "none",
+      },
+    },
+    ...theme.globalClasses,
+  };
+});
 
 const SiteNav = ({ loggedIn, username }) => {
   const classes = useStyles();
@@ -109,16 +112,16 @@ const SiteNav = ({ loggedIn, username }) => {
     >
       <MenuItem>
         <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
+          <Badge badgeContent={4} classes={{ badge: classes.badge }} max={99}>
+            <MailIcon className={classes.icon} />
           </Badge>
         </IconButton>
         <p>Messages</p>
       </MenuItem>
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
+          <Badge badgeContent={11} classes={{ badge: classes.badge }} max={99}>
+            <NotificationsIcon className={classes.icon} />
           </Badge>
         </IconButton>
         <p>Notifications</p>
@@ -130,7 +133,7 @@ const SiteNav = ({ loggedIn, username }) => {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <AccountCircle className={classes.icon} />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -152,7 +155,7 @@ const SiteNav = ({ loggedIn, username }) => {
         {!loggedIn && (
           <Fragment>
             <Button color="primary" component={Link} to="/login">
-              Login
+              Sign in
             </Button>
             <Button color="primary" component={Link} to="/sign-up">
               Register
@@ -164,16 +167,24 @@ const SiteNav = ({ loggedIn, username }) => {
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton aria-label="show 4 new mails" color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                  <MailIcon />
+                <Badge
+                  badgeContent={4}
+                  classes={{ badge: classes.badge }}
+                  max={99}
+                >
+                  <MailIcon className={classes.icon} />
                 </Badge>
               </IconButton>
               <IconButton
                 aria-label="show 17 new notifications"
                 color="inherit"
               >
-                <Badge badgeContent={17} color="secondary">
-                  <NotificationsIcon />
+                <Badge
+                  badgeContent={17}
+                  classes={{ badge: classes.badge }}
+                  max={99}
+                >
+                  <NotificationsIcon className={classes.icon} />
                 </Badge>
               </IconButton>
               <IconButton
@@ -184,7 +195,7 @@ const SiteNav = ({ loggedIn, username }) => {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+                <AccountCircle className={classes.icon} />
               </IconButton>
             </div>
             <div className={classes.sectionMobile}>
@@ -195,7 +206,7 @@ const SiteNav = ({ loggedIn, username }) => {
                 onClick={handleMobileMenuOpen}
                 color="inherit"
               >
-                <MoreIcon />
+                <MoreIcon className={classes.icon} />
               </IconButton>
             </div>
           </Fragment>

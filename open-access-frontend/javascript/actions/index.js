@@ -29,6 +29,9 @@ export const ActionTypes = {
   DISLIKE_VIDEO_START: "DISLIKE_VIDEO_START",
   DISLIKE_VIDEO_SUCCESS: "DISLIKE_VIDEO_SUCCESS",
   DISLIKE_VIDEO_ERROR: "DISLIKE_VIDEO_ERROR",
+  LOAD_USER_VIDEO_PAGE_START: "LOAD_USER_VIDEO_PAGE_START",
+  LOAD_USER_VIDEO_PAGE_SUCCESS: "LOAD_USER_VIDEO_PAGE_SUCCESS",
+  LOAD_USER_VIDEO_PAGE_ERROR: "LOAD_USER_VIDEO_PAGE_ERROR",
   CLEAR_VIDEO_DATA: "CLEAR_VIDEO_DATA",
   IMAGE_LOADING: "IMAGE_LOADING",
   GET_IMAGE_INFO_START: "GET_IMAGE_INFO_START",
@@ -43,6 +46,9 @@ export const ActionTypes = {
   POST_IMAGE_COMMENT_START: "POST_IMAGE_COMMENT_START",
   POST_IMAGE_COMMENT_SUCCESS: "POST_IMAGE_COMMENT_SUCCESS",
   POST_IMAGE_COMMENT_ERROR: "POST_IMAGE_COMMENT_ERROR",
+  LOAD_USER_IMAGE_PAGE_START: "LOAD_USER_IMAGE_PAGE_START",
+  LOAD_USER_IMAGE_PAGE_SUCCESS: "LOAD_USER_IMAGE_PAGE_SUCCESS",
+  LOAD_USER_IMAGE_PAGE_ERROR: "LOAD_USER_IMAGE_PAGE_ERROR",
   CLEAR_IMAGE_DATA: "CLEAR_IMAGE_DATA",
   NOTE_LOADING: "NOTE_LOADING",
   GET_NOTE_INFO_START: "GET_NOTE_INFO_START",
@@ -57,6 +63,9 @@ export const ActionTypes = {
   POST_NOTE_COMMENT_START: "POST_NOTE_COMMENT_START",
   POST_NOTE_COMMENT_SUCCESS: "POST_NOTE_COMMENT_SUCCESS",
   POST_NOTE_COMMENT_ERROR: "POST_NOTE_COMMENT_ERROR",
+  LOAD_USER_NOTE_PAGE_START: "LOAD_USER_NOTE_PAGE_START",
+  LOAD_USER_NOTE_PAGE_SUCCESS: "LOAD_USER_NOTE_PAGE_SUCCESS",
+  LOAD_USER_NOTE_PAGE_ERROR: "LOAD_USER_NOTE_PAGE_ERROR",
   CLEAR_NOTE_DATA: "CLEAR_NOTE_DATA",
   GET_USER_ACCOUNT_INFO_START: "GET_USER_ACCOUNT_INFO_START",
   GET_USER_ACCOUNT_INFO_SUCCESS: "GET_USER_ACCOUNT_INFO_SUCCESS",
@@ -160,6 +169,21 @@ export const ActionCreators = {
   postVideoCommentError: (error) => {
     return { type: ActionTypes.POST_VIDEO_COMMENT_ERROR, error };
   },
+  loadUserVideoPageStart: (username, page) => {
+    return {
+      type: ActionTypes.LOAD_USER_VIDEO_PAGE_START,
+      payload: { username, page },
+    };
+  },
+  loadUserVideoPageSuccess: (videos, hasMoreVideos) => {
+    return {
+      type: ActionTypes.LOAD_USER_VIDEO_PAGE_SUCCESS,
+      payload: { videos, hasMoreVideos },
+    };
+  },
+  loadUserVideoPageError: (error) => {
+    return { type: ActionTypes.LOAD_USER_VIDEO_PAGE_ERROR, error };
+  },
   clearVideoData: () => {
     return { type: ActionTypes.CLEAR_VIDEO_DATA };
   },
@@ -208,6 +232,21 @@ export const ActionCreators = {
   postImageCommentError: (error) => {
     return { type: ActionTypes.POST_IMAGE_COMMENT_ERROR, error };
   },
+  loadUserImagePageStart: (username, page) => {
+    return {
+      type: ActionTypes.LOAD_USER_IMAGE_PAGE_START,
+      payload: { username, page },
+    };
+  },
+  loadUserImagePageSuccess: (images, hasMoreImages) => {
+    return {
+      type: ActionTypes.LOAD_USER_IMAGE_PAGE_SUCCESS,
+      payload: { images, hasMoreImages },
+    };
+  },
+  loadUserImagePageError: (error) => {
+    return { type: ActionTypes.LOAD_USER_IMAGE_PAGE_ERROR, error };
+  },
   clearImageData: () => {
     return { type: ActionTypes.CLEAR_IMAGE_DATA };
   },
@@ -255,6 +294,21 @@ export const ActionCreators = {
   },
   getNoteInfoError: (error) => {
     return { type: ActionTypes.GET_NOTE_INFO_ERROR, error };
+  },
+  loadUserNotePageStart: (username, page) => {
+    return {
+      type: ActionTypes.LOAD_USER_NOTE_PAGE_START,
+      payload: { username, page },
+    };
+  },
+  loadUserNotePageSuccess: (notes, hasMoreNotes) => {
+    return {
+      type: ActionTypes.LOAD_USER_NOTE_PAGE_SUCCESS,
+      payload: { notes, hasMoreNotes },
+    };
+  },
+  loadUserNotePageError: (error) => {
+    return { type: ActionTypes.LOAD_USER_NOTE_PAGE_ERROR, error };
   },
   clearNoteData: () => {
     return { type: ActionTypes.CLEAR_NOTE_DATA };

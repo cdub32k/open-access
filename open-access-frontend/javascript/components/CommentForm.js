@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
 import { ActionCreators } from "../actions";
+
+import CustomInput from "./CustomInput";
+import CustomButton from "./CustomButton";
 
 const CommentForm = ({
   id,
@@ -35,16 +36,17 @@ const CommentForm = ({
   };
 
   return (
-    <form onSubmit={postComment}>
-      <TextField
+    <form
+      onSubmit={postComment}
+      style={{ marginBottom: 24, textAlign: "right" }}
+    >
+      <CustomInput
         value={body}
+        name="body"
         onChange={(e) => setBody(e.target.value)}
         rows={3}
-        name="body"
       />
-      <Button variant="contained" color="secondary" type="submit">
-        Post comment
-      </Button>
+      <CustomButton text="Post comment" onClick={postComment} size="small" />
     </form>
   );
 };

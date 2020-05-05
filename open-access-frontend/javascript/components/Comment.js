@@ -5,15 +5,22 @@ import Typography from "@material-ui/core/Typography";
 import { date2rel } from "../util/helpers";
 
 const Comment = ({ body, user, createdAt }) => (
-  <article className="center mw5 mw6-ns hidden ba mv4">
-    <div className="bg-purple white mv0 pv2 ph3 flex items-center">
-      <Avatar src={user.profilePic} className="mr3" />
+  <article className="center mw5 mw6-ns hidden mv4">
+    <div
+      className="b-gold white mv0 pv1 flex items-center br-pill"
+      style={{ paddingLeft: 6 }}
+    >
+      <Avatar
+        src={user.profilePic}
+        className="mr3"
+        style={{ width: 32, height: 32 }}
+      />
       <Typography variant="subtitle2">
         @{user.username} &#8226; {date2rel(createdAt)}
       </Typography>
     </div>
-    <div className="pa3 bt flex items-center">
-      <Typography variant="body2">{body}</Typography>
+    <div className="pa2 flex items-center">
+      <Typography variant="body1">{body}</Typography>
     </div>
   </article>
 );

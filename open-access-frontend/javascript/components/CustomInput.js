@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomInput = ({ value, name, label, onChange }) => {
+const CustomInput = ({ value, name, label, onChange, ...rest }) => {
   const classes = useStyles();
 
   return (
@@ -25,6 +25,7 @@ const CustomInput = ({ value, name, label, onChange }) => {
         name={name}
         label={label}
         onChange={onChange}
+        {...rest}
       />
     </FormControl>
   );

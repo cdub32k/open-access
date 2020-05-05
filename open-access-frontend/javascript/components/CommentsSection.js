@@ -1,16 +1,27 @@
 import React, { Fragment } from "react";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
+import { makeStyles } from "@material-ui/core/styles";
+
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 
+const useStyles = makeStyles((theme) => ({
+  section: {
+    maxHeight: 800,
+    paddingRight: 32,
+    overflowY: "scroll",
+  },
+}));
+
 const CommentsSection = ({ comments, contentType, id }) => {
+  const classes = useStyles();
   return (
     <Fragment>
       <CommentForm contentType={contentType} id={id} />
       <hr />
 
-      <TransitionGroup component="section">
+      <TransitionGroup component="section" className={classes.section}>
         {comments.map((comment, i) => (
           <CSSTransition
             timeout={500}

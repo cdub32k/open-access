@@ -1,15 +1,47 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
 import { ActionCreators } from "../actions";
+
+import Typography from "@material-ui/core/Typography";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Box from "@material-ui/core/Box";
+import { withStyles } from "@material-ui/core/styles";
 
 import ProfileHeader from "./ProfileHeader";
 import VideoList from "./VideoList";
 import ImageList from "./ImageList";
 import NoteList from "./NoteList";
 
+const TabPanel = withStyles((theme) => ({
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  hide: {
+    display: "none",
+  },
+}))(({ classes, children, index, selectedTab }) => {
+  return (
+    <Box
+      className={`${classes.container} ${
+        index != selectedTab ? classes.hide : ""
+      }`}
+    >
+      {children}
+    </Box>
+  );
+});
+
 class Profile extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedTab: 0,
+    };
+    this.changeTab = this.changeTab.bind(this);
+  }
 
   componentDidMount() {
     const { username } = this.props.match.params;
@@ -20,21 +52,66 @@ class Profile extends Component {
     this.props.clearUserData();
   }
 
+  changeTab(e, newValue) {
+    this.setState({
+      selectedTab: newValue,
+    });
+  }
+
   render() {
     const { username } = this.props.match.params;
-    const { loading, videos, images, notes } = this.props;
-
+    const {
+      loading,
+      classes,
+      videos,
+      images,
+      notes,
+      loadUserVideoPage,
+      hasMoreVideos,
+      loadUserImagePage,
+      hasMoreImages,
+      loadUserNotePage,
+      hasMoreNotes,
+    } = this.props;
+    const { selectedTab } = this.state;
     return (
-      <div>
+      <div className={classes.container}>
         <ProfileHeader loading={loading} />
-        <h3>Videos</h3>
-        <VideoList videos={videos} loading={loading} />
-        <br />
-        <h3>Images</h3>
-        <ImageList images={images} loading={loading} />
-        <br />
-        <h3>Notes</h3>
-        <NoteList notes={notes} loading={loading} />
+        <Tabs
+          value={selectedTab}
+          onChange={this.changeTab}
+          indicatorColor="primary"
+          textColor="inherit"
+          className={classes.tabHeaders}
+        >
+          <Tab label="Videos" />
+          <Tab label="Images" />
+          <Tab label="Notes" />
+        </Tabs>
+        <TabPanel selectedTab={selectedTab} index={0}>
+          <VideoList
+            hasMore={hasMoreVideos}
+            loadMore={(page) => loadUserVideoPage(username, page)}
+            videos={videos}
+            loading={loading}
+          />
+        </TabPanel>
+        <TabPanel selectedTab={selectedTab} index={1}>
+          <ImageList
+            hasMore={hasMoreImages}
+            loadMore={(page) => loadUserImagePage(username, page)}
+            images={images}
+            loading={loading}
+          />
+        </TabPanel>
+        <TabPanel selectedTab={selectedTab} index={2}>
+          <NoteList
+            hasMore={hasMoreNotes}
+            loadMore={(page) => loadUserNotePage(username, page)}
+            notes={notes}
+            loading={loading}
+          />
+        </TabPanel>
       </div>
     );
   }
@@ -46,6 +123,9 @@ const mapStateToProps = (state) => ({
   videos: state.user.viewed.videos,
   images: state.user.viewed.images,
   notes: state.user.viewed.notes,
+  hasMoreVideos: state.user.viewed.hasMoreVideos,
+  hasMoreImages: state.user.viewed.hasMoreImages,
+  hasMoreNotes: state.user.viewed.hasMoreNotes,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -54,6 +134,25 @@ const mapDispatchToProps = (dispatch) => ({
   clearUserData: () => {
     dispatch(ActionCreators.clearUserData());
   },
+  loadUserVideoPage: (username, page) =>
+    dispatch(ActionCreators.loadUserVideoPageStart(username, page)),
+  loadUserImagePage: (username, page) =>
+    dispatch(ActionCreators.loadUserImagePageStart(username, page)),
+  loadUserNotePage: (username, page) =>
+    dispatch(ActionCreators.loadUserNotePageStart(username, page)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  tabHeaders: {
+    marginBottom: 24,
+  },
+};
+
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(Profile)
+);

@@ -2,10 +2,52 @@ import { gql } from "apollo-server-express";
 
 const typeDefs = gql`
   type Query {
-    user(username: String!): User
+    #prettier-ignore
+    user(username: String!, vidPage: Int, imgPage: Int, notePage: Int ): UserResponse
+    #prettier-ignore
+    videoSearch(username: String, searchText: String, page: Int): VideoSearchResponse
+    #prettier-ignore
+    imageSearch(username: String, searchText: String, page: Int): ImageSearchResponse
+    #prettier-ignore
+    noteSearch(username: String, searchText: String, page: Int): NoteSearchResponse
     video(id: String!): Video
     image(id: String!): Image
     note(id: String!): Note
+  }
+
+  type UserResponse {
+    profilePic: String
+    username: String
+    email: String
+    displayName: String
+    phoneNumber: String
+    country: String
+    city: String
+    state: String
+    bio: String
+    joinedAt: Date
+    notes: [Note]
+    images: [Image]
+    videos: [Video]
+    vidPage: Int
+    imgPage: Int
+    notePage: Int
+    hasMoreVideos: Boolean
+    hasMoreImages: Boolean
+    hasMoreNotes: Boolean
+  }
+
+  type VideoSearchResponse {
+    videos: [Video]
+    hasMore: Boolean
+  }
+  type ImageSearchResponse {
+    images: [Image]
+    hasMore: Boolean
+  }
+  type NoteSearchResponse {
+    notes: [Note]
+    hasMore: Boolean
   }
 
   type Mutation {

@@ -1,16 +1,120 @@
 import DB from "../database";
 
+const perPage = 6;
+
 const resolvers = {
   Query: {
-    user: async (parent, { username }, context, info) => {
+    user: async (
+      parent,
+      { username, vidPage, imgPage, notePage },
+      context,
+      info
+    ) => {
       const user = await DB.User.findOne({ username });
 
-      return user;
+      return { ...user._doc, vidPage, imgPage, notePage };
     },
     video: async (parent, { id }, context, info) => {
       const video = await DB.Video.findOne({ _id: id });
       return video;
     },
+    videoSearch: async (
+      parent,
+      { username, searchText, page },
+      context,
+      info
+    ) => {
+      const criteria = {};
+      if (!page) page = 0;
+      if (username) criteria.username = username;
+      if (searchText) criteria.title = { $regex: searchText, $options: "i" };
+
+      const totalCount = await DB.Video.find(criteria).count();
+      const videos = await DB.Video.find(criteria)
+        .skip(page * perPage)
+        .limit(perPage)
+        .select({
+          likeCount: 1,
+          dislikeCount: 1,
+          commentCount: 1,
+          username: 1,
+          url: 1,
+          thumbUrl: 1,
+          title: 1,
+          caption: 1,
+          viewCount: 1,
+          uploadedAt: 1,
+          _id: 1,
+        });
+
+      return {
+        videos,
+        hasMore: totalCount > page * perPage + perPage,
+      };
+    },
+    imageSearch: async (
+      parent,
+      { username, searchText, page },
+      context,
+      info
+    ) => {
+      const criteria = {};
+      if (!page) page = 0;
+      if (username) criteria.username = username;
+      if (searchText) criteria.title = { $regex: searchText, $options: "i" };
+
+      const totalCount = await DB.Image.find(criteria).count();
+      const images = await DB.Image.find(criteria)
+        .skip(page * perPage)
+        .limit(perPage)
+        .select({
+          likeCount: 1,
+          dislikeCount: 1,
+          commentCount: 1,
+          username: 1,
+          url: 1,
+          title: 1,
+          caption: 1,
+          uploadedAt: 1,
+          _id: 1,
+        });
+
+      return {
+        images,
+        hasMore: totalCount > page * perPage + perPage,
+      };
+    },
+    noteSearch: async (
+      parent,
+      { username, searchText, page },
+      context,
+      info
+    ) => {
+      const criteria = {};
+      if (!page) page = 0;
+      if (username) criteria.username = username;
+      if (searchText) criteria.body = { $regex: searchText, $options: "i" };
+
+      const totalCount = await DB.Note.find(criteria).count();
+      const notes = await DB.Note.find(criteria)
+        .skip(page * perPage)
+        .limit(perPage)
+        .select({
+          likeCount: 1,
+          dislikeCount: 1,
+          commentCount: 1,
+          username: 1,
+          body: 1,
+          uploadedAt: 1,
+          _id: 1,
+        });
+
+      return {
+        notes,
+        hasMore: totalCount > page * perPage + perPage,
+      };
+    },
+
     image: async (parent, { id }, context, info) => {
       const image = await DB.Image.findOne({ _id: id });
       return image;
@@ -415,51 +519,84 @@ const resolvers = {
     },
   },
 
-  User: {
-    notes: async ({ username }, args, context, info) => {
-      const notes = await DB.Note.find({ username }).select({
-        likeCount: 1,
-        dislikeCount: 1,
-        commentCount: 1,
-        username: 1,
-        body: 1,
-        uploadedAt: 1,
-        _id: 1,
-      });
+  UserResponse: {
+    notes: async ({ username, notePage }, args, context, info) => {
+      if (!notePage) notePage = 0;
+
+      const notes = await DB.Note.find({ username })
+        .skip(notePage * perPage)
+        .limit(perPage)
+        .select({
+          likeCount: 1,
+          dislikeCount: 1,
+          commentCount: 1,
+          username: 1,
+          body: 1,
+          uploadedAt: 1,
+          _id: 1,
+        });
 
       return notes;
     },
-    images: async ({ username }, args, context, info) => {
-      const images = await DB.Image.find({ username }).select({
-        likeCount: 1,
-        dislikeCount: 1,
-        commentCount: 1,
-        username: 1,
-        url: 1,
-        title: 1,
-        caption: 1,
-        uploadedAt: 1,
-        _id: 1,
-      });
+    hasMoreNotes: async ({ username, notePage }) => {
+      if (!notePage) notePage = 0;
+      const numVids = await DB.Note.find({ username }).count();
+
+      return numVids > notePage * perPage + perPage;
+    },
+    images: async ({ username, imgPage }, args, context, info) => {
+      if (!imgPage) imgPage = 0;
+
+      const images = await DB.Image.find({ username })
+        .skip(imgPage * perPage)
+        .limit(perPage)
+        .select({
+          likeCount: 1,
+          dislikeCount: 1,
+          commentCount: 1,
+          username: 1,
+          url: 1,
+          title: 1,
+          caption: 1,
+          uploadedAt: 1,
+          _id: 1,
+        });
 
       return images;
     },
-    videos: async ({ username }, args, context, info) => {
-      const videos = await DB.Video.find({ username }).select({
-        likeCount: 1,
-        dislikeCount: 1,
-        commentCount: 1,
-        username: 1,
-        url: 1,
-        thumbUrl: 1,
-        title: 1,
-        caption: 1,
-        viewCount: 1,
-        uploadedAt: 1,
-        _id: 1,
-      });
+    hasMoreImages: async ({ username, imgPage }) => {
+      if (!imgPage) imgPage = 0;
+      const numVids = await DB.Image.find({ username }).count();
+
+      return numVids > imgPage * perPage + perPage;
+    },
+    videos: async ({ username, vidPage }, args, context, info) => {
+      if (!vidPage) vidPage = 0;
+
+      const videos = await DB.Video.find({ username })
+        .skip(vidPage * perPage)
+        .limit(perPage)
+        .select({
+          likeCount: 1,
+          dislikeCount: 1,
+          commentCount: 1,
+          username: 1,
+          url: 1,
+          thumbUrl: 1,
+          title: 1,
+          caption: 1,
+          viewCount: 1,
+          uploadedAt: 1,
+          _id: 1,
+        });
 
       return videos;
+    },
+    hasMoreVideos: async ({ username, vidPage }) => {
+      if (!vidPage) vidPage = 0;
+      const numVids = await DB.Video.find({ username }).count();
+
+      return numVids > vidPage * perPage + perPage;
     },
   },
 };

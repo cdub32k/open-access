@@ -54,6 +54,7 @@ export default [
                     liked
                     disliked
                   }
+                  hasMoreVideos
                   images {
                     _id
                     user {
@@ -67,6 +68,7 @@ export default [
                     liked
                     disliked
                   }
+                  hasMoreImages
                   notes {
                     _id
                     user {
@@ -79,6 +81,7 @@ export default [
                     liked
                     disliked
                   }
+                  hasMoreNotes
                 }
               }
             `,
@@ -283,6 +286,101 @@ export default [
                 )
               );
             else next(ActionCreators.postVideoCommentError());
+          });
+        break;
+      case ActionTypes.LOAD_USER_VIDEO_PAGE_START:
+        axios
+          .post("/api", {
+            query: `
+            {
+              videoSearch(username:"${action.payload.username}", page:${action.payload.page}) {
+                videos {
+                  _id
+                  user {
+                    username
+                    profilePic
+                  }
+                  title
+                  viewCount
+                  thumbUrl
+                  uploadedAt
+                  liked
+                  disliked
+                }
+                hasMore
+              }
+            }
+          `,
+          })
+          .then((res) => {
+            const { videos, hasMore } = res.data.data.videoSearch;
+            next(ActionCreators.loadUserVideoPageSuccess(videos, hasMore));
+          })
+          .catch((error) => {
+            next(ActionCreators.loadUserVideoPageError(error));
+          });
+        break;
+      case ActionTypes.LOAD_USER_IMAGE_PAGE_START:
+        axios
+          .post("/api", {
+            query: `
+            {
+              imageSearch(username:"${action.payload.username}", page:${action.payload.page}) {
+                images {
+                  _id
+                  user {
+                    username
+                    profilePic
+                  }
+                  title
+                  likeCount
+                  url
+                  uploadedAt
+                  liked
+                  disliked
+                }
+                hasMore
+              }
+            }
+          `,
+          })
+          .then((res) => {
+            const { images, hasMore } = res.data.data.imageSearch;
+            next(ActionCreators.loadUserImagePageSuccess(images, hasMore));
+          })
+          .catch((error) => {
+            next(ActionCreators.loadUserImagePageError(error));
+          });
+        break;
+      case ActionTypes.LOAD_USER_NOTE_PAGE_START:
+        axios
+          .post("/api", {
+            query: `
+            {
+              noteSearch(username:"${action.payload.username}", page:${action.payload.page}) {
+                notes {
+                  _id
+                  user {
+                    username
+                    profilePic
+                  }
+                  commentCount
+                  body
+                  uploadedAt
+                  liked
+                  disliked
+                }
+                hasMore
+              }
+            }
+          `,
+          })
+          .then((res) => {
+            const { notes, hasMore } = res.data.data.noteSearch;
+            next(ActionCreators.loadUserNotePageSuccess(notes, hasMore));
+          })
+          .catch((error) => {
+            next(ActionCreators.loadUserNotePageError(error));
           });
         break;
       case ActionTypes.GET_IMAGE_INFO_START:

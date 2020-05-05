@@ -4,22 +4,17 @@ import { ActionCreators } from "../actions";
 
 import Grid from "@material-ui/core/Grid";
 import FormGroup from "@material-ui/core/FormGroup";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+
+import CustomInput from "./CustomInput";
+import CustomButton from "./CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     position: "relative",
-    paddingTop: theme.spacing(10),
+    paddingTop: theme.spacing(2),
     maxWidth: 400,
-  },
-  formControl: {
-    margin: `${theme.spacing(1)}px 0`,
   },
   error: {
     position: "absolute",
@@ -61,48 +56,35 @@ const Login = ({ error, loginStart }) => {
           User not found!
         </Typography>
       )}
-      <Grid item xs={12} className="tac">
-        <Typography variant="h5" color="primary">
+      <Grid item xs={12} style={{ marginBottom: 18 }}>
+        <Typography variant="h3" color="primary">
           Sign in
         </Typography>
       </Grid>
       <Grid item xs={12}>
         <form>
           <FormGroup>
-            <Grid
-              container
-              justify="center"
-              className={`${classes.formControl}`}
-            >
+            <Grid container justify="center">
               <Grid item xs={12}>
-                <FormControl fullWidth={true}>
-                  <InputLabel htmlFor="username">Username</InputLabel>
-                  <Input onChange={updateCredentials} name="username" />
-                </FormControl>
+                <CustomInput
+                  name="username"
+                  label="Username"
+                  onChange={updateCredentials}
+                />
               </Grid>
             </Grid>
-            <Grid
-              container
-              justify="center"
-              className={`${classes.formControl}`}
-            >
+            <Grid container justify="center">
               <Grid item xs={12}>
-                <FormControl fullWidth={true}>
-                  <InputLabel htmlFor="password">Password</InputLabel>
-                  <Input onChange={updateCredentials} name="password" />
-                  {/*<FormHelperText className="tar"><a href="#">forgot password?</a></FormHelperText>*/}
-                </FormControl>
+                <CustomInput
+                  name="password"
+                  label="Password"
+                  onChange={updateCredentials}
+                />
               </Grid>
             </Grid>
-            <Grid
-              container
-              justify="center"
-              className={`${classes.formControl}`}
-            >
+            <Grid container justify="center" className="mt3">
               <Grid className="tar" item xs={12}>
-                <Button onClick={onSubmit} variant="contained" color="primary">
-                  Login
-                </Button>
+                <CustomButton text="Sign in" onClick={onSubmit} />
               </Grid>
             </Grid>
           </FormGroup>
