@@ -18,14 +18,19 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    backgroundColor: "transparent",
+  },
   grow: {
     flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    color: theme.palette.secondary.main,
   },
   title: {
     flexGrow: 1,
+    color: theme.palette.primary.main,
   },
   sectionDesktop: {
     display: "none",
@@ -132,7 +137,7 @@ const SiteNav = ({ loggedIn, username }) => {
     </Menu>
   );
   return (
-    <AppBar position="static">
+    <AppBar position="static" elevation={2} className={classes.container}>
       <Toolbar>
         <IconButton edge="start" className={classes.menuButton} color="inherit">
           <MenuIcon />
@@ -146,10 +151,10 @@ const SiteNav = ({ loggedIn, username }) => {
         {renderMenu}
         {!loggedIn && (
           <Fragment>
-            <Button color="inherit" component={Link} to="/login">
+            <Button color="primary" component={Link} to="/login">
               Login
             </Button>
-            <Button color="inherit" component={Link} to="/sign-up">
+            <Button color="primary" component={Link} to="/sign-up">
               Register
             </Button>
           </Fragment>

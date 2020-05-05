@@ -1,13 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap");
 @import "../node_modules/tachyons-sass/tachyons.scss";
 
 // Tachyons colors
-$purple: #b891d8;
-$yellow: #d6c284;
+$green: #7fb069;
+$gold: #e6aa68;
+$red: #ca3c25;
+$black: #1d1a05;
+$washed-yellow: #fffbbd;
 
 :root {
-  --body-background-color: rgba(0, 0, 0, 0.02);
-  --content-background-color: rgba(0, 0, 0, 0.04);
 }
 
 * {
@@ -24,7 +25,6 @@ html {
 
 body {
   min-height: 100%;
-  background: var(--body-background-color);
 }
 
 a {
@@ -35,10 +35,14 @@ a {
   max-width: 1450px;
   margin: auto;
   padding: 24px;
-  background-color: var(--content-background-color);
+  display: flex;
+  justify-content: center;
+  height: 100%;
 }
 
-.spinner {
+//Material UI Overrides
+.MuiOutlinedInput-notchedOutline {
+  border: 2px solid $gold !important;
 }
 
 //Stripe form styles:
