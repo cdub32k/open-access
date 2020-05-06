@@ -1,8 +1,11 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import { createServer } from "http";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
+import { PubSub } from "apollo-server-express";
+const pubsub = new PubSub();
 
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -20,7 +23,12 @@ import resolvers from "./resolvers";
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:9000",
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
@@ -54,10 +62,16 @@ app.use("/videos", verifyTokenMiddleware, videoRouter);
 
 app.use(express.static("public"));
 
-const server = new ApolloServer({
+const gqlServer = new ApolloServer({
+  cors: false,
   typeDefs,
   resolvers,
-  context: async ({ req }) => {
+  subscriptions: {
+    path: "/subs",
+  },
+  context: async ({ req, connection }) => {
+    if (connection) return { ...connection.context, pubsub };
+
     let token = req.headers["authorization"];
     if (!token) {
       req.authorized = false;
@@ -74,13 +88,24 @@ const server = new ApolloServer({
 
     req.authorized = true;
     req.username = decoded.username;
-    return { req };
+    return { req, pubsub };
   },
 });
-server.applyMiddleware({ app, path: "/api" });
 
-app.listen({ port: process.env.PORT }, () =>
+gqlServer.applyMiddleware({
+  app,
+  path: "/api",
+  cors: false,
+});
+
+const httpServer = createServer(app);
+gqlServer.installSubscriptionHandlers(httpServer);
+
+httpServer.listen({ port: process.env.PORT }, () => {
   console.log(
-    `Server reading at http://localhost:5000\nGraphql server at path ${server.graphqlPath}`
-  )
-);
+    `Graphql Server reading at http://localhost:${process.env.PORT}${gqlServer.graphqlPath}`
+  );
+  console.log(
+    `Subscriptions ready at ws://localhost:${process.env.PORT}${gqlServer.subscriptionsPath}`
+  );
+});

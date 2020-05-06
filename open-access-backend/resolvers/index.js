@@ -1,6 +1,7 @@
 import DB from "../database";
 
-const perPage = 6;
+const perPage = 8;
+const NOTIFICATION_SUBSCRIPTION_PREFIX = "NOTE_SUB_";
 
 const resolvers = {
   Query: {
@@ -29,7 +30,7 @@ const resolvers = {
       if (username) criteria.username = username;
       if (searchText) criteria.title = { $regex: searchText, $options: "i" };
 
-      const totalCount = await DB.Video.find(criteria).count();
+      const totalCount = await DB.Video.find(criteria).countDocuments();
       const videos = await DB.Video.find(criteria)
         .sort({
           uploadedAt: -1,
@@ -66,7 +67,7 @@ const resolvers = {
       if (username) criteria.username = username;
       if (searchText) criteria.title = { $regex: searchText, $options: "i" };
 
-      const totalCount = await DB.Image.find(criteria).count();
+      const totalCount = await DB.Image.find(criteria).countDocuments();
       const images = await DB.Image.find(criteria)
         .sort({
           uploadedAt: -1,
@@ -101,7 +102,7 @@ const resolvers = {
       if (username) criteria.username = username;
       if (searchText) criteria.body = { $regex: searchText, $options: "i" };
 
-      const totalCount = await DB.Note.find(criteria).count();
+      const totalCount = await DB.Note.find(criteria).countDocuments();
       const notes = await DB.Note.find(criteria)
         .sort({
           uploadedAt: -1,
@@ -153,7 +154,7 @@ const resolvers = {
     likeNote: async (
       parent,
       { id },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       try {
@@ -166,6 +167,16 @@ const resolvers = {
           });
           note.likeCount++;
           await note.save();
+
+          pubsub.publish(NOTIFICATION_SUBSCRIPTION_PREFIX + note.username, {
+            notifications: {
+              sender: username,
+              type: "like",
+              target: "note",
+              id: note._id,
+              body: null,
+            },
+          });
         } else {
           await DB.NoteLike.deleteOne({ username, noteId: id });
           note.likeCount--;
@@ -557,7 +568,7 @@ const resolvers = {
     },
     hasMoreNotes: async ({ username, notePage }) => {
       if (!notePage) notePage = 0;
-      const numVids = await DB.Note.find({ username }).count();
+      const numVids = await DB.Note.find({ username }).countDocuments();
 
       return numVids > notePage * perPage + perPage;
     },
@@ -586,7 +597,7 @@ const resolvers = {
     },
     hasMoreImages: async ({ username, imgPage }) => {
       if (!imgPage) imgPage = 0;
-      const numVids = await DB.Image.find({ username }).count();
+      const numVids = await DB.Image.find({ username }).countDocuments();
 
       return numVids > imgPage * perPage + perPage;
     },
@@ -617,9 +628,18 @@ const resolvers = {
     },
     hasMoreVideos: async ({ username, vidPage }) => {
       if (!vidPage) vidPage = 0;
-      const numVids = await DB.Video.find({ username }).count();
+      const numVids = await DB.Video.find({ username }).countDocuments();
 
       return numVids > vidPage * perPage + perPage;
+    },
+  },
+  Subscription: {
+    notifications: {
+      subscribe: (parent, { username }, { pubsub }, info) => {
+        return pubsub.asyncIterator(
+          NOTIFICATION_SUBSCRIPTION_PREFIX + username
+        );
+      },
     },
   },
 };

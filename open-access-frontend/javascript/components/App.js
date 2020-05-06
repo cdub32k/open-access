@@ -10,10 +10,10 @@ import theme from "../muiTheme";
 import { Provider, connect } from "react-redux";
 import store from "../store";
 import { ActionCreators } from "../actions";
-const mapStateToProps = (state) => ({});
-const mapDispatchToProps = (dispatch) => ({
-  autoLogin: (token) => dispatch(ActionCreators.autoLogin(token)),
+const mapStateToProps = (state) => ({
+  username: state.user.username,
 });
+const mapDispatchToProps = (dispatch) => ({});
 const initApp = () => {
   const token = localStorage.getItem("open-access-api-token");
   if (token) {
@@ -24,6 +24,44 @@ const initApp = () => {
   }
 };
 initApp();
+
+import {
+  ApolloClient,
+  ApolloLink,
+  split,
+  HttpLink,
+  InMemoryCache,
+  ApolloProvider,
+  ApolloConsumer,
+  gql,
+} from "@apollo/client";
+import { getMainDefinition } from "apollo-utilities";
+import { WebSocketLink } from "apollo-link-ws";
+import { SubscriptionClient } from "subscriptions-transport-ws";
+
+const wsLink = new WebSocketLink(
+  new SubscriptionClient("ws://localhost:5000/subs", {
+    reconnect: true,
+  })
+);
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: split(
+    // split based on operation type
+    ({ query }) => {
+      const definition = getMainDefinition(query);
+      return (
+        definition.kind === "OperationDefinition" &&
+        definition.operation === "subscription"
+      );
+    },
+    wsLink,
+    new HttpLink({
+      uri: "http://localhost:5000/api",
+    })
+  ),
+});
 
 import AuthRedirect from "./AuthRedirect";
 import UnauthRedirect from "./UnauthRedirect";
@@ -61,7 +99,26 @@ class App extends Component {
     super(props);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.apolloClient
+      .subscribe({
+        query: gql`
+          subscription notifications($username: String!) {
+            notifications(username: $username) {
+              sender
+              type
+              target
+              id
+              body
+            }
+          }
+        `,
+        variables: { username: "first_member" },
+      })
+      .subscribe({
+        next(data) {},
+      });
+  }
 
   render() {
     const { classes } = this.props;
@@ -106,7 +163,11 @@ App = connect(mapStateToProps, mapDispatchToProps)(App);
 export default (
   <ThemeProvider theme={theme}>
     <Provider store={store}>
-      <App />
+      <ApolloProvider client={client}>
+        <ApolloConsumer>
+          {(apolloClient) => <App apolloClient={apolloClient} />}
+        </ApolloConsumer>
+      </ApolloProvider>
     </Provider>
   </ThemeProvider>
 );

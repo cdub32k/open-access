@@ -13,6 +13,8 @@ const typeDefs = gql`
     video(id: String!): Video
     image(id: String!): Image
     note(id: String!): Note
+
+    notifications: [Notification]
   }
 
   type UserResponse {
@@ -205,6 +207,18 @@ const typeDefs = gql`
     comments: [VideoComment]
     liked: Boolean
     disliked: Boolean
+  }
+
+  type Notification {
+    type: String
+    content: String
+    id: String
+    sender: String
+    body: String
+  }
+
+  type Subscription {
+    notifications(username: String!): Notification
   }
 `;
 
