@@ -1,12 +1,17 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import axios from "axios";
 
-import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+import CustomInput from "./CustomInput";
+import CustomButton from "./CustomButton";
 
 class NoteUploader extends Component {
   state = {
     noteBody: "",
+    goToProfile: false,
   };
 
   constructor(props) {
@@ -19,7 +24,7 @@ class NoteUploader extends Component {
     });
   };
 
-  onClickHandler = () => {
+  onSubmitHandler = () => {
     axios
       .post("/api", {
         query: `
@@ -30,19 +35,46 @@ class NoteUploader extends Component {
       }
     `,
       })
-      .then((res) => console.log(res.data.data.postNote));
+      .then((res) => {
+        if (res.data.data.postNote)
+          this.setState({
+            goToProfile: true,
+          });
+      });
   };
 
   render() {
+    if (this.state.goToProfile)
+      return <Redirect to={`/profile/${this.props.username}`} />;
+
+    const { body } = this.state;
     return (
       <div>
-        <textarea onChange={this.updateBody} />
-        <Button type="button" onClick={this.onClickHandler}>
-          Upload
-        </Button>
+        <form onSubmit={this.onSubmitHandler}>
+          <CustomInput
+            value={body}
+            onChange={this.updateBody}
+            multiline={true}
+            rows={3}
+          />
+          <CustomButton text="Post" onClick={this.onSubmitHandler} />
+        </form>
       </div>
     );
   }
 }
 
-export default NoteUploader;
+const styles = (theme) => ({
+  form: {
+    display: "flex",
+    maxWidth: 1450,
+    justifyContent: "space-between",
+    margin: "auto",
+  },
+});
+
+const mapStateToProps = (state) => ({
+  username: state.user.username,
+});
+
+export default withStyles(styles)(connect(mapStateToProps)(NoteUploader));

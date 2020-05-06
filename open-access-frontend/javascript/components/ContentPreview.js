@@ -41,6 +41,9 @@ const styles = (theme) => ({
     maxWidth: "75%",
     marginTop: 8,
   },
+  link: {
+    color: `${theme.palette.text.primary} !important`,
+  },
 });
 
 const ContentPreview = ({
@@ -77,7 +80,7 @@ const ContentPreview = ({
 
   return (
     <Card className={classes.container}>
-      <Link to={`${linkPrefix}/${id}`}>
+      <Link to={`${linkPrefix}/${id}`} className={classes.link}>
         {contentType != "note" && (
           <CardMedia className={classes.thumb} image={thumbUrl} />
         )}

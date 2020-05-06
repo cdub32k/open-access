@@ -31,6 +31,9 @@ const resolvers = {
 
       const totalCount = await DB.Video.find(criteria).count();
       const videos = await DB.Video.find(criteria)
+        .sort({
+          uploadedAt: -1,
+        })
         .skip(page * perPage)
         .limit(perPage)
         .select({
@@ -65,6 +68,9 @@ const resolvers = {
 
       const totalCount = await DB.Image.find(criteria).count();
       const images = await DB.Image.find(criteria)
+        .sort({
+          uploadedAt: -1,
+        })
         .skip(page * perPage)
         .limit(perPage)
         .select({
@@ -97,6 +103,9 @@ const resolvers = {
 
       const totalCount = await DB.Note.find(criteria).count();
       const notes = await DB.Note.find(criteria)
+        .sort({
+          uploadedAt: -1,
+        })
         .skip(page * perPage)
         .limit(perPage)
         .select({
@@ -371,6 +380,11 @@ const resolvers = {
           username,
           videoId: id,
         });
+
+        const video = await DB.Video.findOne({ _id: id });
+        video.viewCount = video.viewCount + 1;
+        await video.save();
+
         return true;
       } catch (error) {
         return false;
@@ -524,6 +538,9 @@ const resolvers = {
       if (!notePage) notePage = 0;
 
       const notes = await DB.Note.find({ username })
+        .sort({
+          uploadedAt: -1,
+        })
         .skip(notePage * perPage)
         .limit(perPage)
         .select({
@@ -548,6 +565,9 @@ const resolvers = {
       if (!imgPage) imgPage = 0;
 
       const images = await DB.Image.find({ username })
+        .sort({
+          uploadedAt: -1,
+        })
         .skip(imgPage * perPage)
         .limit(perPage)
         .select({
@@ -574,6 +594,9 @@ const resolvers = {
       if (!vidPage) vidPage = 0;
 
       const videos = await DB.Video.find({ username })
+        .sort({
+          uploadedAt: -1,
+        })
         .skip(vidPage * perPage)
         .limit(perPage)
         .select({

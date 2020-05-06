@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
+import { Link } from "react-router-dom";
 
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
@@ -12,6 +13,7 @@ import ProfileHeader from "./ProfileHeader";
 import VideoList from "./VideoList";
 import ImageList from "./ImageList";
 import NoteList from "./NoteList";
+import CustomButton from "./CustomButton";
 
 const TabPanel = withStyles((theme) => ({
   container: {
@@ -89,6 +91,9 @@ class Profile extends Component {
           <Tab label="Notes" />
         </Tabs>
         <TabPanel selectedTab={selectedTab} index={0}>
+          <Link to="/video-upload">
+            <CustomButton text="+New Video" />
+          </Link>
           <VideoList
             hasMore={hasMoreVideos}
             loadMore={(page) => loadUserVideoPage(username, page)}
@@ -97,6 +102,9 @@ class Profile extends Component {
           />
         </TabPanel>
         <TabPanel selectedTab={selectedTab} index={1}>
+          <Link to="/image-upload">
+            <CustomButton text="+New Image" />
+          </Link>
           <ImageList
             hasMore={hasMoreImages}
             loadMore={(page) => loadUserImagePage(username, page)}
@@ -105,6 +113,9 @@ class Profile extends Component {
           />
         </TabPanel>
         <TabPanel selectedTab={selectedTab} index={2}>
+          <Link to="/note-upload">
+            <CustomButton text="+New Note" />
+          </Link>
           <NoteList
             hasMore={hasMoreNotes}
             loadMore={(page) => loadUserNotePage(username, page)}

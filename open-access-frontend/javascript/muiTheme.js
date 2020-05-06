@@ -36,6 +36,7 @@ const theme = createMuiTheme({
     text: {
       primary: dark,
       secondary: darkLight,
+      light: "white",
     },
     contrastThreshold: 3,
     tonalOffset: 0.2,
@@ -56,7 +57,7 @@ const theme = createMuiTheme({
     body1: { color: dark, fontSize: 12 },
     body2: { color: dark, fontSize: 11 },
     button: { color: dark },
-    caption: { color: dark },
+    caption: { color: dark, fontSize: 12 },
     overline: { color: dark },
 
     fontFamily: ["Montserrat", "sans-serif"].join(","),
