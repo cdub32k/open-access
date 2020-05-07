@@ -26,7 +26,7 @@ const initApp = () => {
 initApp();
 
 import apolloClient from "../apollo";
-import { gql } from "@apollo/client";
+import { parse } from "graphql";
 
 import AuthRedirect from "./AuthRedirect";
 import UnauthRedirect from "./UnauthRedirect";
@@ -67,7 +67,7 @@ class App extends Component {
   componentDidMount() {
     apolloClient
       .subscribe({
-        query: gql`
+        query: parse(`
           subscription notifications($username: String!) {
             notifications(username: $username) {
               sender
@@ -77,7 +77,7 @@ class App extends Component {
               body
             }
           }
-        `,
+        `),
         variables: { username: "first_member" },
       })
       .subscribe({
