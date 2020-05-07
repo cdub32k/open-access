@@ -2,11 +2,16 @@ import * as jwt_decode from "jwt-decode";
 import { ActionTypes } from "../actions";
 import axios from "axios";
 
+import apolloClient from "../apollo";
+import { parse } from "graphql";
+
 const initialState = {
   profilePic: "",
   email: "",
   username: "",
   error: null,
+  notifications: [],
+  notificationsSubscription: null,
   loggedIn: false,
   viewed: {
     loading: false,
@@ -17,37 +22,74 @@ const initialState = {
   },
 };
 
+const subscribeToNotifications = (username) => {
+  return apolloClient
+    .subscribe({
+      query: parse(`
+          subscription notifications($username: String!) {
+            notifications(username: $username) {
+              sender
+              type
+              targetId
+              body
+            }
+          }
+        `),
+      variables: { username },
+    })
+    .subscribe({
+      next(data) {
+        console.log("RECEIVED NOTIFICATION: ", data);
+      },
+    });
+};
+
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.CLEAR_ERRORS:
       return { ...state, error: null };
-    case ActionTypes.LOGIN_SUCCESS:
+    case ActionTypes.LOGIN_SUCCESS: {
       let { token } = action.payload;
       localStorage.setItem("open-access-api-token", token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       let decodedToken = jwt_decode(token);
+
+      const { username, email, profilePic } = decodedToken;
+
+      const notificationsSubscription = subscribeToNotifications(username);
+
       return {
         ...state,
         loggedIn: true,
-        username: decodedToken.username,
-        email: decodedToken.email,
-        profilePic: decodedToken.profilePic,
+        username,
+        email,
+        profilePic,
+        notificationsSubscription,
       };
+    }
     case ActionTypes.LOGIN_ERROR:
       localStorage.removeItem("open-access-api-token");
       return { ...state, loggedIn: false, error: action.error };
-    case ActionTypes.AUTO_LOGIN:
-      token = localStorage.getItem("open-access-api-token");
+    case ActionTypes.AUTO_LOGIN: {
+      const token = localStorage.getItem("open-access-api-token");
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+      const { username, email, profilePic } = action.payload.token;
+
+      subscribeToNotifications(username);
+
       return {
         ...state,
         loggedIn: true,
-        username: action.payload.token.username,
-        email: action.payload.token.email,
-        profilePic: action.payload.token.profilePic,
+        username,
+        email,
+        profilePic,
       };
+    }
     case ActionTypes.LOGOUT:
       localStorage.removeItem("open-access-api-token");
+      this.state.notificationsSubscription &&
+        this.state.notificationsSubscription();
       return { ...initialState };
     case ActionTypes.USER_INFO_LOADING:
       return { ...state, viewed: { ...state.viewed, loading: true } };

@@ -16,6 +16,7 @@ import ImageComment from "./models/imageComment";
 import NoteLike from "./models/noteLike";
 import NoteDislike from "./models/noteDislike";
 import NoteComment from "./models/noteComment";
+import Notification from "./models/notification";
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ class Database {
     this.NoteLike = NoteLike;
     this.NoteDislike = NoteDislike;
     this.NoteComment = NoteComment;
+    this.Notification = Notification;
   }
 
   _connect() {
@@ -46,6 +48,7 @@ class Database {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
+        useFindAndModify: false,
       })
       .then(() => {
         console.log("Database connection successful");

@@ -1,7 +1,8 @@
 import DB from "../database";
 
 const perPage = 8;
-const NOTIFICATION_SUBSCRIPTION_PREFIX = "NOTE_SUB_";
+
+import { NOTIFICATION_SUBSCRIPTION_PREFIX } from "../constants";
 
 const resolvers = {
   Query: {
@@ -168,15 +169,18 @@ const resolvers = {
           note.likeCount++;
           await note.save();
 
-          pubsub.publish(NOTIFICATION_SUBSCRIPTION_PREFIX + note.username, {
-            notifications: {
+          const notified = await DB.Notification.findOne({
+            sender: username,
+            targetId: note._id,
+          });
+          if (!notified)
+            await DB.Notification.create({
               sender: username,
+              receiver: note.username,
               type: "like",
               target: "note",
-              id: note._id,
-              body: null,
-            },
-          });
+              targetId: note._id,
+            });
         } else {
           await DB.NoteLike.deleteOne({ username, noteId: id });
           note.likeCount--;
@@ -545,6 +549,13 @@ const resolvers = {
   },
 
   UserResponse: {
+    notifications: async ({ username }, args, context, info) => {
+      const notifications = await DB.Notification.find({
+        receiver: username,
+        read: false,
+      }).limit(100);
+      return notifications;
+    },
     notes: async ({ username, notePage }, args, context, info) => {
       if (!notePage) notePage = 0;
 

@@ -346,12 +346,11 @@ export default [
         });
     } else if (action.type == ActionTypes.GET_VIDEO_INFO_START) {
       next(ActionCreators.videoLoading());
-
       const { videoId } = action.payload;
 
       const cachedQ = apolloCache.readQuery({
         query: parse(GET_VIDEO_INFO_QUERY),
-        variables: { id: videoId },
+        variables: { videoId },
       });
       if (cachedQ)
         return next(ActionCreators.getVideoInfoSuccess({ ...cachedQ.video }));
@@ -368,7 +367,7 @@ export default [
 
           apolloCache.writeQuery({
             query: parse(GET_VIDEO_INFO_QUERY),
-            variables: { id: videoId },
+            variables: { videoId },
             data: { ...videoData },
           });
           next(ActionCreators.getVideoInfoSuccess(videoData.video));

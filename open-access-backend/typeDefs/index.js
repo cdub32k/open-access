@@ -18,6 +18,7 @@ const typeDefs = gql`
   }
 
   type UserResponse {
+    notifications: [Notification]
     profilePic: String
     username: String
     email: String
@@ -210,9 +211,10 @@ const typeDefs = gql`
   }
 
   type Notification {
+    _id: String
     type: String
     target: String
-    id: String
+    targetId: String
     sender: String
     body: String
   }

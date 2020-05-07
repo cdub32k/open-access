@@ -4,8 +4,7 @@ dotenv.config();
 import { createServer } from "http";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { PubSub } from "apollo-server-express";
-const pubsub = new PubSub();
+import pubsub from "./PubSub";
 
 import bodyParser from "body-parser";
 import cors from "cors";
