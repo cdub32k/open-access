@@ -211,7 +211,7 @@ const typeDefs = gql`
 
   type Notification {
     type: String
-    content: String
+    target: String
     id: String
     sender: String
     body: String

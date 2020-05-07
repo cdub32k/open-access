@@ -1,6 +1,97 @@
 import { ActionTypes, ActionCreators } from "../actions";
 import axios from "axios";
 
+import apolloClient from "../apollo";
+import { gql } from "@apollo/client";
+import { parse, print } from "graphql";
+
+const GET_USER_INFO_QUERY = `
+  query UserInfo($username: String!) {
+    user(username: $username) {
+      username
+      profilePic
+      displayName
+      bio
+      country
+      city
+      state
+      joinedAt
+      videos {
+        _id
+        user {
+          username
+          profilePic
+        }
+        title
+        viewCount
+        thumbUrl
+        uploadedAt
+        liked
+        disliked
+      }
+      hasMoreVideos
+      images {
+        _id
+        user {
+          username
+          profilePic
+        }
+        title
+        likeCount
+        url
+        uploadedAt
+        liked
+        disliked
+      }
+      hasMoreImages
+      notes {
+        _id
+        user {
+          username
+          profilePic
+        }
+        commentCount
+        body
+        uploadedAt
+        liked
+        disliked
+      }
+      hasMoreNotes
+    }
+  }
+`;
+
+const GET_VIDEO_INFO_QUERY = `
+  query VideoInfo($videoId: String!) {
+    video(id: $videoId) {
+      user {
+        profilePic
+        username
+      }
+      comments {
+        _id
+        user {
+          username
+          profilePic
+        }
+        body
+        createdAt
+      }
+      title
+      caption
+      viewCount
+      likeCount
+      dislikeCount
+      commentCount
+      url
+      thumbUrl
+      uploadedAt
+      liked
+      disliked
+    }
+  }
+`;
+
 export default [
   (store) => (next) => (action) => {
     next(ActionCreators.clearErrors());
@@ -28,66 +119,32 @@ export default [
       case ActionTypes.GET_USER_INFO_START:
         next(ActionCreators.userInfoLoading());
 
+        const { username } = action.payload;
+
+        let cachedQ = apolloClient.readQuery({
+          query: parse(GET_USER_INFO_QUERY),
+          variables: { username },
+        });
+
+        if (cachedQ)
+          return next(ActionCreators.getUserInfoSuccess({ ...cachedQ.user }));
+
         axios
           .post("api", {
-            query: `
-              {
-                user(username:"${action.payload.username}") {
-                  username
-                  profilePic
-                  displayName
-                  bio
-                  country
-                  city
-                  state
-                  joinedAt
-                  videos {
-                    _id
-                    user {
-                      username
-                      profilePic
-                    }
-                    title
-                    viewCount
-                    thumbUrl
-                    uploadedAt
-                    liked
-                    disliked
-                  }
-                  hasMoreVideos
-                  images {
-                    _id
-                    user {
-                      username
-                      profilePic
-                    }
-                    title
-                    likeCount
-                    url
-                    uploadedAt
-                    liked
-                    disliked
-                  }
-                  hasMoreImages
-                  notes {
-                    _id
-                    user {
-                      username
-                      profilePic
-                    }
-                    commentCount
-                    body
-                    uploadedAt
-                    liked
-                    disliked
-                  }
-                  hasMoreNotes
-                }
-              }
-            `,
+            query: GET_USER_INFO_QUERY,
+            variables: {
+              username,
+            },
           })
           .then((res) => {
-            next(ActionCreators.getUserInfoSuccess(res.data.data.user));
+            const userData = res.data.data;
+
+            apolloClient.writeQuery({
+              query: parse(GET_USER_INFO_QUERY),
+              variables: { username },
+              data: { ...userData },
+            });
+            next(ActionCreators.getUserInfoSuccess(userData.user));
           })
           .catch((err) => next(ActionCreators.getUserInfoError(err)));
         break;
@@ -184,41 +241,32 @@ export default [
         break;
       case ActionTypes.GET_VIDEO_INFO_START:
         next(ActionCreators.videoLoading());
+
+        const { videoId } = action.payload;
+
+        cachedQ = apolloClient.readQuery({
+          query: parse(GET_VIDEO_INFO_QUERY),
+          variables: { id: videoId },
+        });
+        if (cachedQ)
+          return next(ActionCreators.getVideoInfoSuccess({ ...cachedQ.video }));
+
         axios
           .post("api", {
-            query: `
-              {
-                video(id:"${action.payload.videoId}") {
-                  user {
-                    profilePic
-                    username
-                  }
-                  comments {
-                    _id
-                    user {
-                      username
-                      profilePic
-                    }
-                    body
-                    createdAt
-                  }
-                  title
-                  caption
-                  viewCount
-                  likeCount
-                  dislikeCount
-                  commentCount
-                  url
-                  thumbUrl
-                  uploadedAt
-                  liked
-                  disliked
-                }
-              }
-            `,
+            query: GET_VIDEO_INFO_QUERY,
+            variables: {
+              videoId,
+            },
           })
           .then((res) => {
-            next(ActionCreators.getVideoInfoSuccess(res.data.data.video));
+            const videoData = res.data.data;
+
+            apolloClient.writeQuery({
+              query: parse(GET_VIDEO_INFO_QUERY),
+              variables: { id: videoId },
+              data: { ...videoData },
+            });
+            next(ActionCreators.getVideoInfoSuccess(videoData.video));
           });
         break;
       case ActionTypes.RECORD_VIDEO_VIEW_START:
