@@ -172,9 +172,10 @@ const resolvers = {
           const notified = await DB.Notification.findOne({
             sender: username,
             targetId: note._id,
+            type: "like",
           });
           if (!notified)
-            await DB.Notification.create({
+            DB.Notification.create({
               sender: username,
               receiver: note.username,
               type: "like",
@@ -212,6 +213,20 @@ const resolvers = {
           });
           note.dislikeCount++;
           await note.save();
+
+          const notified = await DB.Notification.findOne({
+            sender: username,
+            targetId: note._id,
+            type: "dislike",
+          });
+          if (!notified)
+            DB.Notification.create({
+              sender: username,
+              receiver: note.username,
+              type: "dislike",
+              target: "note",
+              targetId: note._id,
+            });
         } else {
           await DB.NoteDislike.deleteOne({ username, noteId: id });
           note.dislikeCount--;
@@ -239,6 +254,21 @@ const resolvers = {
         note.commentCount++;
         await note.save();
 
+        const notified = await DB.Notification.findOne({
+          sender: username,
+          targetId: note._id,
+          type: "comment",
+        });
+        if (!notified)
+          DB.Notification.create({
+            sender: username,
+            receiver: note.username,
+            type: "comment",
+            target: "note",
+            targetId: note._id,
+            body,
+          });
+
         return comment._id;
       } catch (error) {
         return null;
@@ -260,6 +290,20 @@ const resolvers = {
           });
           image.likeCount++;
           await image.save();
+
+          const notified = await DB.Notification.findOne({
+            sender: username,
+            targetId: image._id,
+            type: "like",
+          });
+          if (!notified)
+            DB.Notification.create({
+              sender: username,
+              receiver: image.username,
+              type: "like",
+              target: "image",
+              targetId: image._id,
+            });
         } else {
           await DB.ImageLike.deleteOne({ username, imageId: id });
           image.likeCount--;
@@ -291,6 +335,20 @@ const resolvers = {
           });
           image.dislikeCount++;
           await image.save();
+
+          const notified = await DB.Notification.findOne({
+            sender: username,
+            targetId: image._id,
+            type: "dislike",
+          });
+          if (!notified)
+            DB.Notification.create({
+              sender: username,
+              receiver: image.username,
+              type: "dislike",
+              target: "image",
+              targetId: image._id,
+            });
         } else {
           await DB.ImageDislike.deleteOne({ username, imageId: id });
           image.dislikeCount--;
@@ -318,6 +376,21 @@ const resolvers = {
         image.commentCount++;
         await image.save();
 
+        const notified = await DB.Notification.findOne({
+          sender: username,
+          targetId: image._id,
+          type: "comment",
+        });
+        if (!notified)
+          DB.Notification.create({
+            sender: username,
+            receiver: image.username,
+            type: "comment",
+            target: "image",
+            targetId: image._id,
+            body,
+          });
+
         return comment._id;
       } catch (error) {
         return null;
@@ -339,6 +412,20 @@ const resolvers = {
           });
           video.likeCount++;
           await video.save();
+
+          const notified = await DB.Notification.findOne({
+            sender: username,
+            targetId: video._id,
+            type: "like",
+          });
+          if (!notified)
+            DB.Notification.create({
+              sender: username,
+              receiver: video.username,
+              type: "like",
+              target: "video",
+              targetId: video._id,
+            });
         } else {
           await DB.VideoLike.deleteOne({ username, videoId: id });
           video.likeCount--;
@@ -370,6 +457,20 @@ const resolvers = {
           });
           video.dislikeCount++;
           await video.save();
+
+          const notified = await DB.Notification.findOne({
+            sender: username,
+            targetId: video._id,
+            type: "dislike",
+          });
+          if (!notified)
+            DB.Notification.create({
+              sender: username,
+              receiver: video.username,
+              type: "dislike",
+              target: "video",
+              targetId: video._id,
+            });
         } else {
           await DB.VideoDislike.deleteOne({ username, videoId: id });
           video.dislikeCount--;
@@ -422,11 +523,39 @@ const resolvers = {
         video.commentCount++;
         await video.save();
 
+        const notified = await DB.Notification.findOne({
+          sender: username,
+          targetId: video._id,
+          type: "comment",
+        });
+        if (!notified)
+          DB.Notification.create({
+            sender: username,
+            receiver: video.username,
+            type: "comment",
+            target: "video",
+            targetId: video._id,
+            body,
+          });
+
         return comment._id;
       } catch (error) {
         return null;
       }
     },
+    markNotificationsRead: async (
+      parent,
+      { ids },
+      { req: { username, authorized } },
+      info
+    ) => {
+      try{
+        await DB.Notification.updateMany({ _id: { $in: ids } }, { read: true, readAt: Date.now() });
+        return true;
+      } catch(e) {
+        return false;
+      }
+
   },
 
   Note: {
@@ -552,8 +681,7 @@ const resolvers = {
     notifications: async ({ username }, args, context, info) => {
       const notifications = await DB.Notification.find({
         receiver: username,
-        read: false,
-      }).limit(100);
+      }).limit(1000);
       return notifications;
     },
     notes: async ({ username, notePage }, args, context, info) => {

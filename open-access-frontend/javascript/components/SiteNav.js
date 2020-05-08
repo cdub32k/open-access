@@ -49,16 +49,21 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const SiteNav = ({ loggedIn, username }) => {
+const SiteNav = ({ loggedIn, username, notifications }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [notifsAnchorEl, setNotifsAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
+  const isNotifsMenuOpen = Boolean(notifsAnchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleNotifsMenuOpen = (event) => {
+    setNotifsAnchorEl(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
@@ -73,12 +78,11 @@ const SiteNav = ({ loggedIn, username }) => {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
-  const menuId = "primary-search-account-menu";
+
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
@@ -99,43 +103,77 @@ const SiteNav = ({ loggedIn, username }) => {
       </MenuItem>
     </Menu>
   );
-  const mobileMenuId = "primary-search-account-menu-mobile";
+
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} classes={{ badge: classes.badge }} max={99}>
-            <MailIcon className={classes.icon} />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={handleNotifsMenuOpen}>
         <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} classes={{ badge: classes.badge }} max={99}>
+          <Badge
+            badgeContent={notifications.length}
+            classes={{ badge: classes.badge }}
+            max={99}
+          >
             <NotificationsIcon className={classes.icon} />
           </Badge>
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+        <IconButton color="inherit">
           <AccountCircle className={classes.icon} />
         </IconButton>
         <p>Profile</p>
+      </MenuItem>
+    </Menu>
+  );
+
+  const renderNotifsMenu = (
+    <Menu
+      anchorEl={notifsAnchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isNotifsMenuOpen}
+      onClose={handleMenuClose}
+    >
+      {notifications.map((notif, i) => {
+        let contentUrl = "";
+        switch (notif.type) {
+          case "note":
+            contentUrl = "/note/" + notif.targetId;
+            break;
+          case "image":
+            contentUrl = "/image/" + notif.targetId;
+            break;
+          case "video":
+            contentUrl = "/video-player/" + notif.targetId;
+            break;
+          default:
+            break;
+        }
+        return;
+        <MenuItem>
+          {`${notif.sender} ${notif.typed}ed your ${(
+            <Link to={contentUrl}>notif.target</Link>
+          )}`}
+        </MenuItem>;
+      })}
+      <MenuItem
+        onClick={handleMenuClose}
+        component={Link}
+        to={`/profile/${username}`}
+      >
+        Profile
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose} component={Link} to="/logout">
+        Logout
       </MenuItem>
     </Menu>
   );
@@ -166,21 +204,9 @@ const SiteNav = ({ loggedIn, username }) => {
           <Fragment>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
-              <IconButton aria-label="show 4 new mails" color="inherit">
+              <IconButton onClick={handleNotifsMenuOpen} color="inherit">
                 <Badge
-                  badgeContent={4}
-                  classes={{ badge: classes.badge }}
-                  max={99}
-                >
-                  <MailIcon className={classes.icon} />
-                </Badge>
-              </IconButton>
-              <IconButton
-                aria-label="show 17 new notifications"
-                color="inherit"
-              >
-                <Badge
-                  badgeContent={17}
+                  badgeContent={notifications.length}
                   classes={{ badge: classes.badge }}
                   max={99}
                 >
@@ -189,9 +215,6 @@ const SiteNav = ({ loggedIn, username }) => {
               </IconButton>
               <IconButton
                 edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
@@ -199,13 +222,7 @@ const SiteNav = ({ loggedIn, username }) => {
               </IconButton>
             </div>
             <div className={classes.sectionMobile}>
-              <IconButton
-                aria-label="show more"
-                aria-controls={mobileMenuId}
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
+              <IconButton onClick={handleMobileMenuOpen} color="inherit">
                 <MoreIcon className={classes.icon} />
               </IconButton>
             </div>
@@ -219,5 +236,6 @@ const SiteNav = ({ loggedIn, username }) => {
 const mapStateToProps = (state) => ({
   loggedIn: state.user.loggedIn,
   username: state.user.username,
+  notifications: state.user.notifications,
 });
 export default connect(mapStateToProps)(SiteNav);

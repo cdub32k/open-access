@@ -15,6 +15,7 @@ let notificationSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    readAt: Date,
   },
   { timestamps: true }
 );
@@ -33,5 +34,14 @@ notificationSchema.pre("save", function (done) {
   });
   done();
 });
+
+notificationSchema.index(
+  { readAt: 1 },
+  {
+    //expireAfterSeconds: 24 * 60 * 60 * 3,
+    expireAfterSeconds: 60,
+    partialFilterExpression: { read: true },
+  }
+);
 
 export default mongoose.model("notification", notificationSchema);

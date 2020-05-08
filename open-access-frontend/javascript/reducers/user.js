@@ -170,6 +170,14 @@ const userReducer = (state = initialState, action) => {
         ...state,
         viewed: { ...initialState.viewed },
       };
+    case ActionTypes.MARK_NOTIFICATIONS_READ_SUCCESS:
+      const readNotifs = state.notifications.map((notif) => {
+        notif.read = true;
+        return notif;
+      });
+      return { ...state, notifications: readNotifs };
+    case ActionTypes.MARK_NOTIFICATIONS_READ_ERROR:
+      return { ...state, error: action.error };
     default:
       return { ...state };
   }

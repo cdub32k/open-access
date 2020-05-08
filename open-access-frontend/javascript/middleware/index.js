@@ -57,6 +57,14 @@ const GET_USER_INFO_QUERY = `
       }
       hasMoreNotes
     }
+    notifications {
+      _id
+      type
+      target
+      targetId
+      body
+      sender
+    }
   }
 `;
 
@@ -209,11 +217,30 @@ const USER_NOTE_PAGE_QUERY = `
   }
 `;
 
+const MARK_NOTIFICATIONS_READ_QUERY = `
+  mutation MarkNotificationsRead($ids: [String]!) {
+    markNotificationsRead(ids: $ids)
+  }
+`;
+
 export default [
   (store) => (next) => (action) => {
     next(ActionCreators.clearErrors());
-
-    if (action.type == ActionTypes.LOGIN_START) {
+    if (action.type == ActionTypes.MARK_NOTIFICATIONS_READ_START) {
+      axios
+        .post("/api", {
+          query: MARK_NOTIFICATIONS_READ_QUERY,
+          variables: {
+            ids: store.getState().notifications.map((notif) => notif._id),
+          },
+        })
+        .then((res) => {
+          if (res.data.data.markNotificationsRead)
+            next(ActionCreators.markNotificationsReadSuccess());
+          else next(ActionCreators.markNotificationsReadError());
+        })
+        .catch((err) => next(ActionCreators.markNotificationsReadError(err)));
+    } else if (action.type == ActionTypes.LOGIN_START) {
       axios
         .post("auth/login", action.payload.credentials)
         .then((res) => {

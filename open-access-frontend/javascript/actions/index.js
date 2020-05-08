@@ -73,6 +73,9 @@ export const ActionTypes = {
   UPDATE_ACCOUNT_INFO_START: "UPDATE_ACCOUNT_INFO_START",
   UPDATE_ACCOUNT_INFO_SUCCESS: "UPDATE_ACCOUNT_INFO_SUCCESS",
   UPDATE_ACCOUNT_INFO_ERROR: "UPDATE_ACCOUNT_INFO_ERROR",
+  MARK_NOTIFICATIONS_READ_START: "MARK_NOTIFICATIONS_READ_START",
+  MARK_NOTIFICATIONS_READ_SUCCESS: "MARK_NOTIFICATIONS_READ_SUCCESS",
+  MARK_NOTIFICATIONS_READ_ERROR: "MARK_NOTIFICATIONS_READ_ERROR",
 };
 
 export const ActionCreators = {
@@ -342,5 +345,14 @@ export const ActionCreators = {
   },
   updateAccountInfoError: (error) => {
     return { type: ActionTypes.UPDATE_ACCOUNT_INFO_ERROR, error };
+  },
+  markNotificationsReadStart: () => {
+    return { type: ActionTypes.MARK_NOTIFICATIONS_READ_START };
+  },
+  markNotificationsReadSuccess: () => {
+    return { type: ActionTypes.MARK_NOTIFICATIONS_READ_SUCCESS };
+  },
+  markNotificationsReadError: (error) => {
+    return { type: ActionTypes.MARK_NOTIFICATIONS_READ_ERROR, error };
   },
 };

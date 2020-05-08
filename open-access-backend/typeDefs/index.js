@@ -65,6 +65,7 @@ const typeDefs = gql`
     likeNote(id: String!): Boolean
     dislikeNote(id: String!): Boolean
     commentNote(id: String!, body: String!): String
+    markNotificationsRead(ids: [String]!): Boolean
   }
 
   scalar Date
