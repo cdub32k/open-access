@@ -218,6 +218,8 @@ const typeDefs = gql`
     targetId: String
     sender: String
     body: String
+    read: Boolean
+    createdAt: Date
   }
 
   type Subscription {

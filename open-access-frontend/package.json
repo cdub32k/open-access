@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf dist/ && webpack --env.MODE=development --config webpack.config.js",
     "build-prod": "rm -rf dist/ && webpack --env.MODE=production -p --config webpack.config.js",
-    "serve": "webpack-dev-server --env.MODE=development --env.API_URL=http://localhost:5000"
+    "serve": "--env.MODE=development --env.API_URL=http://localhost:5000 webpack-dev-server "
   },
   "author": "Christopher Wood",
   "license": "MIT",

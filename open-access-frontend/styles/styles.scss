@@ -28,6 +28,9 @@ body {
 a {
   text-decoration: none;
 }
+a:visited {
+  color: unset;
+}
 
 .site-content {
   max-width: 1450px;

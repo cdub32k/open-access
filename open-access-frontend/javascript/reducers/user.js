@@ -2,6 +2,9 @@ import * as jwt_decode from "jwt-decode";
 import { ActionTypes } from "../actions";
 import axios from "axios";
 
+import store from "../store";
+import { ActionCreators } from "../actions";
+
 import apolloClient from "../apollo";
 import { parse } from "graphql";
 
@@ -28,18 +31,23 @@ const subscribeToNotifications = (username) => {
       query: parse(`
           subscription notifications($username: String!) {
             notifications(username: $username) {
-              sender
+              _id
               type
+              target
               targetId
               body
+              sender
+              read
+              createdAt
             }
           }
         `),
       variables: { username },
     })
     .subscribe({
-      next(data) {
-        console.log("RECEIVED NOTIFICATION: ", data);
+      next({ data: { notifications } }) {
+        console.log("RECEIVED NOTIFICATION: ", notifications);
+        store.dispatch(ActionCreators.addNotification(notifications));
       },
     });
 };
@@ -178,6 +186,11 @@ const userReducer = (state = initialState, action) => {
       return { ...state, notifications: readNotifs };
     case ActionTypes.MARK_NOTIFICATIONS_READ_ERROR:
       return { ...state, error: action.error };
+    case ActionTypes.ADD_NOTIFICATION:
+      return {
+        ...state,
+        notifications: [action.payload.notification, ...state.notifications],
+      };
     default:
       return { ...state };
   }

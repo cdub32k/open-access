@@ -2,7 +2,7 @@ import React from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 
-import { date2rel } from "../util/helpers";
+import { date2rel } from "../utils/helpers";
 
 const Comment = ({ body, user, createdAt }) => (
   <article className="center mw5 mw6-ns hidden mv4">

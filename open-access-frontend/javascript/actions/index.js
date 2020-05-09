@@ -76,6 +76,7 @@ export const ActionTypes = {
   MARK_NOTIFICATIONS_READ_START: "MARK_NOTIFICATIONS_READ_START",
   MARK_NOTIFICATIONS_READ_SUCCESS: "MARK_NOTIFICATIONS_READ_SUCCESS",
   MARK_NOTIFICATIONS_READ_ERROR: "MARK_NOTIFICATIONS_READ_ERROR",
+  ADD_NOTIFICATION: "ADD_NOTIFICATION",
 };
 
 export const ActionCreators = {
@@ -354,5 +355,8 @@ export const ActionCreators = {
   },
   markNotificationsReadError: (error) => {
     return { type: ActionTypes.MARK_NOTIFICATIONS_READ_ERROR, error };
+  },
+  addNotification: (notification) => {
+    return { type: ActionTypes.ADD_NOTIFICATION, payload: { notification } };
   },
 };

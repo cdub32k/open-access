@@ -16,6 +16,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { ActionCreators } from "../actions";
+import { date2rel } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -49,7 +51,12 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const SiteNav = ({ loggedIn, username, notifications }) => {
+const SiteNav = ({
+  loggedIn,
+  username,
+  notifications,
+  markNotificationsRead,
+}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifsAnchorEl, setNotifsAnchorEl] = useState(null);
@@ -75,6 +82,10 @@ const SiteNav = ({ loggedIn, username, notifications }) => {
     handleMobileMenuClose();
   };
 
+  const handleNotifsMenuClose = () => {
+    setNotifsAnchorEl(null);
+    markNotificationsRead();
+  };
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -114,9 +125,9 @@ const SiteNav = ({ loggedIn, username, notifications }) => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem onClick={handleNotifsMenuOpen}>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
+        <IconButton color="inherit">
           <Badge
-            badgeContent={notifications.length}
+            badgeContent={notifications.filter((notif) => !notif.read).length}
             classes={{ badge: classes.badge }}
             max={99}
           >
@@ -141,11 +152,30 @@ const SiteNav = ({ loggedIn, username, notifications }) => {
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isNotifsMenuOpen}
-      onClose={handleMenuClose}
+      onClose={handleNotifsMenuClose}
     >
+      {notifications.length == 0 && (
+        <MenuItem style={{ pointerEvents: "none" }}>
+          No notifications at this time
+        </MenuItem>
+      )}
       {notifications.map((notif, i) => {
         let contentUrl = "";
+        let msg = `${notif.sender} `;
         switch (notif.type) {
+          case "like":
+            msg += "liked your ";
+            break;
+          case "dislike":
+            msg += "disliked your ";
+            break;
+          case "comment":
+            msg += "commented on your ";
+            break;
+          default:
+            break;
+        }
+        switch (notif.target) {
           case "note":
             contentUrl = "/note/" + notif.targetId;
             break;
@@ -158,23 +188,16 @@ const SiteNav = ({ loggedIn, username, notifications }) => {
           default:
             break;
         }
-        return;
-        <MenuItem>
-          {`${notif.sender} ${notif.typed}ed your ${(
-            <Link to={contentUrl}>notif.target</Link>
-          )}`}
-        </MenuItem>;
+
+        return (
+          <MenuItem key={notif._id} onClick={handleNotifsMenuClose}>
+            <Link to={contentUrl}>
+              {`${msg} `}
+              {`${notif.target} ${date2rel(notif.createdAt)}`}
+            </Link>
+          </MenuItem>
+        );
       })}
-      <MenuItem
-        onClick={handleMenuClose}
-        component={Link}
-        to={`/profile/${username}`}
-      >
-        Profile
-      </MenuItem>
-      <MenuItem onClick={handleMenuClose} component={Link} to="/logout">
-        Logout
-      </MenuItem>
     </Menu>
   );
   return (
@@ -190,6 +213,7 @@ const SiteNav = ({ loggedIn, username, notifications }) => {
         </Typography>
         {renderMobileMenu}
         {renderMenu}
+        {renderNotifsMenu}
         {!loggedIn && (
           <Fragment>
             <Button color="primary" component={Link} to="/login">
@@ -206,7 +230,9 @@ const SiteNav = ({ loggedIn, username, notifications }) => {
             <div className={classes.sectionDesktop}>
               <IconButton onClick={handleNotifsMenuOpen} color="inherit">
                 <Badge
-                  badgeContent={notifications.length}
+                  badgeContent={
+                    notifications.filter((notif) => !notif.read).length
+                  }
                   classes={{ badge: classes.badge }}
                   max={99}
                 >
@@ -238,4 +264,8 @@ const mapStateToProps = (state) => ({
   username: state.user.username,
   notifications: state.user.notifications,
 });
-export default connect(mapStateToProps)(SiteNav);
+const mapDispatchToProps = (dispatch) => ({
+  markNotificationsRead: () =>
+    dispatch(ActionCreators.markNotificationsReadStart()),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(SiteNav);

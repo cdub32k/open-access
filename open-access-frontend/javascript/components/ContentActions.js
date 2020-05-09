@@ -9,7 +9,7 @@ import ThumbDownOutline from "@material-ui/icons/ThumbDownOutlined";
 import AddCommentIcon from "@material-ui/icons/AddComment";
 import { withStyles } from "@material-ui/core/styles";
 
-import { num2str } from "../util/helpers";
+import { num2str } from "../utils/helpers";
 
 const styles = (theme) => ({
   metric: {

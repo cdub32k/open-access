@@ -12,7 +12,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 import ContentActions from "./ContentActions";
 
-import { date2rel, thousandsSeparators } from "../util/helpers";
+import { date2rel, thousandsSeparators } from "../utils/helpers";
 
 const styles = (theme) => ({
   container: {

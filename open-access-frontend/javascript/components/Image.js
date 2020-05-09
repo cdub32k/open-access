@@ -16,7 +16,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 import ContentActions from "./ContentActions";
 
-import { num2str, date2rel } from "../util/helpers";
+import { num2str, date2rel } from "../utils/helpers";
 
 const styles = (theme) => ({
   container: {

@@ -29,7 +29,10 @@ notificationSchema.pre("save", function (done) {
       type: this.type,
       target: this.target,
       targetId: this.targetId,
-      body: null,
+      body: this.body,
+      read: this.read,
+      _id: this._id,
+      createdAt: this.createdAt,
     },
   });
   done();

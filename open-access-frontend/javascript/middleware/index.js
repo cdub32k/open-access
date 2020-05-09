@@ -1,5 +1,6 @@
 import { ActionTypes, ActionCreators } from "../actions";
 import axios from "axios";
+axios.defaults.baseURL = process.env.API_URL;
 
 import apolloCache from "../apollo";
 import { parse } from "graphql";
@@ -56,14 +57,6 @@ const GET_USER_INFO_QUERY = `
         disliked
       }
       hasMoreNotes
-    }
-    notifications {
-      _id
-      type
-      target
-      targetId
-      body
-      sender
     }
   }
 `;
@@ -217,6 +210,23 @@ const USER_NOTE_PAGE_QUERY = `
   }
 `;
 
+const GET_USER_NOTIFICATIONS_QUERY = `
+  query UserNotifications($username: String!) {
+    user(username: $username) {
+      notifications {
+        _id
+        type
+        target
+        targetId
+        body
+        sender
+        read
+        createdAt
+      }
+    }
+  }
+`;
+
 const MARK_NOTIFICATIONS_READ_QUERY = `
   mutation MarkNotificationsRead($ids: [String]!) {
     markNotificationsRead(ids: $ids)
@@ -231,7 +241,7 @@ export default [
         .post("/api", {
           query: MARK_NOTIFICATIONS_READ_QUERY,
           variables: {
-            ids: store.getState().notifications.map((notif) => notif._id),
+            ids: store.getState().user.notifications.map((notif) => notif._id),
           },
         })
         .then((res) => {
@@ -244,10 +254,36 @@ export default [
       axios
         .post("auth/login", action.payload.credentials)
         .then((res) => {
-          if (res.data.auth) next(ActionCreators.loginSuccess(res.data.token));
-          else throw new Error("authentication failed!");
+          if (res.data.auth) {
+            next(ActionCreators.loginSuccess(res.data.token));
+
+            axios
+              .post("/api", {
+                query: GET_USER_NOTIFICATIONS_QUERY,
+                variables: { username: action.payload.credentials.username },
+              })
+              .then((res) => {
+                next(
+                  ActionCreators.getUserAccountInfoSuccess(res.data.data.user)
+                );
+              })
+              .catch((err) =>
+                next(ActionCreators.getUserAccountInfoError(err))
+              );
+          } else throw new Error("authentication failed!");
         })
         .catch((err) => next(ActionCreators.loginError(err)));
+    } else if (action.type == ActionTypes.AUTO_LOGIN) {
+      next(action);
+      axios
+        .post("/api", {
+          query: GET_USER_NOTIFICATIONS_QUERY,
+          variables: { username: action.payload.token.username },
+        })
+        .then((res) => {
+          next(ActionCreators.getUserAccountInfoSuccess(res.data.data.user));
+        })
+        .catch((err) => next(ActionCreators.getUserAccountInfoError(err)));
     } else if (action.type == ActionTypes.SIGN_UP_START) {
       axios
         .post("auth/sign-up", action.payload.userInfo)
@@ -291,20 +327,20 @@ export default [
       axios
         .post("/api", {
           query: `
-      {
-        user(username:"${action.payload.username}") {
-          profilePic
-          email
-          username
-          displayName
-          phoneNumber
-          country
-          state
-          city
-          bio
-        }
-      }
-    `,
+            {
+              user(username:"${action.payload.username}") {
+                profilePic
+                email
+                username
+                displayName
+                phoneNumber
+                country
+                state
+                city
+                bio
+              }
+            }
+          `,
         })
         .then((res) => {
           next(ActionCreators.getUserAccountInfoSuccess(res.data.data.user));

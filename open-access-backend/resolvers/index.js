@@ -549,13 +549,16 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
-      try{
-        await DB.Notification.updateMany({ _id: { $in: ids } }, { read: true, readAt: Date.now() });
+      try {
+        await DB.Notification.updateMany(
+          { _id: { $in: ids } },
+          { read: true, readAt: Date.now() }
+        );
         return true;
-      } catch(e) {
+      } catch (e) {
         return false;
       }
-
+    },
   },
 
   Note: {
@@ -678,10 +681,14 @@ const resolvers = {
   },
 
   UserResponse: {
-    notifications: async ({ username }, args, context, info) => {
+    notifications: async (parent, args, { req: { username } }, info) => {
       const notifications = await DB.Notification.find({
         receiver: username,
-      }).limit(1000);
+      })
+        .sort({
+          createdAt: -1,
+        })
+        .limit(1000);
       return notifications;
     },
     notes: async ({ username, notePage }, args, context, info) => {

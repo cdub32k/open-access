@@ -9,7 +9,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import { withStyles } from "@material-ui/core/styles";
 
-import { num2str, date2rel } from "../util/helpers";
+import { num2str, date2rel } from "../utils/helpers";
 
 const styles = (theme) => ({
   container: {
