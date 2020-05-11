@@ -9,23 +9,27 @@ const resolvers = {
     user: async (
       parent,
       { username, vidPage, imgPage, notePage },
-      context,
+      { req: { authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       const user = await DB.User.findOne({ username });
 
       return { ...user._doc, vidPage, imgPage, notePage };
     },
-    video: async (parent, { id }, context, info) => {
+    video: async (parent, { id }, { req: { username, authorized } }, info) => {
       const video = await DB.Video.findOne({ _id: id });
       return video;
     },
     videoSearch: async (
       parent,
       { username, searchText, page },
-      context,
+      { req: { authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       const criteria = {};
       if (!page) page = 0;
       if (username) criteria.username = username;
@@ -60,9 +64,11 @@ const resolvers = {
     imageSearch: async (
       parent,
       { username, searchText, page },
-      context,
+      { req: { authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       const criteria = {};
       if (!page) page = 0;
       if (username) criteria.username = username;
@@ -95,9 +101,11 @@ const resolvers = {
     noteSearch: async (
       parent,
       { username, searchText, page },
-      context,
+      { req: { authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       const criteria = {};
       if (!page) page = 0;
       if (username) criteria.username = username;
@@ -126,11 +134,15 @@ const resolvers = {
       };
     },
 
-    image: async (parent, { id }, context, info) => {
+    image: async (parent, { id }, { req: { username, authorized } }, info) => {
+      if (!authorized) return null;
+
       const image = await DB.Image.findOne({ _id: id });
       return image;
     },
-    note: async (parent, { id }, context, info) => {
+    note: async (parent, { id }, { req: { username, authorized } }, info) => {
+      if (!authorized) return null;
+
       const note = await DB.Note.findOne({ _id: id });
       return note;
     },
@@ -158,6 +170,8 @@ const resolvers = {
       { req: { username, authorized }, pubsub },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const liked = await DB.NoteLike.findOne({ username, noteId: id });
         const note = await DB.Note.findOne({ _id: id });
@@ -199,6 +213,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const disliked = await DB.NoteDislike.findOne({
           username,
@@ -243,6 +259,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const comment = await DB.NoteComment.create({
           username,
@@ -280,6 +298,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const liked = await DB.ImageLike.findOne({ username, imageId: id });
         const image = await DB.Image.findOne({ _id: id });
@@ -321,6 +341,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const disliked = await DB.ImageDislike.findOne({
           username,
@@ -365,6 +387,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const comment = await DB.ImageComment.create({
           username,
@@ -402,6 +426,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const liked = await DB.VideoLike.findOne({ username, videoId: id });
         const video = await DB.Video.findOne({ _id: id });
@@ -443,6 +469,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const disliked = await DB.VideoDislike.findOne({
           username,
@@ -487,6 +515,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const viewed = await DB.VideoView.findOne({ username, videoId: id });
 
@@ -512,6 +542,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         const comment = await DB.VideoComment.create({
           username,
@@ -549,6 +581,8 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
+      if (!authorized) return null;
+
       try {
         await DB.Notification.updateMany(
           { _id: { $in: ids } },
@@ -562,27 +596,54 @@ const resolvers = {
   },
 
   Note: {
-    user: async ({ username }, args, context, info) => {
+    user: async ({ username }, args, { req: { authorized } }, info) => {
+      if (!authorized) return null;
+
       const user = await DB.User.findOne({ username });
       return user;
     },
-    liked: async ({ _id }, args, { req: { username } }, info) => {
+    liked: async ({ _id }, args, { req: { username, authorized } }, info) => {
+      if (!authorized) return null;
+
       const liked = await DB.NoteLike.findOne({ username, noteId: _id });
       return !!liked;
     },
-    disliked: async ({ _id }, args, { req: { username } }, info) => {
+    disliked: async (
+      { _id },
+      args,
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       const disliked = await DB.NoteDislike.findOne({ username, noteId: _id });
       return !!disliked;
     },
-    likes: async ({ _id }, args, context, info) => {
+    likes: async ({ _id }, args, { req: { username, authorized } }, info) => {
+      if (!authorized) return null;
+
       const likes = await DB.NoteLike.find({ noteId: _id });
       return likes;
     },
-    dislikes: async ({ _id }, args, context, info) => {
+    dislikes: async (
+      { _id },
+      args,
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       const dislikes = await DB.NoteDislike.find({ noteId: _id });
       return dislikes;
     },
-    comments: async ({ _id }, args, context, info) => {
+    comments: async (
+      { _id },
+      args,
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       const comments = await DB.NoteComment.find({ noteId: _id }).sort({
         createdAt: -1,
       });
@@ -591,37 +652,61 @@ const resolvers = {
   },
 
   NoteComment: {
-    user: async ({ username }) => {
+    user: async ({ username }, args, { req: { authorized } }) => {
+      if (!authorized) return null;
+
       const user = await DB.User.findOne({ username });
       return user;
     },
   },
 
   Image: {
-    user: async ({ username }, args, context, info) => {
+    user: async ({ username }, args, { req: { authorized } }, info) => {
+      if (!authorized) return null;
+
       const user = await DB.User.findOne({ username });
       return user;
     },
     liked: async ({ _id }, args, { req: { username } }, info) => {
+      if (!authorized) return null;
+
       const liked = await DB.ImageLike.findOne({ username, imageId: _id });
       return !!liked;
     },
     disliked: async ({ _id }, args, { req: { username } }, info) => {
+      if (!authorized) return null;
+
       const disliked = await DB.ImageDislike.findOne({
         username,
         imageId: _id,
       });
       return !!disliked;
     },
-    likes: async ({ _id }, args, context, info) => {
+    likes: async ({ _id }, args, { req: { username, authorized } }, info) => {
+      if (!authorized) return null;
+
       const likes = await DB.ImageLike.find({ imageId: _id });
       return likes;
     },
-    dislikes: async ({ _id }, args, context, info) => {
+    dislikes: async (
+      { _id },
+      args,
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       const dislikes = await DB.ImageDislike.find({ imageId: _id });
       return dislikes;
     },
-    comments: async ({ _id }, args, context, info) => {
+    comments: async (
+      { _id },
+      args,
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       const comments = await DB.ImageComment.find({ imageId: _id }).sort({
         createdAt: -1,
       });
@@ -630,22 +715,35 @@ const resolvers = {
   },
 
   ImageComment: {
-    user: async ({ username }) => {
+    user: async ({ username }, args, { req: { authorized } }) => {
+      if (!authorized) return null;
+
       const user = await DB.User.findOne({ username });
       return user;
     },
   },
 
   Video: {
-    user: async ({ username }, args, context, info) => {
+    user: async ({ username }, args, { req: { authorized } }, info) => {
+      if (!authorized) return null;
+
       const user = await DB.User.findOne({ username });
       return user;
     },
-    liked: async ({ _id }, args, { req: { username } }, info) => {
+    liked: async ({ _id }, args, { req: { username, authorized } }, info) => {
+      if (!authorized) return null;
+
       const liked = await DB.VideoLike.findOne({ username, videoId: _id });
       return !!liked;
     },
-    disliked: async ({ _id }, args, { req: { username } }, info) => {
+    disliked: async (
+      { _id },
+      args,
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       const disliked = await DB.VideoDislike.findOne({
         username,
         videoId: _id,
@@ -653,19 +751,37 @@ const resolvers = {
 
       return !!disliked;
     },
-    likes: async ({ _id }, args, context, info) => {
+    likes: async ({ _id }, args, { req: { username, authorized } }, info) => {
+      if (!authorized) return null;
+
       const likes = await DB.VideoLike.find({ videoId: _id });
       return likes;
     },
-    dislikes: async ({ _id }, args, context, info) => {
+    dislikes: async (
+      { _id },
+      args,
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       const dislikes = await DB.VideoDislike.find({ videoId: _id });
       return dislikes;
     },
-    views: async ({ _id }, args, context, info) => {
+    views: async ({ _id }, args, { req: { username, authorized } }, info) => {
+      if (!authorized) return null;
+
       const views = await DB.VideoView.find({ videoId: _id });
       return views;
     },
-    comments: async ({ _id }, args, context, info) => {
+    comments: async (
+      { _id },
+      args,
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       const comments = await DB.VideoComment.find({ videoId: _id }).sort({
         createdAt: -1,
       });
@@ -674,14 +790,23 @@ const resolvers = {
   },
 
   VideoComment: {
-    user: async ({ username }) => {
+    user: async ({ username }, args, { req: { authorized } }) => {
+      if (!authorized) return null;
+
       const user = await DB.User.findOne({ username });
       return user;
     },
   },
 
   UserResponse: {
-    notifications: async (parent, args, { req: { username } }, info) => {
+    notifications: async (
+      parent,
+      args,
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       const notifications = await DB.Notification.find({
         receiver: username,
       })
@@ -691,7 +816,14 @@ const resolvers = {
         .limit(1000);
       return notifications;
     },
-    notes: async ({ username, notePage }, args, context, info) => {
+    notes: async (
+      { username, notePage },
+      args,
+      { req: { authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       if (!notePage) notePage = 0;
 
       const notes = await DB.Note.find({ username })
@@ -712,13 +844,26 @@ const resolvers = {
 
       return notes;
     },
-    hasMoreNotes: async ({ username, notePage }) => {
+    hasMoreNotes: async (
+      { username, notePage },
+      args,
+      { req: { authorized } }
+    ) => {
+      if (!authorized) return null;
+
       if (!notePage) notePage = 0;
       const numVids = await DB.Note.find({ username }).countDocuments();
 
       return numVids > notePage * perPage + perPage;
     },
-    images: async ({ username, imgPage }, args, context, info) => {
+    images: async (
+      { username, imgPage },
+      args,
+      { req: { authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       if (!imgPage) imgPage = 0;
 
       const images = await DB.Image.find({ username })
@@ -741,13 +886,26 @@ const resolvers = {
 
       return images;
     },
-    hasMoreImages: async ({ username, imgPage }) => {
+    hasMoreImages: async (
+      { username, imgPage },
+      args,
+      { req: { authorized } }
+    ) => {
+      if (!authorized) return null;
+
       if (!imgPage) imgPage = 0;
       const numVids = await DB.Image.find({ username }).countDocuments();
 
       return numVids > imgPage * perPage + perPage;
     },
-    videos: async ({ username, vidPage }, args, context, info) => {
+    videos: async (
+      { username, vidPage },
+      args,
+      { req: { authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
       if (!vidPage) vidPage = 0;
 
       const videos = await DB.Video.find({ username })
@@ -772,7 +930,13 @@ const resolvers = {
 
       return videos;
     },
-    hasMoreVideos: async ({ username, vidPage }) => {
+    hasMoreVideos: async (
+      { username, vidPage },
+      args,
+      { req: { authorized } }
+    ) => {
+      if (!authorized) return null;
+
       if (!vidPage) vidPage = 0;
       const numVids = await DB.Video.find({ username }).countDocuments();
 

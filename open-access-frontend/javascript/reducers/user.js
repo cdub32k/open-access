@@ -84,7 +84,7 @@ const userReducer = (state = initialState, action) => {
 
       const { username, email, profilePic } = action.payload.token;
 
-      subscribeToNotifications(username);
+      const notificationsSubscription = subscribeToNotifications(username);
 
       return {
         ...state,
@@ -92,11 +92,13 @@ const userReducer = (state = initialState, action) => {
         username,
         email,
         profilePic,
+        notificationsSubscription,
       };
     }
     case ActionTypes.LOGOUT:
       localStorage.removeItem("open-access-api-token");
-      state.notificationsSubscription && state.notificationsSubscription();
+      state.notificationsSubscription &&
+        state.notificationsSubscription.unsubscribe();
       return { ...initialState };
     case ActionTypes.USER_INFO_LOADING:
       return { ...state, viewed: { ...state.viewed, loading: true } };

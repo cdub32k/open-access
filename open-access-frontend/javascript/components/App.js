@@ -26,7 +26,7 @@ const initApp = () => {
 initApp();
 
 import AuthRedirect from "./AuthRedirect";
-import UnauthRedirect from "./UnauthRedirect";
+import UnAuthRedirect from "./UnAuthRedirect";
 import Account from "./Account";
 import Payment from "./Payment";
 import Login from "./Login";
@@ -71,25 +71,89 @@ class App extends Component {
           <SiteNav />
           <div className="site-content">
             <Switch>
-              <Route path="/login">
-                <AuthRedirect component={Login} />
-              </Route>
+              <Route
+                path="/login"
+                render={(props) => (
+                  <AuthRedirect {...props} component={Login} />
+                )}
+              />
               <Route path="/logout" component={Logout} />
-              <Route path="/sign-up">
-                <AuthRedirect component={SignUp} />
-              </Route>
-              <Route path="/my-account" component={Account} />
-              <Route path="/payment" component={Payment} />
-              <Route path="/note/:noteId" component={NotePage} />
-              <Route path="/note-list" component={NoteList} />
-              <Route path="/note-upload" component={NoteUploader} />
-              <Route path="/image/:imageId" component={ImagePage} />
-              <Route path="/image-list" component={ImageList} />
-              <Route path="/image-upload" component={ImageUploader} />
-              <Route path="/video-player/:videoId" component={VideoPage} />
-              <Route path="/video-list" component={VideoList} />
-              <Route path="/video-upload" component={VideoUploader} />
-              <Route path="/profile/:username" component={Profile} />
+              <Route
+                path="/sign-up"
+                render={(props) => (
+                  <AuthRedirect {...props} component={SignUp} />
+                )}
+              />
+              <Route
+                path="/my-account"
+                render={(props) => (
+                  <UnAuthRedirect {...props} component={Account} />
+                )}
+              />
+              <Route
+                path="/payment"
+                render={(props) => (
+                  <UnAuthRedirect {...props} component={Payment} />
+                )}
+              />
+              <Route
+                path="/note/:noteId"
+                render={(props) => (
+                  <UnAuthRedirect
+                    key={props.match.params.noteId}
+                    {...props}
+                    component={NotePage}
+                  />
+                )}
+              />
+              <Route
+                path="/note-upload"
+                render={(props) => (
+                  <UnAuthRedirect {...props} component={NoteUploader} />
+                )}
+              />
+              <Route
+                path="/image/:imageId"
+                render={(props) => (
+                  <UnAuthRedirect
+                    key={props.match.params.imageId}
+                    {...props}
+                    component={ImagePage}
+                  />
+                )}
+              />
+              <Route
+                path="/image-upload"
+                render={(props) => (
+                  <UnAuthRedirect {...props} component={ImageUploader} />
+                )}
+              />
+              <Route
+                path="/video-player/:videoId"
+                render={(props) => (
+                  <UnAuthRedirect
+                    key={props.match.params.videoId}
+                    {...props}
+                    component={VideoPage}
+                  />
+                )}
+              />
+              <Route
+                path="/video-upload"
+                render={(props) => (
+                  <UnAuthRedirect {...props} component={VideoUploader} />
+                )}
+              />
+              <Route
+                path="/profile/:username"
+                render={(props) => (
+                  <UnAuthRedirect
+                    key={props.match.params.username}
+                    {...props}
+                    component={Profile}
+                  />
+                )}
+              />
               <Route path="/about" component={About} />
               <Route path="/users" component={Users} />
               <Route path="/" component={Home} />

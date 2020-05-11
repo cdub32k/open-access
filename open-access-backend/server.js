@@ -69,25 +69,30 @@ const gqlServer = new ApolloServer({
     path: "/subs",
   },
   context: async ({ req, connection }) => {
-    if (connection) return { ...connection.context, pubsub };
+    try {
+      if (connection) return { ...connection.context, pubsub };
 
-    let token = req.headers["authorization"];
-    if (!token) {
+      let token = req.headers["authorization"];
+      if (!token) {
+        req.authorized = false;
+        return { req };
+      }
+
+      token = token.replace("Bearer ", "");
+      const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+
+      if (!decoded.username) {
+        req.authorized = false;
+        return { req };
+      }
+
+      req.authorized = true;
+      req.username = decoded.username;
+      return { req, pubsub };
+    } catch (e) {
       req.authorized = false;
       return { req };
     }
-
-    token = token.replace("Bearer ", "");
-    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-
-    if (!decoded.username) {
-      req.authorized = false;
-      return { req };
-    }
-
-    req.authorized = true;
-    req.username = decoded.username;
-    return { req, pubsub };
   },
 });
 

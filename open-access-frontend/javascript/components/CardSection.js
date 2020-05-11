@@ -1,34 +1,52 @@
 import React, { Component } from "react";
 import { CardElement } from "@stripe/react-stripe-js";
 
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+
 const CARD_ELEMENT_OPTIONS = {
   style: {
     base: {
-      color: "#32325d",
-      fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+      color: "#1D1A05",
+      fontFamily: '"Montserrat", sans-serif',
       fontSmoothing: "antialiased",
-      fontSize: "16px",
+      fontSize: "12px",
       "::placeholder": {
-        color: "#aab7c4",
+        color: "#51490e",
       },
+      height: 51.25,
+      border: "2px solid #E6AA68",
     },
     invalid: {
-      color: "#fa755a",
-      iconColor: "#fa755a",
+      color: "#CA3C25",
+      iconColor: "#CA3C25",
     },
   },
 };
 
-class CardSection extends Component {
-  state = {};
-  render() {
-    return (
-      <label>
-        Card details
-        <CardElement options={CARD_ELEMENT_OPTIONS} />
-      </label>
-    );
-  }
-}
+const useStyles = makeStyles((theme) => ({
+  ccSection: {
+    margin: `${theme.spacing(5)}px 0`,
+  },
+  ccInput: {
+    height: 51.25,
+    border: `2px solid ${theme.palette.secondary.main}`,
+    paddingTop: 15,
+    margin: `${theme.spacing(2)}px 0`,
+  },
+}));
+
+const CardSection = (props) => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.ccSection}>
+      <Typography variant="h6" color="primary">
+        Credit Card Info
+      </Typography>
+      <CardElement className={classes.ccInput} options={CARD_ELEMENT_OPTIONS} />
+    </div>
+  );
+};
 
 export default CardSection;

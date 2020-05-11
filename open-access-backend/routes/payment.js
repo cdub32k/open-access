@@ -46,7 +46,6 @@ router.post("/process-payment", async (req, res) => {
         stripeCustomerId: subscription.customer,
         username,
         amount: 2500,
-        createdAt: subscription.created,
       });
 
       return res.send({
@@ -69,7 +68,6 @@ router.post("/process-payment", async (req, res) => {
         stripePaymentMethodId: result.payment_method,
         username,
         amount,
-        createdAt: created,
       });
 
       return res.send({ charge });

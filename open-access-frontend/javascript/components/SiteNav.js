@@ -104,10 +104,10 @@ const SiteNav = ({
         component={Link}
         to={`/profile/${username}`}
       >
-        Profile
+        My Profile
       </MenuItem>
       <MenuItem onClick={handleMenuClose} component={Link} to="/my-account">
-        My account
+        My Account
       </MenuItem>
       <MenuItem onClick={handleMenuClose} component={Link} to="/logout">
         Logout
@@ -140,7 +140,7 @@ const SiteNav = ({
         <IconButton color="inherit">
           <AccountCircle className={classes.icon} />
         </IconButton>
-        <p>Profile</p>
+        <p>Account</p>
       </MenuItem>
     </Menu>
   );

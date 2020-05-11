@@ -4,8 +4,8 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 import CheckoutForm from "./CheckoutForm";
-
-const stripePromise = loadStripe("pk_test_ymlirL5g1gzxXymKMoI5dUDH");
+import { STRIPE_PK } from "../constants";
+const stripePromise = loadStripe(STRIPE_PK);
 
 class Payment extends Component {
   state = {};

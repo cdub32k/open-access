@@ -84,7 +84,11 @@ const Login = ({ error, loginStart }) => {
             </Grid>
             <Grid container justify="center" className="mt3">
               <Grid className="tar" item xs={12}>
-                <CustomButton text="Sign in" onClick={onSubmit} />
+                <CustomButton
+                  text="Sign in"
+                  disabled={!username || !password}
+                  onClick={onSubmit}
+                />
               </Grid>
             </Grid>
           </FormGroup>

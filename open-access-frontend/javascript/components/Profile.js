@@ -74,6 +74,7 @@ class Profile extends Component {
       hasMoreImages,
       loadUserNotePage,
       hasMoreNotes,
+      mineUsername,
     } = this.props;
     const { selectedTab } = this.state;
     return (
@@ -91,9 +92,11 @@ class Profile extends Component {
           <Tab label="Notes" />
         </Tabs>
         <TabPanel selectedTab={selectedTab} index={0}>
-          <Link to="/video-upload">
-            <CustomButton text="+New Video" />
-          </Link>
+          {mineUsername == username && (
+            <Link to="/video-upload">
+              <CustomButton text="+New Video" />
+            </Link>
+          )}
           <VideoList
             hasMore={hasMoreVideos}
             loadMore={(page) => loadUserVideoPage(username, page)}
@@ -102,9 +105,11 @@ class Profile extends Component {
           />
         </TabPanel>
         <TabPanel selectedTab={selectedTab} index={1}>
-          <Link to="/image-upload">
-            <CustomButton text="+New Image" />
-          </Link>
+          {mineUsername == username && (
+            <Link to="/image-upload">
+              <CustomButton text="+New Image" />
+            </Link>
+          )}
           <ImageList
             hasMore={hasMoreImages}
             loadMore={(page) => loadUserImagePage(username, page)}
@@ -113,9 +118,11 @@ class Profile extends Component {
           />
         </TabPanel>
         <TabPanel selectedTab={selectedTab} index={2}>
-          <Link to="/note-upload">
-            <CustomButton text="+New Note" />
-          </Link>
+          {mineUsername == username && (
+            <Link to="/note-upload">
+              <CustomButton text="+New Note" />
+            </Link>
+          )}
           <NoteList
             hasMore={hasMoreNotes}
             loadMore={(page) => loadUserNotePage(username, page)}
@@ -129,6 +136,7 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  mineUsername: state.user.username,
   loading: state.user.viewed.loading,
   username: state.user.viewed.username,
   videos: state.user.viewed.videos,

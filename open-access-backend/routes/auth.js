@@ -7,7 +7,9 @@ const router = require("express").Router();
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const { User } = require("../database");
+const stripe = require("stripe")(process.env.STRIPE_SK);
+
+const { User, Charge, Subscription } = require("../database");
 
 router.post("/login", async (req, res) => {
   try {
@@ -36,7 +38,7 @@ router.post("/sign-up", async (req, res) => {
   try {
     //TODO validate email,username,password
 
-    const { password, email, username } = req.body;
+    const { password, email, username, payment_method, subscribed } = req.body;
     const passwordHash = bcrypt.hashSync(password, 8);
     const user = await User.create({
       email,
@@ -46,10 +48,10 @@ router.post("/sign-up", async (req, res) => {
 
     if (!user) res.status(500).send({ error: "Error while creating user." });
 
-    fs.mkdir(`../public/vid/${username}`, (err) => {
+    fs.mkdir(`public/vid/${username}`, (err) => {
       console.log(err);
     });
-    fs.mkdir(`../public/img/${username}`, (err) => {
+    fs.mkdir(`public/img/${username}`, (err) => {
       console.log(err);
     });
 
@@ -61,9 +63,54 @@ router.post("/sign-up", async (req, res) => {
       }
     );
 
+    const customer = await stripe.customers.create({
+      payment_method,
+      email,
+      invoice_settings: {
+        default_payment_method: payment_method,
+      },
+    });
+    user.stripeCustomerId = customer.id;
+    user.stripePaymentMethodId = payment_method;
+
+    if (subscribed) {
+      const subscription = await stripe.subscriptions.create({
+        customer: user.stripeCustomerId,
+        items: [{ plan: process.env.STRIPE_SUB_ID }],
+        expand: ["latest_invoice.payment_intent"],
+        trial_period_days: 0,
+      });
+
+      await Subscription.create({
+        stripeSubscriptionId: subscription.id,
+        stripePlanId: subscription.plan.id,
+        stripeCustomerId: subscription.customer,
+        username,
+        amount: 2500,
+      });
+    } else {
+      const result = await stripe.paymentIntents.create({
+        customer: user.stripeCustomerId,
+        payment_method,
+        amount: 2500,
+        currency: "usd",
+        metadata: { integration_check: "accept_a_payment" },
+        confirm: true,
+      });
+
+      const { id, amount, created } = result;
+
+      const charge = await Charge.create({
+        stripePaymentIntentId: id,
+        stripePaymentMethodId: result.payment_method,
+        username,
+        amount,
+      });
+    }
+
     return res.status(200).send({ auth: true, token });
   } catch (err) {
-    return res.status(500).send({ error: "Something went wrong." });
+    return res.status(500).send({ error: "Something went wrong." + err });
   }
 });
 
