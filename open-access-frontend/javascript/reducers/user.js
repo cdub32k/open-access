@@ -96,8 +96,7 @@ const userReducer = (state = initialState, action) => {
     }
     case ActionTypes.LOGOUT:
       localStorage.removeItem("open-access-api-token");
-      this.state.notificationsSubscription &&
-        this.state.notificationsSubscription();
+      state.notificationsSubscription && state.notificationsSubscription();
       return { ...initialState };
     case ActionTypes.USER_INFO_LOADING:
       return { ...state, viewed: { ...state.viewed, loading: true } };

@@ -21,9 +21,9 @@ const CustomInput = ({ value, name, label, onChange, ...rest }) => {
         className={classes.textField}
         InputProps={{ className: classes.input }}
         variant="outlined"
-        value={value}
         name={name}
         label={label}
+        value={value}
         onChange={onChange}
         {...rest}
       />

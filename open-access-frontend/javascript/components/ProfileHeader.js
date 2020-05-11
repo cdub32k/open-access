@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 
 import dayjs from "dayjs";
 
@@ -25,11 +28,22 @@ const useStyles = makeStyles((theme) => ({
   large: {
     width: 100,
     height: 100,
-    border: `4px solid ${theme.palette.primary.main}`,
+    border: `4px solid ${theme.palette.secondary.main}`,
     marginBottom: 12,
+    cursor: "pointer",
   },
   bio: {
     margin: "12px 0",
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  paper: {
+    border: `4px solid ${theme.palette.secondary.main}`,
+    boxShadow: theme.shadows[5],
+    padding: 0,
   },
 }));
 
@@ -46,11 +60,20 @@ const ProfileHeader = ({
 }) => {
   const classes = useStyles();
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return loading ? (
     <PreviewProfileHeader />
   ) : (
     <div className={classes.container}>
-      <Avatar src={profilePic} className={classes.large} />
+      <Avatar src={profilePic} onClick={handleOpen} className={classes.large} />
       <Typography variant="h4">{displayName}</Typography>
       <Typography variant="body2">@{username}</Typography>
       <Typography variant="body2">
@@ -59,6 +82,22 @@ const ProfileHeader = ({
       <Typography variant="body1" className={classes.bio}>
         {bio}
       </Typography>
+      <Modal
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className={classes.paper}>
+            <img src={profilePic} width="300" height="300" />
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 };
