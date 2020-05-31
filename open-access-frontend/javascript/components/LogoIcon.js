@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const interp = (i) => (r) =>
-  `translate3d(0, ${1 * Math.sin(r + (i * 2 * Math.PI) / 1.6)}px, 0)`;
+  `translate3d(0, ${2 * Math.sin(r + (i * 2 * Math.PI) / 1.6)}px, 0)`;
 
 const LogoIcon = () => {
   const classes = useStyles();
@@ -30,7 +30,7 @@ const LogoIcon = () => {
       >
         <animated.div
           className="ball-l"
-          style={{ transform: radians.interpolate(interp(2)) }}
+          style={{ transform: radians.interpolate(interp(3)) }}
         />
       </animated.div>
       <animated.div
@@ -39,7 +39,7 @@ const LogoIcon = () => {
       >
         <animated.div
           className="ball-r"
-          style={{ transform: radians.interpolate(interp(3)) }}
+          style={{ transform: radians.interpolate(interp(2)) }}
         />
       </animated.div>
     </div>

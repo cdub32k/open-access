@@ -43,10 +43,7 @@ import VideoList from "./VideoList";
 import ImagePage from "./ImagePage";
 import ImageUploader from "./ImageUploader";
 import ImageList from "./ImageList";
-
-function Home() {
-  return <h2>Home</h2>;
-}
+import Home from "./Home";
 
 function About() {
   return <h2>About</h2>;
