@@ -19,10 +19,14 @@ import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 import { date2rel } from "../utils/helpers";
 
+import MainLogo from "./MainLogo";
+
 const useStyles = makeStyles((theme) => {
   return {
     container: {
       backgroundColor: "transparent",
+      maxWidth: 1450,
+      margin: "auto",
     },
     grow: {
       flexGrow: 1,
@@ -30,10 +34,6 @@ const useStyles = makeStyles((theme) => {
     menuButton: {
       marginRight: theme.spacing(2),
       color: theme.palette.secondary.main,
-    },
-    title: {
-      flexGrow: 1,
-      color: theme.palette.primary.main,
     },
     sectionDesktop: {
       display: "none",
@@ -201,22 +201,20 @@ const SiteNav = ({
     </Menu>
   );
   return (
-    <AppBar position="static" elevation={2} className={classes.container}>
+    <AppBar position="static" elevation={0} className={classes.container}>
       <Toolbar>
-        <IconButton edge="start" className={classes.menuButton} color="inherit">
-          <MenuIcon />
-        </IconButton>
-        <Typography color="inherit" variant="h6" className={classes.title}>
-          <Link to="/" style={{ color: "inherit" }}>
-            Open Acess
-          </Link>
-        </Typography>
+        <MainLogo />
         {renderMobileMenu}
         {renderMenu}
         {renderNotifsMenu}
         {!loggedIn && (
           <Fragment>
-            <Button color="primary" component={Link} to="/login">
+            <Button
+              color="primary"
+              component={Link}
+              to="/login"
+              style={{ marginLeft: "auto" }}
+            >
               Sign in
             </Button>
             <Button color="primary" component={Link} to="/sign-up">
