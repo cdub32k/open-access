@@ -222,8 +222,20 @@ const typeDefs = gql`
     createdAt: Date
   }
 
+  type NewsfeedItem {
+    _id: String
+    username: String
+    profilePic: String
+    uploadedAt: Date
+    type: String
+    likeCount: Int
+    dislikeCount: Int
+    commentCount: Int
+  }
+
   type Subscription {
     notifications(username: String!): Notification
+    newsfeed: NewsfeedItem
   }
 `;
 

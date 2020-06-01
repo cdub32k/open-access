@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const NewsFeedItem = ({
   item: {
     id,
-    author,
+    username,
     profilePic,
     uploadedAt,
     type,
@@ -93,7 +93,7 @@ const NewsFeedItem = ({
       <Avatar className={classes.avatar} src={profilePic} />
       <div className={classes.userInfo}>
         <Typography style={{ color: f }} variant="h5">
-          {author}
+          {username}
         </Typography>
         <Typography style={{ color: f }}>
           uploaded a {type} {date2rel(uploadedAt)}

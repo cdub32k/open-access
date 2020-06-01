@@ -714,6 +714,9 @@ export default [
             );
           else next(ActionCreators.postNoteCommentError());
         });
+    }
+    if (action.type == ActionTypes.LOAD_NEWSFEED_START) {
+      next(action);
     } else next(action);
   },
 ];

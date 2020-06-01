@@ -77,6 +77,10 @@ export const ActionTypes = {
   MARK_NOTIFICATIONS_READ_SUCCESS: "MARK_NOTIFICATIONS_READ_SUCCESS",
   MARK_NOTIFICATIONS_READ_ERROR: "MARK_NOTIFICATIONS_READ_ERROR",
   ADD_NOTIFICATION: "ADD_NOTIFICATION",
+  NEWSFEED_UPDATE: "NEWSFEED_UPDATE",
+  LOAD_NEWSFEED_START: "LOAD_NEWSFEED_START",
+  LOAD_NEWSFEED_SUCCESS: "LOAD_NEWSFEED_SUCCESS",
+  LOAD_NEWSFEED_ERROR: "LOAD_NEWSFEED_START",
 };
 
 export const ActionCreators = {
@@ -358,5 +362,17 @@ export const ActionCreators = {
   },
   addNotification: (notification) => {
     return { type: ActionTypes.ADD_NOTIFICATION, payload: { notification } };
+  },
+  newsfeedUpdate: (item) => {
+    return { type: ActionTypes.NEWSFEED_UPDATE, payload: { item } };
+  },
+  loadNewsfeedStart: () => {
+    return { type: ActionTypes.LOAD_NEWSFEED_START };
+  },
+  loadNewsfeedSuccess: (items) => {
+    return { type: ActionTypes.LOAD_NEWSFEED_SUCCESS, payload: { items } };
+  },
+  loadNewsfeedError: (error) => {
+    return { type: ActionTypes.LOAD_NEWSFEED_ERROR, error };
   },
 };

@@ -23,6 +23,121 @@ const initialState = {
     images: [],
     notes: [],
   },
+  newsfeed: {
+    items: [
+      {
+        _id: 1,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "video",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 2,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "image",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 3,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "note",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 4,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "note",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 5,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "image",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 6,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "video",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 7,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "video",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 8,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "note",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 9,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "note",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 10,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "image",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+      {
+        _id: 11,
+        username: "@first_member",
+        profilePic: "http://localhost:5000/img/default-profile.png",
+        uploadedAt: Date(),
+        type: "note",
+        likeCount: 4,
+        dislikeCount: 3,
+        commentCount: 12,
+      },
+    ],
+    subscription: null,
+  },
 };
 
 const subscribeToNotifications = (username) => {
@@ -48,6 +163,32 @@ const subscribeToNotifications = (username) => {
       next({ data: { notifications } }) {
         console.log("RECEIVED NOTIFICATION: ", notifications);
         store.dispatch(ActionCreators.addNotification(notifications));
+      },
+    });
+};
+
+const subscribeToNewsfeedUpdates = () => {
+  return apolloClient
+    .subscribe({
+      query: parse(`
+        subscription newsfeed {
+          newsfeed {
+            _id
+            username
+            profilePic
+            uploadedAt
+            type
+            likeCount
+            dislikeCount
+            commentCount
+          }
+        }
+     `),
+    })
+    .subscribe({
+      next({ data: { newsfeed } }) {
+        console.log("RECEIVED NOTIFICATION: ", newsfeed);
+        store.dispatch(ActionCreators.newsfeedUpdate(newsfeed));
       },
     });
 };
@@ -191,6 +332,29 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         notifications: [action.payload.notification, ...state.notifications],
+      };
+    case ActionTypes.NEWSFEED_UPDATE:
+      return {
+        ...state,
+        newsfeed: {
+          ...state.newsfeed,
+          items: [action.payload.item, ...state.newsfeed.items],
+        },
+      };
+    case ActionTypes.LOAD_NEWSFEED_START:
+      /// will remove this (only runs in middleware eventually)
+      const subscription = subscribeToNewsfeedUpdates();
+      return {
+        ...state,
+        newsfeed: { ...state.newsfeed, subscription },
+      };
+    case ActionTypes.LOAD_NEWSFEED_SUCCESS:
+      return {
+        ...state,
+      };
+    case ActionTypes.LOAD_NEWSFEED_ERROR:
+      return {
+        ...state,
       };
     default:
       return { ...state };

@@ -2,7 +2,10 @@ import DB from "../database";
 
 const perPage = 8;
 
-import { NOTIFICATION_SUBSCRIPTION_PREFIX } from "../constants";
+import {
+  NOTIFICATION_SUBSCRIPTION_PREFIX,
+  NEWSFEED_SUBSCRIPTION_PREFIX,
+} from "../constants";
 
 const resolvers = {
   Query: {
@@ -152,7 +155,7 @@ const resolvers = {
     postNote: async (
       parent,
       { body },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -162,12 +165,27 @@ const resolvers = {
         username,
       });
 
+      let profilePic = await DB.User.findOne({ username }).profilePic;
+
+      pubsub.publish(NEWSFEED_SUBSCRIPTION_PREFIX, {
+        newsfeed: {
+          _id: note._id,
+          username: note.username,
+          uploadedAt: note.uploadedAt,
+          profilePic,
+          type: "note",
+          likeCount: 0,
+          dislikeCount: 0,
+          commentCount: 0,
+        },
+      });
+
       return note;
     },
     likeNote: async (
       parent,
       { id },
-      { req: { username, authorized }, pubsub },
+      { req: { username, authorized } },
       info
     ) => {
       if (!authorized) return null;
@@ -949,6 +967,11 @@ const resolvers = {
         return pubsub.asyncIterator(
           NOTIFICATION_SUBSCRIPTION_PREFIX + username
         );
+      },
+    },
+    newsfeed: {
+      subscribe: (parent, { username }, { pubsub }, info) => {
+        return pubsub.asyncIterator(NEWSFEED_SUBSCRIPTION_PREFIX);
       },
     },
   },
