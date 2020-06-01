@@ -7,7 +7,7 @@ const alert = "#CA3C25";
 const dark = "#1D1A05";
 const darkLight = "#51490e";
 const light = "#FFF";
-
+const lightDark = "#fffbbd";
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -36,6 +36,7 @@ const theme = createMuiTheme({
     },
     light: {
       main: light,
+      dark: lightDark,
     },
     text: {
       primary: dark,
@@ -54,7 +55,7 @@ const theme = createMuiTheme({
       fontWeight: 700,
       color: dark,
     },
-    h5: { color: dark },
+    h5: { color: dark, fontSize: 18, fontWeight: 700 },
     h6: { color: dark },
     subtitle1: { color: dark, fontSize: 18, letterSpacing: 1.1 },
     subtitle2: { color: dark, fontSize: 16, fontWeight: 700 },

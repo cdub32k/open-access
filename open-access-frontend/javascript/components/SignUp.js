@@ -44,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignUp = ({ error, signupStart, ...rest }) => {
-  console.log("@@@@@@@@@@@@@@@@@@@", rest);
   const classes = useStyles();
   const stripe = useStripe();
   const elements = useElements();

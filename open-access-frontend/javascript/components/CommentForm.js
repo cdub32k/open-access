@@ -44,6 +44,7 @@ const CommentForm = ({
         value={body}
         name="body"
         onChange={(e) => setBody(e.target.value)}
+        multirow
         rows={3}
       />
       <CustomButton text="Post comment" onClick={postComment} size="small" />

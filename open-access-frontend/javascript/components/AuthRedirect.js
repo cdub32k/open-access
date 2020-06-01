@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 const AuthRedirect = ({ component: Component, loggedIn, ...rest }) => {
-  if (loggedIn) return <Redirect to="/home" />;
+  if (loggedIn) return <Redirect to="/feed" />;
   else return <Component {...rest} />;
 };
 

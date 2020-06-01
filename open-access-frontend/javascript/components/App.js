@@ -43,6 +43,7 @@ import VideoList from "./VideoList";
 import ImagePage from "./ImagePage";
 import ImageUploader from "./ImageUploader";
 import ImageList from "./ImageList";
+import NewsFeed from "./NewsFeed";
 import Home from "./Home";
 
 function About() {
@@ -153,7 +154,16 @@ class App extends Component {
               />
               <Route path="/about" component={About} />
               <Route path="/users" component={Users} />
-              <Route path="/" component={Home} />
+              <Route
+                path="/feed"
+                render={(props) => (
+                  <UnAuthRedirect {...props} component={NewsFeed} />
+                )}
+              />
+              <Route
+                path="/"
+                render={(props) => <AuthRedirect {...props} component={Home} />}
+              />
             </Switch>
           </div>
         </div>

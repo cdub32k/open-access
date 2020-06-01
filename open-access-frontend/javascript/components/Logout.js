@@ -8,7 +8,7 @@ const Logout = ({ logout }) => {
     logout();
   }, []);
 
-  return <Redirect to="/home" />;
+  return <Redirect to="/" />;
 };
 
 const mapDispatchToProps = (dispatch) => ({
