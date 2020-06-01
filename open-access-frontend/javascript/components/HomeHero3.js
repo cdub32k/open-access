@@ -25,7 +25,7 @@ const HomeHero = (props) => {
   return (
     <Grid container className={classes.container} alignItems="center">
       <Grid item xs={12} className={classes.header}>
-        <Typography variant="h3">Dozens Ready to Sign Up.</Typography>
+        <Typography variant="h3">People Ready to Sign Up.</Typography>
       </Grid>
       <Grid item xs={12}>
         <Carousel />

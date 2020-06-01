@@ -6,28 +6,39 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { makeStyles } from "@material-ui/core/styles";
 
+import AdvocateCard from "./AdvocateCard";
+
 const useStyles = makeStyles((theme) => ({
   carousel: {},
   slides: {
-    width: 1020,
     whiteSpace: "nowrap",
     overflow: "hidden",
     margin: "auto",
     pointerEvents: "none",
+    paddingTop: 30,
+    marginTop: -30,
   },
-  slide: {
-    height: 300,
-    width: 300,
-    margin: 20,
-    backgroundColor: theme.palette.secondary.main,
-    display: "inline-block",
-  },
-  arrows: {},
-  left: {
-    cursor: "pointer",
-  },
-  right: {
-    cursor: "pointer",
+  arrows: {
+    display: "flex",
+    justifyContent: "center",
+    "& > .left, & > .right": {
+      width: 44,
+      height: 44,
+      cursor: "pointer",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: theme.palette.primary.main,
+      borderRadius: "50%",
+      padding: 8,
+      color: theme.palette.light.main,
+      margin: 12,
+      boxShadow: "0 3px 5px 0 rgba(0,0,0,.4)",
+      transition: "all 100ms ease-out",
+      "&:hover": {
+        transform: "translateY(-4px)",
+      },
+    },
   },
 }));
 
@@ -39,7 +50,12 @@ const Carousel = (props) => {
 
   const switchSlides = (back) => {
     if (!back) {
-      let c = Math.min(slide + 1, 6);
+      let scrolls;
+      if (window.innerWidth < 601) scrolls = 7;
+      else if (window.innerWidth < 961) scrolls = 6;
+      else scrolls = 5;
+
+      let c = Math.min(slide + 1, scrolls);
       setSlide(c);
 
       slides.current.scrollTo({
@@ -59,22 +75,21 @@ const Carousel = (props) => {
 
   return (
     <div className={classes.carousel}>
-      <div className={classes.slides} ref={slides}>
-        <div className={classes.slide}></div>
-        <div className={classes.slide}></div>
-        <div className={classes.slide}></div>
-        <div className={classes.slide}></div>
-        <div className={classes.slide}></div>
-        <div className={classes.slide}></div>
-        <div className={classes.slide}></div>
-        <div className={classes.slide}></div>
-        <div className={classes.slide}></div>
+      <div className={`${classes.slides} advocate-slides`} ref={slides}>
+        <AdvocateCard />
+        <AdvocateCard />
+        <AdvocateCard />
+        <AdvocateCard />
+        <AdvocateCard />
+        <AdvocateCard />
+        <AdvocateCard />
+        <AdvocateCard />
       </div>
       <div className={classes.arrows}>
-        <div className={classes.left} onClick={() => switchSlides(true)}>
+        <div className="left" onClick={() => switchSlides(true)}>
           <ArrowBackIcon size="small" />
         </div>
-        <div className={classes.right}>
+        <div className="right">
           <ArrowForwardIcon size="small" onClick={() => switchSlides()} />
         </div>
       </div>

@@ -134,3 +134,20 @@ a:visited {
     will-change: transform;
   }
 }
+
+// advocate carousel
+.advocate-slides {
+  max-width: 1020px;
+}
+
+@media (max-width: 960px) {
+  .advocate-slides {
+    max-width: calc(1020px - 340px);
+  }
+}
+
+@media (max-width: 600px) {
+  .advocate-slides {
+    max-width: calc(1020px - 680px);
+  }
+}
