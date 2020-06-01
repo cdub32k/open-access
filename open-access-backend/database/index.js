@@ -17,6 +17,7 @@ import NoteLike from "./models/noteLike";
 import NoteDislike from "./models/noteDislike";
 import NoteComment from "./models/noteComment";
 import Notification from "./models/notification";
+import NSub from "./models/nSubscriber";
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ class Database {
     this.NoteDislike = NoteDislike;
     this.NoteComment = NoteComment;
     this.Notification = Notification;
+    this.NSub = NSub;
   }
 
   _connect() {

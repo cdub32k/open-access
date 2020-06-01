@@ -16,6 +16,7 @@ import userRouter from "./routes/user";
 import paymentRouter from "./routes/payment";
 import imageRouter from "./routes/image";
 import videoRouter from "./routes/video";
+import newsletterRouter from "./routes/newsletter";
 
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
@@ -58,6 +59,8 @@ app.use("/payment", verifyTokenMiddleware, paymentRouter);
 app.use("/images", verifyTokenMiddleware, imageRouter);
 
 app.use("/videos", verifyTokenMiddleware, videoRouter);
+
+app.use("/newsletter", newsletterRouter);
 
 app.use(express.static("public"));
 

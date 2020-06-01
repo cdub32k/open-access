@@ -29,13 +29,13 @@ const MainLogo = (props) => {
     <Grid container className={classes.container}>
       <Grid container alignItems="center" className={classes.topRow}>
         <Grid item xs={2}>
-          <LogoIcon />
+          <Link to="/">
+            <LogoIcon />
+          </Link>
         </Grid>
         <Grid item xs={10}>
           <Typography color="inherit" variant="h3" className={classes.title}>
-            <Link to="/" style={{ color: "inherit" }}>
-              Open Access
-            </Link>
+            <Link to="/">Open Access</Link>
           </Typography>
         </Grid>
       </Grid>
