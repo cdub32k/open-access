@@ -89,8 +89,8 @@ const Carousel = (props) => {
         <div className="left" onClick={() => switchSlides(true)}>
           <ArrowBackIcon size="small" />
         </div>
-        <div className="right">
-          <ArrowForwardIcon size="small" onClick={() => switchSlides()} />
+        <div className="right" onClick={() => switchSlides()}>
+          <ArrowForwardIcon size="small" />
         </div>
       </div>
     </div>

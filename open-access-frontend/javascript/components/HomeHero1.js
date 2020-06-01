@@ -31,9 +31,9 @@ const HomeHero = (props) => {
   const classes = useStyles();
 
   return (
-    <Grid container className={classes.container}>
+    <Grid container className={`${classes.container} home-hero-container`}>
       <Grid item xs={12} md={6} lg={5}>
-        <Grid container className={classes.tContainer}>
+        <Grid container className={`${classes.tContainer} home-hero-container`}>
           <Grid item xs={12} className={classes.title}>
             <Typography variant="h2">Open Access</Typography>
           </Grid>

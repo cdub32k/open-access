@@ -140,13 +140,18 @@ a:visited {
   max-width: 1020px;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1120px) {
   .advocate-slides {
     max-width: calc(1020px - 340px);
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 780px) {
+  .site-content,
+  .home-hero-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
   .advocate-slides {
     max-width: calc(1020px - 680px);
   }

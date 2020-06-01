@@ -23,7 +23,11 @@ const HomeHero = (props) => {
   const classes = useStyles();
 
   return (
-    <Grid container className={classes.container} alignItems="center">
+    <Grid
+      container
+      className={`${classes.container} home-hero-container`}
+      alignItems="center"
+    >
       <Grid item xs={12} className={classes.header}>
         <Typography variant="h3">People Ready to Sign Up.</Typography>
       </Grid>

@@ -87,7 +87,7 @@ const HomeHero4 = ({ subscribe }) => {
   };
 
   return (
-    <Grid container className={classes.container}>
+    <Grid container className={`${classes.container} home-hero-container`}>
       <Grid item xs={12} md={6}>
         <Grid container>
           <Grid item xs={12}>
@@ -99,29 +99,22 @@ const HomeHero4 = ({ subscribe }) => {
             <Typography variant="h3">Subscribe to our newsletter</Typography>
           </Grid>
           <Grid className={classes.input} item xs={12}>
-            <Grid container>
-              <Grid item xs={8}>
-                <CustomInput
-                  onChange={(e) => setEmail(e.target.value)}
-                  size="medium"
-                  placeholder="Enter Your Email"
-                />
-              </Grid>
-              &nbsp;&nbsp;
-              <Grid item xs={4}>
-                <CustomButton
-                  onClick={sendEmail}
-                  size="large"
-                  text="Subscribe"
-                  style={{ display: "inline-block" }}
-                />
-                {error && (
-                  <Typography className={classes.error} variant="caption">
-                    {error}
-                  </Typography>
-                )}
-              </Grid>
-            </Grid>
+            <CustomInput
+              onChange={(e) => setEmail(e.target.value)}
+              size="medium"
+              placeholder="Enter Your Email"
+            />
+            <CustomButton
+              onClick={sendEmail}
+              size="large"
+              text="Subscribe"
+              style={{ display: "block" }}
+            />
+            {error && (
+              <Typography className={classes.error} variant="caption">
+                {error}
+              </Typography>
+            )}
           </Grid>
           <Grid item xs={12}>
             <Grid container>
