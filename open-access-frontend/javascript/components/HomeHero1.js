@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   btn: {},
   heroImg: {
+    width: "100%",
     borderRadius: 10,
   },
 }));

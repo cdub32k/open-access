@@ -29,7 +29,10 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 400,
   },
   section: {
-    margin: `${theme.spacing(5)}px 0 0 0`,
+    margin: `${theme.spacing(2)}px 0 0 0`,
+  },
+  btn: {
+    marginTop: 18,
   },
   error: {
     position: "absolute",
@@ -96,7 +99,7 @@ const SignUp = ({ error, signupStart, ...rest }) => {
 
   return (
     <Grid className={classes.container} container justify="center">
-      <Grid item xs={12} style={{ marginBottom: 18 }}>
+      <Grid item xs={12}>
         <Typography variant="h3" color="primary">
           Sign up
         </Typography>
@@ -144,8 +147,8 @@ const SignUp = ({ error, signupStart, ...rest }) => {
                 <CardSection />
               </Grid>
             </Grid>
-            <Grid container justify="center" className="mt3">
-              <Grid item xs={12}>
+            <Grid container justify="center" className={classes.btn}>
+              <Grid item xs={12} style={{ textAlign: "right" }}>
                 <CustomButton
                   text="Sign up"
                   disabled={!email || !username || !password}

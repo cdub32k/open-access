@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
     left: "50%",
     transform: "translateX(-50%)",
   },
+  btn: {
+    marginTop: 18,
+  },
 }));
 
 const Login = ({ error, loginStart }) => {
@@ -82,8 +85,8 @@ const Login = ({ error, loginStart }) => {
                 />
               </Grid>
             </Grid>
-            <Grid container justify="center" className="mt3">
-              <Grid className="tar" item xs={12}>
+            <Grid container justify="center" className={classes.btn}>
+              <Grid style={{ textAlign: "right" }} item xs={12}>
                 <CustomButton
                   text="Sign in"
                   disabled={!username || !password}

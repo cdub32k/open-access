@@ -4,11 +4,16 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+  control: {
+    flexGrow: 1,
+    maxWidth: 600,
+  },
   textField: {
-    margin: `${theme.spacing(2)}px 0`,
+    width: "100%",
+    margin: "12px 0",
   },
   input: {
-    color: theme.palette.dark,
+    color: theme.palette.dark.main,
   },
 }));
 
@@ -16,7 +21,7 @@ const CustomInput = ({ value, name, label, onChange, ...rest }) => {
   const classes = useStyles();
 
   return (
-    <FormControl fullWidth={true}>
+    <FormControl className={classes.control} fullWidth={true}>
       <TextField
         className={classes.textField}
         InputProps={{ className: classes.input }}

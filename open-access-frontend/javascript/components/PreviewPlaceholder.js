@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     height: 240,
     width: 300,
-    margin: 24,
+    margin: "18px 6px",
     display: "inline-block",
     position: "relative",
     backgroundColor: "rgba(0, 0, 0, 0.03)",

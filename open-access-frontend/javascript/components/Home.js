@@ -3,6 +3,7 @@ import React from "react";
 import HomeHero1 from "./HomeHero1";
 import HomeHero2 from "./HomeHero2";
 import HomeHero3 from "./HomeHero3";
+import HomeHero4 from "./HomeHero4";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -18,6 +19,7 @@ const Home = (props) => {
       <HomeHero1 />
       <HomeHero2 />
       <HomeHero3 />
+      <HomeHero4 />
     </div>
   );
 };
