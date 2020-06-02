@@ -16,12 +16,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewsFeedItems = ({ items }) => {
+const NewsFeedItems = ({ items, type }) => {
   const classes = useStyles();
 
   return (
     <Grid container style={{ justifyContent: "center" }}>
       {items.map((item) => {
+        item.type = type;
         return <NewsFeedItem key={item._id} item={item} />;
       })}
     </Grid>

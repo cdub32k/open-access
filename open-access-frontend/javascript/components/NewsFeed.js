@@ -27,15 +27,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewsFeed = ({ loadNewsfeed, videos, images, notes }) => {
+const NewsFeed = ({
+  loadNewsfeedVideos,
+  loadNewsfeedImages,
+  loadNewsfeedNotes,
+  videos,
+  images,
+  notes,
+}) => {
   const [tab, setTab] = useState(0);
   const changeTab = (e, newValue) => {
+    if (newValue == 1 && images.length == 0) loadNewsfeedImages();
+    if (newValue == 2 && notes.length == 0) loadNewsfeedNotes();
+
     setTab(newValue);
   };
 
   const classes = useStyles();
   useEffect(() => {
-    loadNewsfeed();
+    loadNewsfeedVideos();
   }, []);
 
   return (
@@ -57,13 +67,13 @@ const NewsFeed = ({ loadNewsfeed, videos, images, notes }) => {
           <Tab label="Notes" />
         </Tabs>
         <TabPanel selectedTab={tab} index={0}>
-          <NewsFeedItems items={videos} />
+          <NewsFeedItems items={videos} type="video" />
         </TabPanel>
         <TabPanel selectedTab={tab} index={1}>
-          <NewsFeedItems items={images} />
+          <NewsFeedItems items={images} type="image" />
         </TabPanel>
         <TabPanel selectedTab={tab} index={2}>
-          <NewsFeedItems items={notes} />
+          <NewsFeedItems items={notes} type="note" />
         </TabPanel>
       </Grid>
     </Grid>
@@ -74,11 +84,13 @@ const mapStateToProps = (state) => ({
   videos: state.user.newsfeed.videos,
   images: state.user.newsfeed.images,
   notes: state.user.newsfeed.notes,
-  newsfeedSubscription: state.user.newsfeed.subscription,
+  newsfeedVideoSubscription: state.user.newsfeed.videoSubscription,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadNewsfeed: () => dispatch(ActionCreators.loadNewsfeedStart()),
+  loadNewsfeedVideos: () => dispatch(ActionCreators.loadNewsfeedVideoStart()),
+  loadNewsfeedImages: () => dispatch(ActionCreators.loadNewsfeedImagesStart()),
+  loadNewsfeedNotes: () => dispatch(ActionCreators.loadNewsfeedNotesStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewsFeed);

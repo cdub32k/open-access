@@ -38,9 +38,7 @@ const CheckoutForm = ({ email }) => {
           payment_method: result.paymentMethod.id,
           subscribed,
         })
-        .then((res) => {
-          console.log(res.data);
-        });
+        .then((res) => {});
     }
   };
 

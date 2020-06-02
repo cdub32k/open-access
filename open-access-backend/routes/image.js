@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import multer from "multer";
+import pubsub from "../PubSub";
+import { NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX } from "../constants";
 
 const { Image, User } = require("../database");
 
@@ -23,11 +25,20 @@ const upload = multer({ storage }).fields([{ name: "image", maxCount: 1 }]);
 
 router.post("/upload", upload, async (req, res) => {
   try {
+    const username = req.username;
     const image = await Image.create({
-      username: req.username,
+      username,
       url: `http://localhost:5000/img/${req.username}/${req.files["image"][0].filename}`,
       title: req.body.title,
       caption: req.body.caption,
+    });
+
+    let profilePic = await User.findOne({ username }).profilePic;
+
+    let user = { username, profilePic };
+    image.user = user;
+    pubsub.publish(NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX, {
+      newsfeedImages: image,
     });
 
     return res.send({ image });

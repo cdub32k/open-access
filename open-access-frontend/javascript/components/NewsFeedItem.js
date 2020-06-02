@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
@@ -13,7 +15,7 @@ import { num2str, date2rel } from "../utils/helpers";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    width: 345,
     margin: "12px 0",
   },
   media: {
@@ -41,9 +43,8 @@ const useStyles = makeStyles({
 
 const NewsFeedItem = ({
   item: {
-    id,
-    username,
-    profilePic,
+    _id,
+    user: { username, profilePic },
     uploadedAt,
     type,
     title,
@@ -52,24 +53,28 @@ const NewsFeedItem = ({
     dislikeCount,
     commentCount,
     thumbUrl,
+    body,
   },
 }) => {
   const classes = useStyles();
   const theme = useTheme();
 
-  let bgL, bgR, f;
+  let bgL, bgR, f, link;
   switch (type) {
     case "video":
+      link = `/video-player/${_id}`;
       f = theme.palette.light.main;
       bgL = theme.palette.alert.main;
       bgR = theme.palette.alert.dark;
       break;
     case "image":
+      link = `/image/${_id}`;
       f = theme.palette.dark.main;
       bgL = theme.palette.secondary.light;
       bgR = theme.palette.secondary.main;
       break;
     case "note":
+      link = `/note/${_id}`;
       f = theme.palette.light.main;
       bgL = theme.palette.primary.main;
       bgR = theme.palette.primary.dark;
@@ -82,10 +87,15 @@ const NewsFeedItem = ({
     <Card className={classes.root}>
       <CardActionArea>
         <CardContent className={classes.actions}>
-          <Avatar src={profilePic} className={classes.avatar} />
+          <Link to={`/profile/${username}`}>
+            <Avatar src={profilePic} className={classes.avatar} />
+          </Link>
           <div>
             <Typography variant="body2" className={classes.userInfo}>
-              <b>{username}</b> posted a {type} {date2rel(uploadedAt)}
+              <Link to={`/profile/${username}`}>
+                <b>{username}</b>
+              </Link>{" "}
+              posted a {type} {date2rel(uploadedAt)}
             </Typography>
             <div className={classes.stats}>
               <Typography variant="body2">
@@ -100,40 +110,42 @@ const NewsFeedItem = ({
             </div>
           </div>
         </CardContent>
-        {type != "note" && (
-          <CardMedia
-            className={classes.media}
-            style={{ height: type == "image" ? 354 : 194 }}
-            image={thumbUrl}
-            title={title}
-          />
-        )}
-        {type != "image" && (
-          <CardContent
-            className={classes.content}
-            style={{
-              background: `linear-gradient(45deg, ${bgL} 68%, ${bgR})`,
-              maxHeight: type == "note" ? 345 : 112,
-            }}
-          >
-            <Typography
-              style={{ color: f }}
-              gutterBottom
-              variant="h5"
-              component="h2"
+        <Link to={link}>
+          {type != "note" && (
+            <CardMedia
+              className={classes.media}
+              style={{ height: type == "image" ? 354 : 194 }}
+              image={thumbUrl}
+              title={title}
+            />
+          )}
+          {type != "image" && (
+            <CardContent
+              className={classes.content}
+              style={{
+                background: `linear-gradient(45deg, ${bgL} 68%, ${bgR})`,
+                maxHeight: type == "note" ? 345 : 112,
+              }}
             >
-              {title}
-            </Typography>
-            <Typography
-              style={{ color: f }}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
-              {caption}
-            </Typography>
-          </CardContent>
-        )}
+              <Typography
+                style={{ color: f }}
+                gutterBottom
+                variant="h5"
+                component="h2"
+              >
+                {title || body}
+              </Typography>
+              <Typography
+                style={{ color: f }}
+                variant="body2"
+                color="textSecondary"
+                component="p"
+              >
+                {caption}
+              </Typography>
+            </CardContent>
+          )}
+        </Link>
       </CardActionArea>
     </Card>
   );

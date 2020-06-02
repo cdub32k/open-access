@@ -24,398 +24,12 @@ const initialState = {
     notes: [],
   },
   newsfeed: {
-    notes: [
-      {
-        _id: 3,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title: "Adipisicing nulla nulla officia Lorem velit laboris magna.",
-      },
-      {
-        _id: 4,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title:
-          "Esse veniam irure est dolor dolore proident excepteur laborum cupidatat cupidatat adipisicing.",
-      },
-      {
-        _id: 4,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title:
-          "Esse veniam irure est dolor dolore proident excepteur laborum cupidatat cupidatat adipisicing.",
-      },
-      {
-        _id: 4,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title:
-          "Esse veniam irure est dolor dolore proident excepteur laborum cupidatat cupidatat adipisicing.",
-      },
-      {
-        _id: 4,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title:
-          "Esse veniam irure est dolor dolore proident excepteur laborum cupidatat cupidatat adipisicing.",
-      },
-      {
-        _id: 4,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title:
-          "Esse veniam irure est dolor dolore proident excepteur laborum cupidatat cupidatat adipisicing.",
-      },
-      {
-        _id: 4,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title:
-          "Esse veniam irure est dolor dolore proident excepteur laborum cupidatat cupidatat adipisicing.",
-      },
-      {
-        _id: 4,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title:
-          "Esse veniam irure est dolor dolore proident excepteur laborum cupidatat cupidatat adipisicing.",
-      },
-      {
-        _id: 4,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title:
-          "Esse veniam irure est dolor dolore proident excepteur laborum cupidatat cupidatat adipisicing.",
-      },
-      {
-        _id: 4,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "note",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        title:
-          "Esse veniam irure est dolor dolore proident excepteur laborum cupidatat cupidatat adipisicing.",
-      },
-    ],
-    images: [
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-      {
-        _id: 2,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "image",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/img/first_member/1588218623504.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Dolore exercitation id laborum laboris anim eiusmod nulla qui. Enim laborum elit tempor ea incididunt et elit. Aliqua ex do culpa in duis. Labore pariatur magna deserunt velit ipsum amet.",
-      },
-    ],
-    videos: [
-      {
-        _id: 1,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "video",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/vid/first_member/1588203830736.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Sunt sit sunt amet voluptate reprehenderit esse anim eu amet sit exercitation pariatur tempor. In tempor esse ullamco est duis et officia Lorem minim tempor commodo. Est sint anim fugiat sit ad est qui adipisicing mollit cupidatat pariatur. Sit ea qui nulla sit aliqua tempor amet aliqua aute laborum. Eu dolore labore mollit tempor veniam. Veniam reprehenderit aute deserunt minim ullamco reprehenderit ex adipisicing nisi. Id id in fugiat incididunt cillum aute aliquip irure et in dolor eu id id.",
-      },
-      {
-        _id: 1,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "video",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/vid/first_member/1588203830736.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Sunt sit sunt amet voluptate reprehenderit esse anim eu amet sit exercitation pariatur tempor. In tempor esse ullamco est duis et officia Lorem minim tempor commodo. Est sint anim fugiat sit ad est qui adipisicing mollit cupidatat pariatur. Sit ea qui nulla sit aliqua tempor amet aliqua aute laborum. Eu dolore labore mollit tempor veniam. Veniam reprehenderit aute deserunt minim ullamco reprehenderit ex adipisicing nisi. Id id in fugiat incididunt cillum aute aliquip irure et in dolor eu id id.",
-      },
-      {
-        _id: 1,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "video",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/vid/first_member/1588203830736.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Sunt sit sunt amet voluptate reprehenderit esse anim eu amet sit exercitation pariatur tempor. In tempor esse ullamco est duis et officia Lorem minim tempor commodo. Est sint anim fugiat sit ad est qui adipisicing mollit cupidatat pariatur. Sit ea qui nulla sit aliqua tempor amet aliqua aute laborum. Eu dolore labore mollit tempor veniam. Veniam reprehenderit aute deserunt minim ullamco reprehenderit ex adipisicing nisi. Id id in fugiat incididunt cillum aute aliquip irure et in dolor eu id id.",
-      },
-      {
-        _id: 1,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "video",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/vid/first_member/1588203830736.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Sunt sit sunt amet voluptate reprehenderit esse anim eu amet sit exercitation pariatur tempor. In tempor esse ullamco est duis et officia Lorem minim tempor commodo. Est sint anim fugiat sit ad est qui adipisicing mollit cupidatat pariatur. Sit ea qui nulla sit aliqua tempor amet aliqua aute laborum. Eu dolore labore mollit tempor veniam. Veniam reprehenderit aute deserunt minim ullamco reprehenderit ex adipisicing nisi. Id id in fugiat incididunt cillum aute aliquip irure et in dolor eu id id.",
-      },
-      {
-        _id: 1,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "video",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/vid/first_member/1588203830736.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Sunt sit sunt amet voluptate reprehenderit esse anim eu amet sit exercitation pariatur tempor. In tempor esse ullamco est duis et officia Lorem minim tempor commodo. Est sint anim fugiat sit ad est qui adipisicing mollit cupidatat pariatur. Sit ea qui nulla sit aliqua tempor amet aliqua aute laborum. Eu dolore labore mollit tempor veniam. Veniam reprehenderit aute deserunt minim ullamco reprehenderit ex adipisicing nisi. Id id in fugiat incididunt cillum aute aliquip irure et in dolor eu id id.",
-      },
-      {
-        _id: 1,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "video",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/vid/first_member/1588203830736.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Sunt sit sunt amet voluptate reprehenderit esse anim eu amet sit exercitation pariatur tempor. In tempor esse ullamco est duis et officia Lorem minim tempor commodo. Est sint anim fugiat sit ad est qui adipisicing mollit cupidatat pariatur. Sit ea qui nulla sit aliqua tempor amet aliqua aute laborum. Eu dolore labore mollit tempor veniam. Veniam reprehenderit aute deserunt minim ullamco reprehenderit ex adipisicing nisi. Id id in fugiat incididunt cillum aute aliquip irure et in dolor eu id id.",
-      },
-      {
-        _id: 1,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "video",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/vid/first_member/1588203830736.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Sunt sit sunt amet voluptate reprehenderit esse anim eu amet sit exercitation pariatur tempor. In tempor esse ullamco est duis et officia Lorem minim tempor commodo. Est sint anim fugiat sit ad est qui adipisicing mollit cupidatat pariatur. Sit ea qui nulla sit aliqua tempor amet aliqua aute laborum. Eu dolore labore mollit tempor veniam. Veniam reprehenderit aute deserunt minim ullamco reprehenderit ex adipisicing nisi. Id id in fugiat incididunt cillum aute aliquip irure et in dolor eu id id.",
-      },
-      {
-        _id: 1,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "video",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/vid/first_member/1588203830736.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Sunt sit sunt amet voluptate reprehenderit esse anim eu amet sit exercitation pariatur tempor. In tempor esse ullamco est duis et officia Lorem minim tempor commodo. Est sint anim fugiat sit ad est qui adipisicing mollit cupidatat pariatur. Sit ea qui nulla sit aliqua tempor amet aliqua aute laborum. Eu dolore labore mollit tempor veniam. Veniam reprehenderit aute deserunt minim ullamco reprehenderit ex adipisicing nisi. Id id in fugiat incididunt cillum aute aliquip irure et in dolor eu id id.",
-      },
-      {
-        _id: 1,
-        username: "@first_member",
-        profilePic: "http://localhost:5000/img/default-profile.png",
-        uploadedAt: Date(),
-        type: "video",
-        likeCount: 4,
-        dislikeCount: 3,
-        commentCount: 12,
-        thumbUrl: "http://localhost:5000/vid/first_member/1588203830736.jpg",
-        title: "Ankle Breaking 1V1 Against TheFlightMike!",
-        caption:
-          "Sunt sit sunt amet voluptate reprehenderit esse anim eu amet sit exercitation pariatur tempor. In tempor esse ullamco est duis et officia Lorem minim tempor commodo. Est sint anim fugiat sit ad est qui adipisicing mollit cupidatat pariatur. Sit ea qui nulla sit aliqua tempor amet aliqua aute laborum. Eu dolore labore mollit tempor veniam. Veniam reprehenderit aute deserunt minim ullamco reprehenderit ex adipisicing nisi. Id id in fugiat incididunt cillum aute aliquip irure et in dolor eu id id.",
-      },
-    ],
-    subscription: null,
+    notes: [],
+    images: [],
+    videos: [],
+    videoSubscription: null,
+    imageSubscription: null,
+    noteSubscription: null,
   },
 };
 
@@ -440,23 +54,52 @@ const subscribeToNotifications = (username) => {
     })
     .subscribe({
       next({ data: { notifications } }) {
-        console.log("RECEIVED NOTIFICATION: ", notifications);
         store.dispatch(ActionCreators.addNotification(notifications));
       },
     });
 };
 
-const subscribeToNewsfeedUpdates = () => {
+const subscribeToNewsfeedVideoUpdates = () => {
   return apolloClient
     .subscribe({
       query: parse(`
-        subscription newsfeed {
-          newsfeed {
+        subscription NewsfeedVideos {
+          newsfeedVideos {
             _id
-            username
-            profilePic
+            user {
+              username
+              profilePic
+            }
             uploadedAt
-            type
+            thumbUrl
+            likeCount
+            dislikeCount
+            commentCount
+            title
+            caption
+          }
+        }
+     `),
+    })
+    .subscribe({
+      next({ data: { newsfeedVideos } }) {
+        store.dispatch(ActionCreators.newsfeedVideoUpdate(newsfeedVideos));
+      },
+    });
+};
+const subscribeToNewsfeedImageUpdates = () => {
+  return apolloClient
+    .subscribe({
+      query: parse(`
+        subscription NewsfeedImages {
+          newsfeedImages {
+            _id
+            user {
+              username
+              profilePic
+            }
+            uploadedAt
+            thumbUrl
             likeCount
             dislikeCount
             commentCount
@@ -465,9 +108,34 @@ const subscribeToNewsfeedUpdates = () => {
      `),
     })
     .subscribe({
-      next({ data: { newsfeed } }) {
-        console.log("RECEIVED NOTIFICATION: ", newsfeed);
-        store.dispatch(ActionCreators.newsfeedUpdate(newsfeed));
+      next({ data: { newsfeedImages } }) {
+        store.dispatch(ActionCreators.newsfeedImageUpdate(newsfeedImages));
+      },
+    });
+};
+const subscribeToNewsfeedNoteUpdates = () => {
+  return apolloClient
+    .subscribe({
+      query: parse(`
+        subscription NewsfeedNotes {
+          newsfeedNotes {
+            _id
+            user {
+              username
+              profilePic
+            }
+            uploadedAt
+            likeCount
+            dislikeCount
+            commentCount
+            body
+          }
+        }
+     `),
+    })
+    .subscribe({
+      next({ data: { newsfeedNotes } }) {
+        store.dispatch(ActionCreators.newsfeedNoteUpdate(newsfeedNotes));
       },
     });
 };
@@ -612,26 +280,87 @@ const userReducer = (state = initialState, action) => {
         ...state,
         notifications: [action.payload.notification, ...state.notifications],
       };
-    case ActionTypes.NEWSFEED_UPDATE:
+    case ActionTypes.NEWSFEED_VIDEO_UPDATE:
       return {
         ...state,
         newsfeed: {
           ...state.newsfeed,
-          items: [action.payload.item, ...state.newsfeed.items],
+          videos: [action.payload.video, ...state.newsfeed.videos],
         },
       };
-    case ActionTypes.LOAD_NEWSFEED_START:
+    case ActionTypes.NEWSFEED_IMAGE_UPDATE:
+      return {
+        ...state,
+        newsfeed: {
+          ...state.newsfeed,
+          images: [action.payload.image, ...state.newsfeed.images],
+        },
+      };
+    case ActionTypes.NEWSFEED_NOTE_UPDATE:
+      return {
+        ...state,
+        newsfeed: {
+          ...state.newsfeed,
+          notes: [action.payload.note, ...state.newsfeed.notes],
+        },
+      };
+    case ActionTypes.LOAD_NEWSFEED_VIDEO_START:
       /// will remove this (only runs in middleware eventually)
-      const subscription = subscribeToNewsfeedUpdates();
+      const videoSubscription = subscribeToNewsfeedVideoUpdates();
+
       return {
         ...state,
-        newsfeed: { ...state.newsfeed, subscription },
+        newsfeed: { ...state.newsfeed, videoSubscription },
       };
-    case ActionTypes.LOAD_NEWSFEED_SUCCESS:
+    case ActionTypes.LOAD_NEWSFEED_VIDEO_SUCCESS:
+      return {
+        ...state,
+        newsfeed: {
+          ...state.newsfeed,
+          videos: [...action.payload.videos, ...state.newsfeed.videos],
+        },
+      };
+    case ActionTypes.LOAD_NEWSFEED_VIDEO_ERROR:
       return {
         ...state,
       };
-    case ActionTypes.LOAD_NEWSFEED_ERROR:
+    case ActionTypes.LOAD_NEWSFEED_IMAGES_START:
+      /// will remove this (only runs in middleware eventually)
+      const imageSubscription = subscribeToNewsfeedImageUpdates();
+
+      return {
+        ...state,
+        newsfeed: { ...state.newsfeed, imageSubscription },
+      };
+    case ActionTypes.LOAD_NEWSFEED_IMAGES_SUCCESS:
+      return {
+        ...state,
+        newsfeed: {
+          ...state.newsfeed,
+          images: [...action.payload.images, ...state.newsfeed.images],
+        },
+      };
+    case ActionTypes.LOAD_NEWSFEED_IMAGES_ERROR:
+      return {
+        ...state,
+      };
+    case ActionTypes.LOAD_NEWSFEED_NOTES_START:
+      /// will remove this (only runs in middleware eventually)
+      const noteSubscription = subscribeToNewsfeedNoteUpdates();
+
+      return {
+        ...state,
+        newsfeed: { ...state.newsfeed, noteSubscription },
+      };
+    case ActionTypes.LOAD_NEWSFEED_NOTES_SUCCESS:
+      return {
+        ...state,
+        newsfeed: {
+          ...state.newsfeed,
+          notes: [...action.payload.notes, ...state.newsfeed.notes],
+        },
+      };
+    case ActionTypes.LOAD_NEWSFEED_NOTES_ERROR:
       return {
         ...state,
       };

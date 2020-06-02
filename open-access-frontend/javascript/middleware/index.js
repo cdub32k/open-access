@@ -233,6 +233,57 @@ const MARK_NOTIFICATIONS_READ_QUERY = `
   }
 `;
 
+const GET_NEWSFEED_VIDEOS_QUERY = `
+  query NewsfeedVideos {
+    newsfeedVideos {
+      _id
+      user {
+        username
+        profilePic
+      }
+      uploadedAt
+      likeCount
+      dislikeCount
+      commentCount
+      thumbUrl
+      title
+      caption
+    }
+  }
+`;
+const GET_NEWSFEED_IMAGES_QUERY = `
+  query NewsfeedImages {
+    newsfeedImages {
+      _id
+      user {
+        username
+        profilePic
+      }
+      uploadedAt
+      likeCount
+      dislikeCount
+      commentCount
+      thumbUrl
+    }
+  }
+`;
+const GET_NEWSFEED_NOTES_QUERY = `
+  query NewsfeedNotes {
+    newsfeedNotes {
+      _id
+      user {
+        username
+        profilePic
+      }
+      uploadedAt
+      likeCount
+      dislikeCount
+      commentCount
+      body
+    }
+  }
+`;
+
 export default [
   (store) => (next) => (action) => {
     next(ActionCreators.clearErrors());
@@ -714,8 +765,54 @@ export default [
             );
           else next(ActionCreators.postNoteCommentError());
         });
-    } else if (action.type == ActionTypes.LOAD_NEWSFEED_START) {
-      next(action);
+    } else if (action.type == ActionTypes.LOAD_NEWSFEED_VIDEO_START) {
+      axios
+        .post("/api", {
+          query: GET_NEWSFEED_VIDEOS_QUERY,
+        })
+        .then((res) => {
+          const videoData = res.data.data;
+
+          if (videoData.newsfeedVideos) {
+            next(action);
+            next(
+              ActionCreators.loadNewsfeedVideoSuccess(videoData.newsfeedVideos)
+            );
+          }
+        })
+        .catch((error) => next(ActionCreators.loadNewsfeedVideoError(error)));
+    } else if (action.type == ActionTypes.LOAD_NEWSFEED_IMAGES_START) {
+      axios
+        .post("/api", {
+          query: GET_NEWSFEED_IMAGES_QUERY,
+        })
+        .then((res) => {
+          const imageData = res.data.data;
+
+          if (imageData.newsfeedImages) {
+            next(action);
+            next(
+              ActionCreators.loadNewsfeedImagesSuccess(imageData.newsfeedImages)
+            );
+          }
+        })
+        .catch((error) => next(ActionCreators.loadNewsfeedVideoError(error)));
+    } else if (action.type == ActionTypes.LOAD_NEWSFEED_NOTES_START) {
+      axios
+        .post("/api", {
+          query: GET_NEWSFEED_NOTES_QUERY,
+        })
+        .then((res) => {
+          const noteData = res.data.data;
+
+          if (noteData.newsfeedNotes) {
+            next(action);
+            next(
+              ActionCreators.loadNewsfeedNotesSuccess(noteData.newsfeedNotes)
+            );
+          }
+        })
+        .catch((error) => next(ActionCreators.loadNewsfeedNotesError(error)));
     } else next(action);
   },
 ];

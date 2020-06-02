@@ -4,7 +4,9 @@ const perPage = 8;
 
 import {
   NOTIFICATION_SUBSCRIPTION_PREFIX,
-  NEWSFEED_SUBSCRIPTION_PREFIX,
+  NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX,
+  NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX,
+  NEWSFEED_NOTE_SUBSCRIPTION_PREFIX,
 } from "../constants";
 
 const resolvers = {
@@ -149,6 +151,55 @@ const resolvers = {
       const note = await DB.Note.findOne({ _id: id });
       return note;
     },
+
+    newsfeedVideos: async (
+      parent,
+      { id },
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      const videos = await DB.Video.find()
+        .sort({
+          uploadedAt: -1,
+        })
+        .limit(10);
+
+      return videos;
+    },
+    newsfeedImages: async (
+      parent,
+      { id },
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      const images = await DB.Image.find()
+        .sort({
+          uploadedAt: -1,
+        })
+        .limit(10);
+
+      return images;
+    },
+    newsfeedNotes: async (
+      parent,
+      { id },
+      { req: { username, authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      const notes = await DB.Note.find()
+        .sort({
+          uploadedAt: -1,
+        })
+        .limit(10);
+
+      return notes;
+    },
   },
 
   Mutation: {
@@ -167,17 +218,9 @@ const resolvers = {
 
       let profilePic = await DB.User.findOne({ username }).profilePic;
 
-      pubsub.publish(NEWSFEED_SUBSCRIPTION_PREFIX, {
-        newsfeed: {
-          _id: note._id,
-          username: note.username,
-          uploadedAt: note.uploadedAt,
-          profilePic,
-          type: "note",
-          likeCount: 0,
-          dislikeCount: 0,
-          commentCount: 0,
-        },
+      note.user = { username, profilePic };
+      pubsub.publish(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX, {
+        newsfeedNotes: note,
       });
 
       return note;
@@ -614,54 +657,27 @@ const resolvers = {
   },
 
   Note: {
-    user: async ({ username }, args, { req: { authorized } }, info) => {
-      if (!authorized) return null;
-
+    user: async ({ username }, args, context, info) => {
       const user = await DB.User.findOne({ username });
       return user;
     },
-    liked: async ({ _id }, args, { req: { username, authorized } }, info) => {
-      if (!authorized) return null;
-
+    liked: async ({ _id, username }, args, context, info) => {
       const liked = await DB.NoteLike.findOne({ username, noteId: _id });
       return !!liked;
     },
-    disliked: async (
-      { _id },
-      args,
-      { req: { username, authorized } },
-      info
-    ) => {
-      if (!authorized) return null;
-
+    disliked: async ({ _id, username }, args, context, info) => {
       const disliked = await DB.NoteDislike.findOne({ username, noteId: _id });
       return !!disliked;
     },
-    likes: async ({ _id }, args, { req: { username, authorized } }, info) => {
-      if (!authorized) return null;
-
+    likes: async ({ _id }, args, context, info) => {
       const likes = await DB.NoteLike.find({ noteId: _id });
       return likes;
     },
-    dislikes: async (
-      { _id },
-      args,
-      { req: { username, authorized } },
-      info
-    ) => {
-      if (!authorized) return null;
-
+    dislikes: async ({ _id }, args, context, info) => {
       const dislikes = await DB.NoteDislike.find({ noteId: _id });
       return dislikes;
     },
-    comments: async (
-      { _id },
-      args,
-      { req: { username, authorized } },
-      info
-    ) => {
-      if (!authorized) return null;
-
+    comments: async ({ _id }, args, context, info) => {
       const comments = await DB.NoteComment.find({ noteId: _id }).sort({
         createdAt: -1,
       });
@@ -670,98 +686,65 @@ const resolvers = {
   },
 
   NoteComment: {
-    user: async ({ username }, args, { req: { authorized } }) => {
-      if (!authorized) return null;
-
+    user: async ({ username }, args, context) => {
       const user = await DB.User.findOne({ username });
       return user;
     },
   },
 
   Image: {
-    user: async ({ username }, args, { req: { authorized } }, info) => {
-      if (!authorized) return null;
-
+    user: async ({ username }, args, context, info) => {
       const user = await DB.User.findOne({ username });
       return user;
     },
-    liked: async ({ _id }, args, { req: { username } }, info) => {
-      if (!authorized) return null;
-
+    liked: async ({ _id, username }, args, context, info) => {
       const liked = await DB.ImageLike.findOne({ username, imageId: _id });
       return !!liked;
     },
-    disliked: async ({ _id }, args, { req: { username } }, info) => {
-      if (!authorized) return null;
-
+    disliked: async ({ _id, username }, args, context, info) => {
       const disliked = await DB.ImageDislike.findOne({
         username,
         imageId: _id,
       });
       return !!disliked;
     },
-    likes: async ({ _id }, args, { req: { username, authorized } }, info) => {
-      if (!authorized) return null;
-
+    likes: async ({ _id }, args, context, info) => {
       const likes = await DB.ImageLike.find({ imageId: _id });
       return likes;
     },
-    dislikes: async (
-      { _id },
-      args,
-      { req: { username, authorized } },
-      info
-    ) => {
-      if (!authorized) return null;
-
+    dislikes: async ({ _id }, args, context, info) => {
       const dislikes = await DB.ImageDislike.find({ imageId: _id });
       return dislikes;
     },
-    comments: async (
-      { _id },
-      args,
-      { req: { username, authorized } },
-      info
-    ) => {
-      if (!authorized) return null;
-
+    comments: async ({ _id }, args, context, info) => {
       const comments = await DB.ImageComment.find({ imageId: _id }).sort({
         createdAt: -1,
       });
       return comments;
     },
+
+    thumbUrl: async ({ url }, args, context, info) => {
+      return url;
+    },
   },
 
   ImageComment: {
-    user: async ({ username }, args, { req: { authorized } }) => {
-      if (!authorized) return null;
-
+    user: async ({ username }, args, context) => {
       const user = await DB.User.findOne({ username });
       return user;
     },
   },
 
   Video: {
-    user: async ({ username }, args, { req: { authorized } }, info) => {
-      if (!authorized) return null;
-
+    user: async ({ username }, args, context, info) => {
       const user = await DB.User.findOne({ username });
       return user;
     },
-    liked: async ({ _id }, args, { req: { username, authorized } }, info) => {
-      if (!authorized) return null;
-
+    liked: async ({ _id, username }, args, context, info) => {
       const liked = await DB.VideoLike.findOne({ username, videoId: _id });
       return !!liked;
     },
-    disliked: async (
-      { _id },
-      args,
-      { req: { username, authorized } },
-      info
-    ) => {
-      if (!authorized) return null;
-
+    disliked: async ({ _id, username }, args, context, info) => {
       const disliked = await DB.VideoDislike.findOne({
         username,
         videoId: _id,
@@ -769,37 +752,19 @@ const resolvers = {
 
       return !!disliked;
     },
-    likes: async ({ _id }, args, { req: { username, authorized } }, info) => {
-      if (!authorized) return null;
-
+    likes: async ({ _id }, args, context, info) => {
       const likes = await DB.VideoLike.find({ videoId: _id });
       return likes;
     },
-    dislikes: async (
-      { _id },
-      args,
-      { req: { username, authorized } },
-      info
-    ) => {
-      if (!authorized) return null;
-
+    dislikes: async ({ _id }, args, context, info) => {
       const dislikes = await DB.VideoDislike.find({ videoId: _id });
       return dislikes;
     },
-    views: async ({ _id }, args, { req: { username, authorized } }, info) => {
-      if (!authorized) return null;
-
+    views: async ({ _id }, args, context, info) => {
       const views = await DB.VideoView.find({ videoId: _id });
       return views;
     },
-    comments: async (
-      { _id },
-      args,
-      { req: { username, authorized } },
-      info
-    ) => {
-      if (!authorized) return null;
-
+    comments: async ({ _id }, args, context, info) => {
       const comments = await DB.VideoComment.find({ videoId: _id }).sort({
         createdAt: -1,
       });
@@ -808,9 +773,7 @@ const resolvers = {
   },
 
   VideoComment: {
-    user: async ({ username }, args, { req: { authorized } }) => {
-      if (!authorized) return null;
-
+    user: async ({ username }, args, context) => {
       const user = await DB.User.findOne({ username });
       return user;
     },
@@ -969,9 +932,19 @@ const resolvers = {
         );
       },
     },
-    newsfeed: {
+    newsfeedVideos: {
       subscribe: (parent, { username }, { pubsub }, info) => {
-        return pubsub.asyncIterator(NEWSFEED_SUBSCRIPTION_PREFIX);
+        return pubsub.asyncIterator(NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX);
+      },
+    },
+    newsfeedImages: {
+      subscribe: (parent, { username }, { pubsub }, info) => {
+        return pubsub.asyncIterator(NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX);
+      },
+    },
+    newsfeedNotes: {
+      subscribe: (parent, { username }, { pubsub }, info) => {
+        return pubsub.asyncIterator(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX);
       },
     },
   },

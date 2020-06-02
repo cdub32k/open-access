@@ -77,10 +77,18 @@ export const ActionTypes = {
   MARK_NOTIFICATIONS_READ_SUCCESS: "MARK_NOTIFICATIONS_READ_SUCCESS",
   MARK_NOTIFICATIONS_READ_ERROR: "MARK_NOTIFICATIONS_READ_ERROR",
   ADD_NOTIFICATION: "ADD_NOTIFICATION",
-  NEWSFEED_UPDATE: "NEWSFEED_UPDATE",
-  LOAD_NEWSFEED_START: "LOAD_NEWSFEED_START",
-  LOAD_NEWSFEED_SUCCESS: "LOAD_NEWSFEED_SUCCESS",
-  LOAD_NEWSFEED_ERROR: "LOAD_NEWSFEED_START",
+  NEWSFEED_VIDEO_UPDATE: "NEWSFEED_VIDEO_UPDATE",
+  NEWSFEED_IMAGE_UPDATE: "NEWSFEED_IMAGE_UPDATE",
+  NEWSFEED_NOTE_UPDATE: "NEWSFEED_NOTE_UPDATE",
+  LOAD_NEWSFEED_VIDEO_START: "LOAD_NEWSFEED_VIDEO_START",
+  LOAD_NEWSFEED_VIDEO_SUCCESS: "LOAD_NEWSFEED_VIDEO_SUCCESS",
+  LOAD_NEWSFEED_VIDEO_ERROR: "LOAD_NEWSFEED_VIDEO_START",
+  LOAD_NEWSFEED_IMAGES_START: "LOAD_NEWSFEED_IMAGES_START",
+  LOAD_NEWSFEED_IMAGES_SUCCESS: "LOAD_NEWSFEED_IMAGES_SUCCESS",
+  LOAD_NEWSFEED_IMAGES_ERROR: "LOAD_NEWSFEED_IMAGES_START",
+  LOAD_NEWSFEED_NOTES_START: "LOAD_NEWSFEED_NOTES_START",
+  LOAD_NEWSFEED_NOTES_SUCCESS: "LOAD_NEWSFEED_NOTES_SUCCESS",
+  LOAD_NEWSFEED_NOTES_ERROR: "LOAD_NEWSFEED_NOTES_START",
 };
 
 export const ActionCreators = {
@@ -363,16 +371,49 @@ export const ActionCreators = {
   addNotification: (notification) => {
     return { type: ActionTypes.ADD_NOTIFICATION, payload: { notification } };
   },
-  newsfeedUpdate: (item) => {
-    return { type: ActionTypes.NEWSFEED_UPDATE, payload: { item } };
+  newsfeedVideoUpdate: (video) => {
+    return { type: ActionTypes.NEWSFEED_VIDEO_UPDATE, payload: { video } };
   },
-  loadNewsfeedStart: () => {
-    return { type: ActionTypes.LOAD_NEWSFEED_START };
+  newsfeedImageUpdate: (image) => {
+    return { type: ActionTypes.NEWSFEED_IMAGE_UPDATE, payload: { image } };
   },
-  loadNewsfeedSuccess: (items) => {
-    return { type: ActionTypes.LOAD_NEWSFEED_SUCCESS, payload: { items } };
+  newsfeedNoteUpdate: (note) => {
+    return { type: ActionTypes.NEWSFEED_NOTE_UPDATE, payload: { note } };
   },
-  loadNewsfeedError: (error) => {
-    return { type: ActionTypes.LOAD_NEWSFEED_ERROR, error };
+  loadNewsfeedVideoStart: () => {
+    return { type: ActionTypes.LOAD_NEWSFEED_VIDEO_START };
+  },
+  loadNewsfeedVideoSuccess: (videos) => {
+    return {
+      type: ActionTypes.LOAD_NEWSFEED_VIDEO_SUCCESS,
+      payload: { videos },
+    };
+  },
+  loadNewsfeedVideoError: (error) => {
+    return { type: ActionTypes.LOAD_NEWSFEED_VIDEO_ERROR, error };
+  },
+  loadNewsfeedImagesStart: () => {
+    return { type: ActionTypes.LOAD_NEWSFEED_IMAGES_START };
+  },
+  loadNewsfeedImagesSuccess: (images) => {
+    return {
+      type: ActionTypes.LOAD_NEWSFEED_IMAGES_SUCCESS,
+      payload: { images },
+    };
+  },
+  loadNewsfeedImagesError: (error) => {
+    return { type: ActionTypes.LOAD_NEWSFEED_IMAGES_ERROR, error };
+  },
+  loadNewsfeedNotesStart: () => {
+    return { type: ActionTypes.LOAD_NEWSFEED_NOTES_START };
+  },
+  loadNewsfeedNotesSuccess: (notes) => {
+    return {
+      type: ActionTypes.LOAD_NEWSFEED_NOTES_SUCCESS,
+      payload: { notes },
+    };
+  },
+  loadNewsfeedVideoError: (error) => {
+    return { type: ActionTypes.LOAD_NEWSFEED_NOTES_ERROR, error };
   },
 };

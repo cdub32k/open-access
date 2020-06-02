@@ -15,6 +15,9 @@ const typeDefs = gql`
     note(id: String!): Note
 
     notifications: [Notification]
+    newsfeedVideos: [Video]
+    newsfeedImages: [Image]
+    newsfeedNotes: [Note]
   }
 
   type UserResponse {
@@ -178,6 +181,7 @@ const typeDefs = gql`
     user: User
     _id: String
     url: String
+    thumbUrl: String
     title: String
     caption: String
     likeCount: Int
@@ -222,20 +226,11 @@ const typeDefs = gql`
     createdAt: Date
   }
 
-  type NewsfeedItem {
-    _id: String
-    username: String
-    profilePic: String
-    uploadedAt: Date
-    type: String
-    likeCount: Int
-    dislikeCount: Int
-    commentCount: Int
-  }
-
   type Subscription {
     notifications(username: String!): Notification
-    newsfeed: NewsfeedItem
+    newsfeedVideos: Video
+    newsfeedImages: Image
+    newsfeedNotes: Note
   }
 `;
 
