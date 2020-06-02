@@ -317,7 +317,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         newsfeed: {
           ...state.newsfeed,
-          videos: [...action.payload.videos, ...state.newsfeed.videos],
+          videos: [...state.newsfeed.videos, ...action.payload.videos],
         },
       };
     case ActionTypes.LOAD_NEWSFEED_VIDEO_ERROR:
@@ -337,7 +337,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         newsfeed: {
           ...state.newsfeed,
-          images: [...action.payload.images, ...state.newsfeed.images],
+          images: [...state.newsfeed.images, ...action.payload.images],
         },
       };
     case ActionTypes.LOAD_NEWSFEED_IMAGES_ERROR:
@@ -357,7 +357,7 @@ const userReducer = (state = initialState, action) => {
         ...state,
         newsfeed: {
           ...state.newsfeed,
-          notes: [...action.payload.notes, ...state.newsfeed.notes],
+          notes: [...state.newsfeed.notes, ...action.payload.notes],
         },
       };
     case ActionTypes.LOAD_NEWSFEED_NOTES_ERROR:

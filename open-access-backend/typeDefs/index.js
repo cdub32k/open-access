@@ -15,9 +15,9 @@ const typeDefs = gql`
     note(id: String!): Note
 
     notifications: [Notification]
-    newsfeedVideos: [Video]
-    newsfeedImages: [Image]
-    newsfeedNotes: [Note]
+    newsfeedVideos(lastOldest: Date): [Video]
+    newsfeedImages(lastOldest: Date): [Image]
+    newsfeedNotes(lastOldest: Date): [Note]
   }
 
   type UserResponse {

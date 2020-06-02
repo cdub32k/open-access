@@ -85,68 +85,66 @@ const NewsFeedItem = ({
 
   return (
     <Card className={classes.root}>
-      <CardActionArea>
-        <CardContent className={classes.actions}>
-          <Link to={`/profile/${username}`}>
-            <Avatar src={profilePic} className={classes.avatar} />
-          </Link>
-          <div>
-            <Typography variant="body2" className={classes.userInfo}>
-              <Link to={`/profile/${username}`}>
-                <b>{username}</b>
-              </Link>{" "}
-              posted a {type} {date2rel(uploadedAt)}
-            </Typography>
-            <div className={classes.stats}>
-              <Typography variant="body2">
-                <b>{num2str(likeCount)}</b> likes&nbsp;•&nbsp;
-              </Typography>
-              <Typography variant="body2">
-                <b>{num2str(dislikeCount)}</b> dislikes&nbsp;•&nbsp;
-              </Typography>
-              <Typography variant="body2">
-                <b>{num2str(commentCount)}</b> comments
-              </Typography>
-            </div>
-          </div>
-        </CardContent>
-        <Link to={link}>
-          {type != "note" && (
-            <CardMedia
-              className={classes.media}
-              style={{ height: type == "image" ? 354 : 194 }}
-              image={thumbUrl}
-              title={title}
-            />
-          )}
-          {type != "image" && (
-            <CardContent
-              className={classes.content}
-              style={{
-                background: `linear-gradient(45deg, ${bgL} 68%, ${bgR})`,
-                maxHeight: type == "note" ? 345 : 112,
-              }}
-            >
-              <Typography
-                style={{ color: f }}
-                gutterBottom
-                variant="h5"
-                component="h2"
-              >
-                {title || body}
-              </Typography>
-              <Typography
-                style={{ color: f }}
-                variant="body2"
-                color="textSecondary"
-                component="p"
-              >
-                {caption}
-              </Typography>
-            </CardContent>
-          )}
+      <CardContent className={classes.actions}>
+        <Link to={`/profile/${username}`} target="_blank">
+          <Avatar src={profilePic} className={classes.avatar} />
         </Link>
-      </CardActionArea>
+        <div>
+          <Typography variant="body2" className={classes.userInfo}>
+            <Link to={`/profile/${username}`} target="_blank">
+              <b>{username}</b>
+            </Link>{" "}
+            posted a {type} {date2rel(uploadedAt)}
+          </Typography>
+          <div className={classes.stats}>
+            <Typography variant="body2">
+              <b>{num2str(likeCount)}</b> likes&nbsp;•&nbsp;
+            </Typography>
+            <Typography variant="body2">
+              <b>{num2str(dislikeCount)}</b> dislikes&nbsp;•&nbsp;
+            </Typography>
+            <Typography variant="body2">
+              <b>{num2str(commentCount)}</b> comments
+            </Typography>
+          </div>
+        </div>
+      </CardContent>
+      <Link to={link} target="_blank">
+        {type != "note" && (
+          <CardMedia
+            className={classes.media}
+            style={{ height: type == "image" ? 354 : 194 }}
+            image={thumbUrl}
+            title={title}
+          />
+        )}
+        {type != "image" && (
+          <CardContent
+            className={classes.content}
+            style={{
+              background: `linear-gradient(45deg, ${bgL} 68%, ${bgR})`,
+              maxHeight: type == "note" ? 345 : 112,
+            }}
+          >
+            <Typography
+              style={{ color: f }}
+              gutterBottom
+              variant="h5"
+              component="h2"
+            >
+              {title || body}
+            </Typography>
+            <Typography
+              style={{ color: f }}
+              variant="body2"
+              color="textSecondary"
+              component="p"
+            >
+              {caption}
+            </Typography>
+          </CardContent>
+        )}
+      </Link>
     </Card>
   );
 };

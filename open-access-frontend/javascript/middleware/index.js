@@ -234,8 +234,8 @@ const MARK_NOTIFICATIONS_READ_QUERY = `
 `;
 
 const GET_NEWSFEED_VIDEOS_QUERY = `
-  query NewsfeedVideos {
-    newsfeedVideos {
+  query NewsfeedVideos($lastOldest: Date) {
+    newsfeedVideos(lastOldest: $lastOldest) {
       _id
       user {
         username
@@ -252,8 +252,8 @@ const GET_NEWSFEED_VIDEOS_QUERY = `
   }
 `;
 const GET_NEWSFEED_IMAGES_QUERY = `
-  query NewsfeedImages {
-    newsfeedImages {
+  query NewsfeedImages($lastOldest: Date) {
+    newsfeedImages(lastOldest: $lastOldest) {
       _id
       user {
         username
@@ -268,8 +268,8 @@ const GET_NEWSFEED_IMAGES_QUERY = `
   }
 `;
 const GET_NEWSFEED_NOTES_QUERY = `
-  query NewsfeedNotes {
-    newsfeedNotes {
+  query NewsfeedNotes($lastOldest: Date) {
+    newsfeedNotes(lastOldest: $lastOldest) {
       _id
       user {
         username
@@ -801,6 +801,66 @@ export default [
       axios
         .post("/api", {
           query: GET_NEWSFEED_NOTES_QUERY,
+        })
+        .then((res) => {
+          const noteData = res.data.data;
+
+          if (noteData.newsfeedNotes) {
+            next(action);
+            next(
+              ActionCreators.loadNewsfeedNotesSuccess(noteData.newsfeedNotes)
+            );
+          }
+        })
+        .catch((error) => next(ActionCreators.loadNewsfeedNotesError(error)));
+    } else if (action.type == ActionTypes.LOAD_MORE_NEWSFEED_VIDEO) {
+      axios
+        .post("/api", {
+          query: GET_NEWSFEED_VIDEOS_QUERY,
+          variables: {
+            lastOldest: store.getState().user.newsfeed.videos.slice(-1)[0]
+              .uploadedAt,
+          },
+        })
+        .then((res) => {
+          const videoData = res.data.data;
+
+          if (videoData.newsfeedVideos) {
+            next(action);
+            next(
+              ActionCreators.loadNewsfeedVideoSuccess(videoData.newsfeedVideos)
+            );
+          }
+        })
+        .catch((error) => next(ActionCreators.loadNewsfeedVideoError(error)));
+    } else if (action.type == ActionTypes.LOAD_MORE_NEWSFEED_IMAGES) {
+      axios
+        .post("/api", {
+          query: GET_NEWSFEED_IMAGES_QUERY,
+          variables: {
+            lastOldest: store.getState().user.newsfeed.images.slice(-1)[0]
+              .uploadedAt,
+          },
+        })
+        .then((res) => {
+          const imageData = res.data.data;
+
+          if (imageData.newsfeedImages) {
+            next(action);
+            next(
+              ActionCreators.loadNewsfeedImagesSuccess(imageData.newsfeedImages)
+            );
+          }
+        })
+        .catch((error) => next(ActionCreators.loadNewsfeedImagesError(error)));
+    } else if (action.type == ActionTypes.LOAD_MORE_NEWSFEED_NOTES) {
+      axios
+        .post("/api", {
+          query: GET_NEWSFEED_NOTES_QUERY,
+          variables: {
+            lastOldest: store.getState().user.newsfeed.notes.slice(-1)[0]
+              .uploadedAt,
+          },
         })
         .then((res) => {
           const noteData = res.data.data;

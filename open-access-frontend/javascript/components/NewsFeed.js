@@ -10,6 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import NewsFeedItems from "./NewsFeedItems";
 import TabPanel from "./TabPanel";
+import CustomButton from "./CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,6 +32,9 @@ const NewsFeed = ({
   loadNewsfeedVideos,
   loadNewsfeedImages,
   loadNewsfeedNotes,
+  loadMoreVideo,
+  loadMoreImages,
+  loadMoreNotes,
   videos,
   images,
   notes,
@@ -45,7 +49,7 @@ const NewsFeed = ({
 
   const classes = useStyles();
   useEffect(() => {
-    loadNewsfeedVideos();
+    if (videos.length == 0) loadNewsfeedVideos();
   }, []);
 
   return (
@@ -68,12 +72,15 @@ const NewsFeed = ({
         </Tabs>
         <TabPanel selectedTab={tab} index={0}>
           <NewsFeedItems items={videos} type="video" />
+          <CustomButton text="Load more" onClick={loadMoreVideo} />
         </TabPanel>
         <TabPanel selectedTab={tab} index={1}>
           <NewsFeedItems items={images} type="image" />
+          <CustomButton text="Load more" onClick={loadMoreImages} />
         </TabPanel>
         <TabPanel selectedTab={tab} index={2}>
           <NewsFeedItems items={notes} type="note" />
+          <CustomButton text="Load more" onClick={loadMoreNotes} />
         </TabPanel>
       </Grid>
     </Grid>
@@ -91,6 +98,9 @@ const mapDispatchToProps = (dispatch) => ({
   loadNewsfeedVideos: () => dispatch(ActionCreators.loadNewsfeedVideoStart()),
   loadNewsfeedImages: () => dispatch(ActionCreators.loadNewsfeedImagesStart()),
   loadNewsfeedNotes: () => dispatch(ActionCreators.loadNewsfeedNotesStart()),
+  loadMoreVideo: () => dispatch(ActionCreators.loadMoreNewsfeedVideo()),
+  loadMoreImages: () => dispatch(ActionCreators.loadMoreNewsfeedImages()),
+  loadMoreNotes: () => dispatch(ActionCreators.loadMoreNewsfeedNotes()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewsFeed);

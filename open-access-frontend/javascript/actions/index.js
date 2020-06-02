@@ -89,6 +89,9 @@ export const ActionTypes = {
   LOAD_NEWSFEED_NOTES_START: "LOAD_NEWSFEED_NOTES_START",
   LOAD_NEWSFEED_NOTES_SUCCESS: "LOAD_NEWSFEED_NOTES_SUCCESS",
   LOAD_NEWSFEED_NOTES_ERROR: "LOAD_NEWSFEED_NOTES_START",
+  LOAD_MORE_NEWSFEED_VIDEO: "LOAD_MORE_NEWSFEED_VIDEO",
+  LOAD_MORE_NEWSFEED_IMAGES: "LOAD_MORE_NEWSFEED_IMAGES",
+  LOAD_MORE_NEWSFEED_NOTES: "LOAD_MORE_NEWSFEED_NOTES",
 };
 
 export const ActionCreators = {
@@ -415,5 +418,14 @@ export const ActionCreators = {
   },
   loadNewsfeedVideoError: (error) => {
     return { type: ActionTypes.LOAD_NEWSFEED_NOTES_ERROR, error };
+  },
+  loadMoreNewsfeedVideo: () => {
+    return { type: ActionTypes.LOAD_MORE_NEWSFEED_VIDEO };
+  },
+  loadMoreNewsfeedImages: () => {
+    return { type: ActionTypes.LOAD_MORE_NEWSFEED_IMAGES };
+  },
+  loadMoreNewsfeedNotes: () => {
+    return { type: ActionTypes.LOAD_MORE_NEWSFEED_NOTES };
   },
 };

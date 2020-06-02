@@ -154,13 +154,15 @@ const resolvers = {
 
     newsfeedVideos: async (
       parent,
-      { id },
+      { lastOldest },
       { req: { username, authorized } },
       info
     ) => {
       if (!authorized) return null;
 
-      const videos = await DB.Video.find()
+      const criteria = lastOldest ? { uploadedAt: { $lt: lastOldest } } : {};
+
+      const videos = await DB.Video.find(criteria)
         .sort({
           uploadedAt: -1,
         })
@@ -170,13 +172,15 @@ const resolvers = {
     },
     newsfeedImages: async (
       parent,
-      { id },
+      { lastOldest },
       { req: { username, authorized } },
       info
     ) => {
       if (!authorized) return null;
 
-      const images = await DB.Image.find()
+      const criteria = lastOldest ? { uploadedAt: { $lt: lastOldest } } : {};
+
+      const images = await DB.Image.find(criteria)
         .sort({
           uploadedAt: -1,
         })
@@ -186,13 +190,15 @@ const resolvers = {
     },
     newsfeedNotes: async (
       parent,
-      { id },
+      { lastOldest },
       { req: { username, authorized } },
       info
     ) => {
       if (!authorized) return null;
 
-      const notes = await DB.Note.find()
+      const criteria = lastOldest ? { uploadedAt: { $lt: lastOldest } } : {};
+
+      const notes = await DB.Note.find(criteria)
         .sort({
           uploadedAt: -1,
         })
