@@ -1,49 +1,43 @@
 import React from "react";
-
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Avatar from "@material-ui/core/Avatar";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 import { num2str, date2rel } from "../utils/helpers";
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    width: 300,
-    height: 200,
-    borderRadius: 25,
-    position: "relative",
-    padding: 20,
-    marginBottom: 18,
-    boxShadow: "0 3px 5px 0 rgba(0,0,0,.4)",
-    cursor: "pointer",
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 345,
+    margin: "12px 0",
   },
-  avatar: {
-    width: 84,
-    height: 84,
-    position: "absolute",
-    top: 30,
-    left: 30,
+  media: {
+    height: 194,
   },
-  userInfo: {
-    position: "absolute",
-    top: 42,
-    left: 132,
+  content: {
+    maxHeight: 112,
   },
   stats: {
     display: "flex",
-    justifyContent: "space-evenly",
-    position: "absolute",
-    bottom: 16,
-    left: "48%",
-    transform: "translateX(-50%)",
-    width: "50%",
   },
-  stat: {
-    textAlign: "center",
-    width: 65,
+  actions: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    display: "flex",
+    padding: 8,
   },
-}));
+  avatar: {
+    width: 44,
+    height: 44,
+    marginRight: 8,
+  },
+});
 
 const NewsFeedItem = ({
   item: {
@@ -52,9 +46,12 @@ const NewsFeedItem = ({
     profilePic,
     uploadedAt,
     type,
+    title,
+    caption,
     likeCount,
     dislikeCount,
     commentCount,
+    thumbUrl,
   },
 }) => {
   const classes = useStyles();
@@ -82,50 +79,63 @@ const NewsFeedItem = ({
   }
 
   return (
-    <Grid
-      item
-      xs={12}
-      className={classes.container}
-      style={{
-        background: `linear-gradient(45deg, ${bgL} 68%, ${bgR}`,
-      }}
-    >
-      <Avatar className={classes.avatar} src={profilePic} />
-      <div className={classes.userInfo}>
-        <Typography style={{ color: f }} variant="h5">
-          {username}
-        </Typography>
-        <Typography style={{ color: f }}>
-          uploaded a {type} {date2rel(uploadedAt)}
-        </Typography>
-      </div>
-      <div className={classes.stats}>
-        <Typography
-          className={classes.stat}
-          style={{ color: f }}
-          variant="caption"
-        >
-          <div style={{ fontSize: 18 }}>{num2str(likeCount)}</div>
-          likes
-        </Typography>
-        <Typography
-          className={classes.stat}
-          style={{ color: f }}
-          variant="caption"
-        >
-          <div style={{ fontSize: 18 }}>{num2str(dislikeCount)}</div>
-          dislikes
-        </Typography>
-        <Typography
-          className={classes.stat}
-          style={{ color: f }}
-          variant="caption"
-        >
-          <div style={{ fontSize: 18 }}>{num2str(commentCount)}</div>
-          comments
-        </Typography>
-      </div>
-    </Grid>
+    <Card className={classes.root}>
+      <CardActionArea>
+        <CardContent className={classes.actions}>
+          <Avatar src={profilePic} className={classes.avatar} />
+          <div>
+            <Typography variant="body2" className={classes.userInfo}>
+              <b>{username}</b> posted a {type} {date2rel(uploadedAt)}
+            </Typography>
+            <div className={classes.stats}>
+              <Typography variant="body2">
+                <b>{num2str(likeCount)}</b> likes&nbsp;•&nbsp;
+              </Typography>
+              <Typography variant="body2">
+                <b>{num2str(dislikeCount)}</b> dislikes&nbsp;•&nbsp;
+              </Typography>
+              <Typography variant="body2">
+                <b>{num2str(commentCount)}</b> comments
+              </Typography>
+            </div>
+          </div>
+        </CardContent>
+        {type != "note" && (
+          <CardMedia
+            className={classes.media}
+            style={{ height: type == "image" ? 354 : 194 }}
+            image={thumbUrl}
+            title={title}
+          />
+        )}
+        {type != "image" && (
+          <CardContent
+            className={classes.content}
+            style={{
+              background: `linear-gradient(45deg, ${bgL} 68%, ${bgR})`,
+              maxHeight: type == "note" ? 345 : 112,
+            }}
+          >
+            <Typography
+              style={{ color: f }}
+              gutterBottom
+              variant="h5"
+              component="h2"
+            >
+              {title}
+            </Typography>
+            <Typography
+              style={{ color: f }}
+              variant="body2"
+              color="textSecondary"
+              component="p"
+            >
+              {caption}
+            </Typography>
+          </CardContent>
+        )}
+      </CardActionArea>
+    </Card>
   );
 };
 

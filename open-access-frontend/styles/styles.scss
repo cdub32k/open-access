@@ -15,7 +15,7 @@ html {
 
 body {
   min-height: 100%;
-  background-color: #f8f8ff;
+  background-color: #f5f5f5;
 }
 
 html,
@@ -50,6 +50,10 @@ a:visited {
 //Material UI Overrides
 .MuiOutlinedInput-notchedOutline {
   border: 2px solid $gold !important;
+}
+
+.MuiTabs-indicator {
+  border: 2px solid $black !important;
 }
 
 //Stripe form styles:

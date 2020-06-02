@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Box from "@material-ui/core/Box";
 import { withStyles } from "@material-ui/core/styles";
 
 import ProfileHeader from "./ProfileHeader";
@@ -14,27 +13,7 @@ import VideoList from "./VideoList";
 import ImageList from "./ImageList";
 import NoteList from "./NoteList";
 import CustomButton from "./CustomButton";
-
-const TabPanel = withStyles((theme) => ({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  hide: {
-    display: "none",
-  },
-}))(({ classes, children, index, selectedTab }) => {
-  return (
-    <Box
-      className={`${classes.container} ${
-        index != selectedTab ? classes.hide : ""
-      }`}
-    >
-      {children}
-    </Box>
-  );
-});
+import TabPanel from "./TabPanel";
 
 class Profile extends Component {
   constructor(props) {

@@ -20,7 +20,7 @@ const NewsFeedItems = ({ items }) => {
   const classes = useStyles();
 
   return (
-    <Grid container>
+    <Grid container style={{ justifyContent: "center" }}>
       {items.map((item) => {
         return <NewsFeedItem key={item._id} item={item} />;
       })}
