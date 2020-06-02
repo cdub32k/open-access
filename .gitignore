@@ -6,3 +6,4 @@ open-access-backend/public
 open-access-frontend/node_modules
 open-access-frontend/.DS_STORE
 open-access-frontend/javascript/images/
+open-access-frontend/dist

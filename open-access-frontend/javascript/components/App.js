@@ -25,34 +25,152 @@ const initApp = () => {
 };
 initApp();
 
+class DynamicImport extends Component {
+  state = {
+    component: null,
+  };
+  componentDidMount() {
+    this.props.load().then((component) => {
+      this.setState(() => ({
+        component: component.default ? component.default : component,
+      }));
+    });
+  }
+
+  render() {
+    return this.props.children(this.state.component);
+  }
+}
+
 import AuthRedirect from "./AuthRedirect";
 import UnAuthRedirect from "./UnAuthRedirect";
-import Account from "./Account";
-import Payment from "./Payment";
-import Login from "./Login";
-import Logout from "./Logout";
-import SignUp from "./SignUp";
+//import Account from "./Account";
+const Account = (props) => (
+  <DynamicImport load={() => import("./Account")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import Payment from "./Payment";
+const Payment = (props) => (
+  <DynamicImport load={() => import("./Payment")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import Login from "./Login";
+const Login = (props) => (
+  <DynamicImport load={() => import("./Login")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import Logout from "./Logout";
+const Logout = (props) => (
+  <DynamicImport load={() => import("./Logout")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import SignUp from "./SignUp";
+const SignUp = (props) => (
+  <DynamicImport load={() => import("./SignUp")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
 import SiteNav from "./SiteNav";
-import Profile from "./Profile";
-import NotePage from "./NotePage";
-import NoteUploader from "./NoteUploader";
-import NoteList from "./NoteList";
-import VideoPage from "./VideoPage";
-import VideoUploader from "./VideoUploader";
-import VideoList from "./VideoList";
-import ImagePage from "./ImagePage";
-import ImageUploader from "./ImageUploader";
-import ImageList from "./ImageList";
-import NewsFeed from "./NewsFeed";
-import Home from "./Home";
 
-function About() {
-  return <h2>About</h2>;
-}
+//import Profile from "./Profile";
+const Profile = (props) => (
+  <DynamicImport load={() => import("./Profile")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
 
-function Users() {
-  return <h2>Users</h2>;
-}
+//import NotePage from "./NotePage";
+const NotePage = (props) => (
+  <DynamicImport load={() => import("./NotePage")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import NoteUploader from "./NoteUploader";
+const NoteUploader = (props) => (
+  <DynamicImport load={() => import("./NoteUploader")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import VideoPage from "./VideoPage";
+const VideoPage = (props) => (
+  <DynamicImport load={() => import("./VideoPage")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import VideoUploader from "./VideoUploader";
+const VideoUploader = (props) => (
+  <DynamicImport load={() => import("./VideoUploader")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import ImagePage from "./ImagePage";
+const ImagePage = (props) => (
+  <DynamicImport load={() => import("./ImagePage")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import ImageUploader from "./ImageUploader";
+const ImageUploader = (props) => (
+  <DynamicImport load={() => import("./ImageUploader")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import NewsFeed from "./NewsFeed";
+const NewsFeed = (props) => (
+  <DynamicImport load={() => import("./NewsFeed")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
+//import Home from "./Home";
+const Home = (props) => (
+  <DynamicImport load={() => import("./Home")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
 
 class App extends Component {
   constructor(props) {
@@ -152,8 +270,6 @@ class App extends Component {
                   />
                 )}
               />
-              <Route path="/about" component={About} />
-              <Route path="/users" component={Users} />
               <Route
                 path="/feed"
                 render={(props) => (
