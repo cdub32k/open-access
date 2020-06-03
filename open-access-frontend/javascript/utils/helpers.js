@@ -32,6 +32,10 @@ export function date2rel(dateStr) {
   return dayjs(dateStr).from(dayjs());
 }
 
+export function date2str(dateStr) {
+  return dayjs(dateStr).format("MM/DD/YYYY");
+}
+
 export function validateEmail(email) {
   return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
     email

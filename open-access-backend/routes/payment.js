@@ -29,15 +29,15 @@ router.post("/process-payment", async (req, res) => {
       });
       user.stripeCustomerId = customer.id;
       user.stripePaymentMethodId = payment_method;
-      await user.save();
     }
+    user.active = true;
 
     if (subscribed) {
       const subscription = await stripe.subscriptions.create({
         customer: user.stripeCustomerId,
         items: [{ plan: process.env.STRIPE_SUB_ID }],
         expand: ["latest_invoice.payment_intent"],
-        trial_period_days: 0,
+        trial_end: Math.round(new Date(user.activeUntil).getTime() / 1000),
       });
 
       await Subscription.create({
@@ -47,6 +47,8 @@ router.post("/process-payment", async (req, res) => {
         username,
         amount: 2500,
       });
+      user.activeUntil = null;
+      await user.save();
 
       return res.send({
         subscription,
@@ -70,11 +72,64 @@ router.post("/process-payment", async (req, res) => {
         amount,
       });
 
+      let start;
+      if (new Date(user.activeUntil) > new Date())
+        start = new Date(user.activeUntil);
+      else start = new Date();
+
+      user.activeUntil = new Date(start.setMonth(start.getMonth() + 1));
+      await user.save();
+
       return res.send({ charge });
     }
   } catch (err) {
-    return res.status(500).send({ error: "Something went wrong." + err });
+    return res.status(500).send({ error: "Something went wrong." });
   }
+});
+
+router.delete("/subscription", async (req, res) => {
+  try {
+    const { username, authorized } = req;
+
+    const sub = await Subscription.findOne({ username, terminated: false });
+
+    if (!sub) return res.status(200).send(true);
+
+    sub.terminated = true;
+    sub.terminatedAt = new Date();
+
+    const subId = sub.stripeSubscriptionId;
+
+    // to immediately cancel (and will have to refund balance):
+    // stripe.subscriptions.del('sub_49ty4767H20z6a');
+    const stripeSubObj = await stripe.subscriptions.retrieve(subId);
+    await stripe.subscriptions.update(subId, { cancel_at_period_end: true });
+    await sub.save();
+
+    let user = await User.findOne({ username });
+    user.activeUntil = new Date(stripeSubObj.current_period_end);
+    await user.save();
+
+    return res.status(200).send(true);
+  } catch (e) {
+    return res.status(500).send({ error: "Something went wrong." });
+  }
+});
+
+router.patch("/subscription", async (req, res) => {
+  /*
+    reactivate a cancelled subscription here:
+    
+    const subscription = await stripe.subscriptions.retrieve('sub_49ty4767H20z6a');
+    stripe.subscriptions.update('sub_49ty4767H20z6a', {
+      cancel_at_period_end: false,
+      proration_behavior: 'create_prorations',
+      items: [{
+        id: subscription.items.data[0].id,
+        price: 'price_CBb6IXqvTLXp3f',
+      }]
+    });
+  */
 });
 
 export default router;

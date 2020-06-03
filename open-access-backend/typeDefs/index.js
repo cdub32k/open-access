@@ -22,6 +22,8 @@ const typeDefs = gql`
 
   type UserResponse {
     notifications: [Notification]
+    active: Boolean
+    activeUntil: Date
     profilePic: String
     username: String
     email: String
@@ -76,6 +78,8 @@ const typeDefs = gql`
   scalar Date
 
   type User {
+    active: Boolean
+    activeUntil: Date
     profilePic: String
     username: String
     email: String
@@ -95,6 +99,7 @@ const typeDefs = gql`
     amount: Int
     refunded: Boolean
     createdAt: Date
+    stripePaymentIntentId: String
   }
 
   type MoSub {

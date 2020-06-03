@@ -9,6 +9,8 @@ import apolloClient from "../apollo";
 import { parse } from "graphql";
 
 const initialState = {
+  active: false,
+  activeUntil: null,
   profilePic: "",
   email: "",
   username: "",

@@ -15,6 +15,7 @@ const CheckoutForm = ({ email }) => {
   const elements = useElements();
 
   const [subscribed, setSubscribed] = useState(false);
+  const [cardError, setCardError] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,6 +33,10 @@ const CheckoutForm = ({ email }) => {
     });
 
     if (result.error) {
+      setCardError(result.error.message);
+      setTimeout(() => {
+        setCardError("");
+      }, 5000);
     } else {
       axios
         .post("payment/process-payment", {
@@ -59,6 +64,7 @@ const CheckoutForm = ({ email }) => {
             label="Renew every month"
           />
         </FormGroup>
+        {cardError && <div className={classes.error}>{cardError}</div>}
         <Button
           type="submit"
           variant="contained"

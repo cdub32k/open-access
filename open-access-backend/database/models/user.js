@@ -20,6 +20,8 @@ let userSchema = new mongoose.Schema(
     passwordHash: String,
     stripeCustomerId: String,
     stripePaymentMethodId: String,
+    active: Boolean,
+    activeUntil: Date,
   },
   { timestamps: { createdAt: "joinedAt" } }
 );

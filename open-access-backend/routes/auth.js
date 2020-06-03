@@ -92,6 +92,8 @@ router.post("/sign-up", async (req, res) => {
         default_payment_method: payment_method,
       },
     });
+    user.active = true;
+
     user.stripeCustomerId = customer.id;
     user.stripePaymentMethodId = payment_method;
 
@@ -110,6 +112,7 @@ router.post("/sign-up", async (req, res) => {
         username,
         amount: 2500,
       });
+      user.activeUntil = null;
     } else {
       const result = await stripe.paymentIntents.create({
         customer: user.stripeCustomerId,
@@ -128,7 +131,11 @@ router.post("/sign-up", async (req, res) => {
         username,
         amount,
       });
+
+      let today = new Date();
+      user.activeUntil = new Date(today.setMonth(today.getMonth() + 1));
     }
+    await user.save();
 
     return res.status(200).send({ auth: true, token });
   } catch (err) {

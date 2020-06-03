@@ -8,6 +8,8 @@ import { parse } from "graphql";
 const GET_USER_INFO_QUERY = `
   query UserInfo($username: String!) {
     user(username: $username) {
+      active
+      activeUntil
       username
       profilePic
       displayName
@@ -67,6 +69,7 @@ const GET_USER_PAYMENT_INFO_QUERY = `
       charges {
         amount
         createdAt
+        stripePaymentIntentId
       }
       subscriptions {
         amount
@@ -230,6 +233,8 @@ const USER_NOTE_PAGE_QUERY = `
 const GET_USER_NOTIFICATIONS_QUERY = `
   query UserNotifications($username: String!) {
     user(username: $username) {
+      active
+      activeUntil
       notifications {
         _id
         type

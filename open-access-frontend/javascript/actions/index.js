@@ -437,7 +437,7 @@ export const ActionCreators = {
   loadUserPaymentInfoSuccess: (paymentData) => {
     return {
       type: ActionTypes.LOAD_USER_PAYMENT_INFO_SUCCESS,
-      payload: { paymentData },
+      payload: { ...paymentData },
     };
   },
   loadUserPaymentInfoError: (error) => {
