@@ -21,6 +21,8 @@ import newsletterRouter from "./routes/newsletter";
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 
+import User from "./database/models/user";
+
 const app = express();
 
 app.use(
@@ -39,14 +41,49 @@ const verifyTokenMiddleware = (req, res, next) => {
   }
 
   token = token.replace("Bearer ", "");
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err || !decoded.username) {
-      return res.status(403).send({ error: "Forbidden" });
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+    if (err) {
+      const refreshToken = req.headers["x-refresh-token"];
+      if (!refreshToken) return res.status(403).send({ error: "Forbidden" });
+
+      const { username } = jwt.decode(refreshToken);
+      let user = await User.findOne({ username });
+      jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET + user.passwordHash,
+        (err, decoded) => {
+          if (err) return res.status(403).send({ error: "Forbidden" });
+          console.log(Math.random() * 1000000);
+          const token = jwt.sign(
+            { username, email: user.email, profilePic: user.profilePic },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: "20s",
+            }
+          );
+
+          const refreshToken = jwt.sign(
+            { username },
+            process.env.JWT_REFRESH_SECRET + user.passwordHash,
+            {
+              expiresIn: "365days",
+            }
+          );
+          res.set("Access-Control-Expose-Headers", "x-token, x-refresh-token");
+          res.set("x-token", token);
+          res.set("x-refresh-token", refreshToken);
+          req.authorized = true;
+          req.username = username;
+          req.email = user.email;
+          return next();
+        }
+      );
+    } else {
+      req.authorized = true;
+      req.username = decoded.username;
+      req.email = decoded.email;
+      return next();
     }
-    req.authorized = true;
-    req.username = decoded.username;
-    req.email = decoded.email;
-    return next();
   });
 };
 
@@ -64,6 +101,8 @@ app.use("/newsletter", newsletterRouter);
 
 app.use(express.static("public"));
 
+app.use(verifyTokenMiddleware);
+
 const gqlServer = new ApolloServer({
   cors: false,
   typeDefs,
@@ -75,22 +114,6 @@ const gqlServer = new ApolloServer({
     try {
       if (connection) return { ...connection.context, pubsub };
 
-      let token = req.headers["authorization"];
-      if (!token) {
-        req.authorized = false;
-        return { req };
-      }
-
-      token = token.replace("Bearer ", "");
-      const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-
-      if (!decoded.username) {
-        req.authorized = false;
-        return { req };
-      }
-
-      req.authorized = true;
-      req.username = decoded.username;
       return { req, pubsub };
     } catch (e) {
       req.authorized = false;

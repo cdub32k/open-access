@@ -151,9 +151,11 @@ const userReducer = (state = initialState, action) => {
     case ActionTypes.CLEAR_ERRORS:
       return { ...state, error: null };
     case ActionTypes.LOGIN_SUCCESS: {
-      let { token } = action.payload;
+      let { token, refreshToken } = action.payload;
       localStorage.setItem("open-access-api-token", token);
+      localStorage.setItem("open-access-api-refresh-token", refreshToken);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      axios.defaults.headers.common["x-refresh-token"] = refreshToken;
       let decodedToken = jwt_decode(token);
 
       const { username, email, profilePic } = decodedToken;
@@ -174,7 +176,11 @@ const userReducer = (state = initialState, action) => {
       return { ...state, loggedIn: false, error: action.error };
     case ActionTypes.AUTO_LOGIN: {
       const token = localStorage.getItem("open-access-api-token");
+      const refreshToken = localStorage.getItem(
+        "open-access-api-refresh-token"
+      );
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      axios.defaults.headers.common["x-refresh-token"] = refreshToken;
 
       const { username, email, profilePic } = action.payload.token;
 

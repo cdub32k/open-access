@@ -22,7 +22,7 @@ import { date2str } from "../utils/helpers";
 const useStyles = makeStyles((theme) => ({
   charge: {},
   sub: {
-    "& caption": {
+    "& .subCaption": {
       display: "inline-block",
       color: theme.palette.secondary.main,
       "& span": {
@@ -88,12 +88,12 @@ const Payment = ({
             <div key={i} className={classes.sub}>
               ${sub.amount} on {date2str(sub.createdAt)}{" "}
               {!sub.terminated && (
-                <Typography variant="subtitle2" component="caption">
+                <Typography variant="subtitle2" className="subCaption">
                   ACTIVE <button onClick={cancelSubscription}>cancel</button>
                 </Typography>
               )}
               {sub.terminated && (
-                <Typography variant="subtitle2" component="caption">
+                <Typography variant="subtitle2" className="subCaption">
                   terminated on {date2str(sub.terminatedAt)}
                 </Typography>
               )}

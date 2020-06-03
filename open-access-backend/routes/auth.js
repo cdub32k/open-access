@@ -24,11 +24,19 @@ router.post("/login", async (req, res) => {
       { username, email: user.email, profilePic: user.profilePic },
       process.env.JWT_SECRET,
       {
-        expiresIn: "24h",
+        expiresIn: "20s",
       }
     );
 
-    return res.status(200).send({ auth: true, token });
+    const refreshToken = jwt.sign(
+      { username },
+      process.env.JWT_REFRESH_SECRET + user.passwordHash,
+      {
+        expiresIn: "365days",
+      }
+    );
+
+    return res.status(200).send({ auth: true, token, refreshToken });
   } catch (err) {
     return res.status(500).send({ error: "Something went wrong." });
   }

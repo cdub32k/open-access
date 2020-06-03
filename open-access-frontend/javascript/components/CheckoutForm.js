@@ -7,10 +7,24 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
 
 import CardSection from "./CardSection";
 
+const useStyles = makeStyles((theme) => ({
+  error: {
+    fontSize: 14,
+    color: theme.palette.alert.main,
+    fontWeight: 700,
+  },
+  orderBtn: {
+    marginTop: 32,
+  },
+}));
+
 const CheckoutForm = ({ email }) => {
+  const classes = useStyles();
+
   const stripe = useStripe();
   const elements = useElements();
 
@@ -66,6 +80,7 @@ const CheckoutForm = ({ email }) => {
         </FormGroup>
         {cardError && <div className={classes.error}>{cardError}</div>}
         <Button
+          className={classes.orderBtn}
           type="submit"
           variant="contained"
           color="primary"

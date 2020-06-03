@@ -62,38 +62,40 @@ const SignUp = ({ error, signupStart, ...rest }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [userError, setUserError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [cardError, setCardError] = useState("");
 
   const checkEmail = (email) => {
     if (validateEmail(email)) {
-      setUserError("");
+      setEmailError("");
       axios.post("/auth/check-email", { email }).then((res) => {
         if (res.data) {
-          setUserError("Email address in use");
+          setEmailError("Email address in use");
         }
       });
     } else {
-      setUserError("Invalid email address");
+      setEmailError("Invalid email address");
     }
   };
 
   const checkUsername = (username) => {
     if (validateUsername(username)) {
-      setUserError("");
+      setUsernameError("");
       axios.post("/auth/check-username", { username }).then((res) => {
         if (res.data) {
-          setUserError("Username taken");
+          setUsernameError("Username taken");
         }
       });
     } else {
-      setUserError("Invalid username");
+      setUsernameError("Invalid username");
     }
   };
 
   const checkPassword = (password) => {
-    if (password.length < 8) setUserError("Password too short");
-    else setUserError("");
+    if (password.length < 8) setPasswordError("Password too short");
+    else setPasswordError("");
   };
 
   const updateCredentials = (e) => {
@@ -196,7 +198,13 @@ const SignUp = ({ error, signupStart, ...rest }) => {
                   />
                 </Grid>
               </Grid>
-              {userError && <div className={classes.error}>{userError}</div>}
+              {emailError && <div className={classes.error}>{emailError}</div>}
+              {usernameError && (
+                <div className={classes.error}>{usernameError}</div>
+              )}
+              {passwordError && (
+                <div className={classes.error}>{passwordError}</div>
+              )}
             </div>
             <Grid container justify="center">
               <Grid item xs={12}>
@@ -222,7 +230,13 @@ const SignUp = ({ error, signupStart, ...rest }) => {
                 <CustomButton
                   text="Sign up"
                   disabled={
-                    !email || !username || !password || userError || cardError
+                    !email ||
+                    !username ||
+                    !password ||
+                    emailError ||
+                    usernameError ||
+                    passwordError ||
+                    cardError
                   }
                   onClick={onSubmit}
                 />

@@ -1,6 +1,31 @@
 import { ActionTypes, ActionCreators } from "../actions";
 import axios from "axios";
 axios.defaults.baseURL = process.env.API_URL;
+axios.interceptors.response.use(
+  (response) => {
+    if (response.headers && response.headers["x-token"]) {
+      localStorage.setItem(
+        "open-access-api-token",
+        response.headers["x-token"]
+      );
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${response.headers["x-token"]}`;
+    }
+    if (response.headers && response.headers["x-refresh-token"]) {
+      localStorage.setItem(
+        "open-access-api-refresh-token",
+        response.headers["x-refresh-token"]
+      );
+      axios.defaults.headers.common["x-refresh-token"] =
+        response.headers["x-refresh-token"];
+    }
+    return response;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 import apolloCache from "../apollo";
 import { parse } from "graphql";
@@ -328,7 +353,9 @@ export default [
         .post("auth/login", action.payload.credentials)
         .then((res) => {
           if (res.data.auth) {
-            next(ActionCreators.loginSuccess(res.data.token));
+            next(
+              ActionCreators.loginSuccess(res.data.token, res.data.refreshToken)
+            );
 
             axios
               .post("/api", {

@@ -104,8 +104,11 @@ export const ActionCreators = {
   loginStart: (credentials) => {
     return { type: ActionTypes.LOGIN_START, payload: { credentials } };
   },
-  loginSuccess: (token) => {
-    return { type: ActionTypes.LOGIN_SUCCESS, payload: { token } };
+  loginSuccess: (token, refreshToken) => {
+    return {
+      type: ActionTypes.LOGIN_SUCCESS,
+      payload: { token, refreshToken },
+    };
   },
   loginError: (error) => {
     return { type: ActionTypes.LOGIN_ERROR, error };
