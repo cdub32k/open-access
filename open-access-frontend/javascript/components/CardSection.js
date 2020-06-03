@@ -26,13 +26,13 @@ const CARD_ELEMENT_OPTIONS = {
 
 const useStyles = makeStyles((theme) => ({
   ccSection: {
-    margin: `${theme.spacing(5)}px 0`,
+    margin: `${theme.spacing(2)}px 0`,
   },
   ccInput: {
     height: 51.25,
     border: `2px solid ${theme.palette.secondary.main}`,
     paddingTop: 15,
-    margin: `${theme.spacing(2)}px 0`,
+    marginTop: theme.spacing(2),
   },
 }));
 

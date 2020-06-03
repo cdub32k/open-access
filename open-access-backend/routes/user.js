@@ -24,7 +24,7 @@ router.put("/", async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(500).send({ error: "Something went wrong" + error });
+    return res.status(500).send({ error: "Something went wrong" });
   }
 });
 

@@ -1,6 +1,7 @@
 import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
+import axios from "axios";
 
 import {
   useStripe,
@@ -14,6 +15,8 @@ const stripePromise = loadStripe(STRIPE_PK);
 
 import Grid from "@material-ui/core/Grid";
 import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,6 +24,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import CustomInput from "./CustomInput";
 import CustomButton from "./CustomButton";
 import CardSection from "./CardSection";
+
+import { validateEmail, validateUsername } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -35,6 +40,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 18,
   },
   error: {
+    fontSize: 14,
+    color: theme.palette.alert.main,
+    fontWeight: 700,
+  },
+  serverError: {
     position: "absolute",
     fontSize: "14px",
     top: 50,
@@ -52,17 +62,53 @@ const SignUp = ({ error, signupStart, ...rest }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [userError, setUserError] = useState("");
+  const [cardError, setCardError] = useState("");
+
+  const checkEmail = (email) => {
+    if (validateEmail(email)) {
+      setUserError("");
+      axios.post("/auth/check-email", { email }).then((res) => {
+        if (res.data) {
+          setUserError("Email address in use");
+        }
+      });
+    } else {
+      setUserError("Invalid email address");
+    }
+  };
+
+  const checkUsername = (username) => {
+    if (validateUsername(username)) {
+      setUserError("");
+      axios.post("/auth/check-username", { username }).then((res) => {
+        if (res.data) {
+          setUserError("Username taken");
+        }
+      });
+    } else {
+      setUserError("Invalid username");
+    }
+  };
+
+  const checkPassword = (password) => {
+    if (password.length < 8) setUserError("Password too short");
+    else setUserError("");
+  };
 
   const updateCredentials = (e) => {
     switch (e.target.name) {
       case "email":
         setEmail(e.target.value.toLowerCase());
+        checkEmail(e.target.value.toLowerCase());
         break;
       case "username":
         setUsername(e.target.value.toLowerCase());
+        checkUsername(e.target.value.toLowerCase());
         break;
       case "password":
         setPassword(e.target.value);
+        checkPassword(e.target.value);
         break;
       default:
         break;
@@ -85,6 +131,10 @@ const SignUp = ({ error, signupStart, ...rest }) => {
     });
 
     if (result.error) {
+      setCardError(result.error.message);
+      setTimeout(() => {
+        setCardError("");
+      }, 5000);
     } else {
       signupStart({
         email,
@@ -117,6 +167,7 @@ const SignUp = ({ error, signupStart, ...rest }) => {
                     name="email"
                     label="Email"
                     onChange={updateCredentials}
+                    required
                   />
                 </Grid>
               </Grid>
@@ -127,6 +178,9 @@ const SignUp = ({ error, signupStart, ...rest }) => {
                     name="username"
                     label="Username"
                     onChange={updateCredentials}
+                    minLength={3}
+                    maxLength={16}
+                    required
                   />
                 </Grid>
               </Grid>
@@ -137,20 +191,39 @@ const SignUp = ({ error, signupStart, ...rest }) => {
                     name="password"
                     label="Password"
                     onChange={updateCredentials}
+                    minLength={8}
+                    required
                   />
                 </Grid>
               </Grid>
+              {userError && <div className={classes.error}>{userError}</div>}
             </div>
             <Grid container justify="center">
               <Grid item xs={12}>
                 <CardSection />
+                <FormGroup row>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={subscribed}
+                        onChange={() => setSubscribed(!subscribed)}
+                        name="subscribe"
+                        color="primary"
+                      />
+                    }
+                    label="Renew every month"
+                  />
+                </FormGroup>
+                {cardError && <div className={classes.error}>{cardError}</div>}
               </Grid>
             </Grid>
             <Grid container justify="center" className={classes.btn}>
               <Grid item xs={12} style={{ textAlign: "right" }}>
                 <CustomButton
                   text="Sign up"
-                  disabled={!email || !username || !password}
+                  disabled={
+                    !email || !username || !password || userError || cardError
+                  }
                   onClick={onSubmit}
                 />
               </Grid>

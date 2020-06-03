@@ -37,3 +37,7 @@ export function validateEmail(email) {
     email
   );
 }
+
+export function validateUsername(username) {
+  return /^[a-z0-9_-]{3,16}$/.test(username);
+}

@@ -34,6 +34,28 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/check-email", async (req, res) => {
+  try {
+    let email = req.body.email;
+    let user = await User.findOne({ email });
+
+    res.state(200).send(!!user);
+  } catch (e) {
+    return res.status(500).send({ error: "Something went wrong" });
+  }
+});
+
+router.post("/check-username", async (req, res) => {
+  try {
+    let username = req.body.username;
+    let user = await User.findOne({ username });
+
+    res.status(200).send(!!user);
+  } catch (e) {
+    return res.status(500).send({ error: "Something went wrong" });
+  }
+});
+
 router.post("/sign-up", async (req, res) => {
   try {
     //TODO validate email,username,password

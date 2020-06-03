@@ -92,6 +92,9 @@ export const ActionTypes = {
   LOAD_MORE_NEWSFEED_VIDEO: "LOAD_MORE_NEWSFEED_VIDEO",
   LOAD_MORE_NEWSFEED_IMAGES: "LOAD_MORE_NEWSFEED_IMAGES",
   LOAD_MORE_NEWSFEED_NOTES: "LOAD_MORE_NEWSFEED_NOTES",
+  LOAD_USER_PAYMENT_INFO_START: "LOAD_USER_PAYMENT_INFO_START",
+  LOAD_USER_PAYMENT_INFO_SUCCESS: "LOAD_USER_PAYMENT_INFO_SUCCESS",
+  LOAD_USER_PAYMENT_INFO_ERROR: "LOAD_USER_PAYMENT_INFO_ERROR",
 };
 
 export const ActionCreators = {
@@ -427,5 +430,17 @@ export const ActionCreators = {
   },
   loadMoreNewsfeedNotes: () => {
     return { type: ActionTypes.LOAD_MORE_NEWSFEED_NOTES };
+  },
+  loadUserPaymentInfoStart: () => {
+    return { type: ActionTypes.LOAD_USER_PAYMENT_INFO_START };
+  },
+  loadUserPaymentInfoSuccess: (paymentData) => {
+    return {
+      type: ActionTypes.LOAD_USER_PAYMENT_INFO_SUCCESS,
+      payload: { paymentData },
+    };
+  },
+  loadUserPaymentInfoError: (error) => {
+    return { type: ActionTypes.LOAD_USER_PAYMENT_INFO_ERROR, error };
   },
 };

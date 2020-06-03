@@ -17,7 +17,7 @@ const resolvers = {
       { req: { authorized } },
       info
     ) => {
-      if (!authorized) return null;
+      //if (!authorized) return null;
 
       const user = await DB.User.findOne({ username });
 
@@ -928,6 +928,18 @@ const resolvers = {
       const numVids = await DB.Video.find({ username }).countDocuments();
 
       return numVids > vidPage * perPage + perPage;
+    },
+    charges: async ({ username }, args, { req: { authorized } }) => {
+      //if (!authorized) return null;
+
+      const charges = await DB.Charge.find({ username });
+      return charges;
+    },
+    subscriptions: async ({ username }, args, { req: { authorized } }) => {
+      //if (!authorized) return null;
+
+      const subs = await DB.Subscription.find({ username });
+      return subs;
     },
   },
   Subscription: {

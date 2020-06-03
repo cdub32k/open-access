@@ -31,6 +31,10 @@ const initialState = {
     imageSubscription: null,
     noteSubscription: null,
   },
+  payment: {
+    charges: [],
+    subscriptions: [],
+  },
 };
 
 const subscribeToNotifications = (username) => {
@@ -363,6 +367,16 @@ const userReducer = (state = initialState, action) => {
     case ActionTypes.LOAD_NEWSFEED_NOTES_ERROR:
       return {
         ...state,
+      };
+    case ActionTypes.LOAD_USER_PAYMENT_INFO_SUCCESS:
+      return {
+        ...state,
+        payment: { ...action.payload },
+      };
+    case ActionTypes.LOAD_USER_PAYMENT_INFO_ERROR:
+      return {
+        ...state,
+        error: action.error,
       };
     default:
       return { ...state };

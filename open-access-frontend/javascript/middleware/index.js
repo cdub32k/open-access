@@ -61,6 +61,23 @@ const GET_USER_INFO_QUERY = `
   }
 `;
 
+const GET_USER_PAYMENT_INFO_QUERY = `
+  query UserPaymentInfo($username: String!) {
+    user(username: $username) {
+      charges {
+        amount
+        createdAt
+      }
+      subscriptions {
+        amount
+        terminated
+        terminatedAt
+        createdAt
+      }
+    }
+  }
+`;
+
 const GET_VIDEO_INFO_QUERY = `
   query VideoInfo($videoId: String!) {
     video(id: $videoId) {
@@ -873,6 +890,22 @@ export default [
           }
         })
         .catch((error) => next(ActionCreators.loadNewsfeedNotesError(error)));
+    } else if (action.type == ActionTypes.LOAD_USER_PAYMENT_INFO_START) {
+      axios
+        .post("/api", {
+          query: GET_USER_PAYMENT_INFO_QUERY,
+          variables: {
+            username: store.getState().user.username,
+          },
+        })
+        .then((res) => {
+          const pData = res.data.data;
+
+          if (pData)
+            next(ActionCreators.loadUserPaymentInfoSuccess(pData.user));
+          else next(ActionCreators.loadUserNotePageError());
+        })
+        .catch((error) => next(ActionCreators.loadUserNotePageError(error)));
     } else next(action);
   },
 ];

@@ -41,6 +41,8 @@ const typeDefs = gql`
     hasMoreVideos: Boolean
     hasMoreImages: Boolean
     hasMoreNotes: Boolean
+    charges: [Charge]
+    subscriptions: [MoSub]
   }
 
   type VideoSearchResponse {
@@ -87,6 +89,19 @@ const typeDefs = gql`
     notes: [Note]
     images: [Image]
     videos: [Video]
+  }
+
+  type Charge {
+    amount: Int
+    refunded: Boolean
+    createdAt: Date
+  }
+
+  type MoSub {
+    amount: Int
+    terminated: Boolean
+    terminatedAt: Date
+    createdAt: Date
   }
 
   type VideoLike {
