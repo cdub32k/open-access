@@ -22,6 +22,8 @@ const styles = (theme) => ({
     position: "relative",
     width: "calc(100% - 48px);",
     margin: 24,
+    marginTop: 0,
+    marginBottom: 80,
     display: "inline-block",
   },
   summary: {

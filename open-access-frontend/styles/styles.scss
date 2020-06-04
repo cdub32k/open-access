@@ -150,6 +150,13 @@ a:visited {
   }
 }
 
+@media (max-width: 960px) {
+  .comments-section {
+    max-height: unset !important;
+    overflow-y: visible !important;
+  }
+}
+
 @media (max-width: 780px) {
   .site-content,
   .home-hero-container {

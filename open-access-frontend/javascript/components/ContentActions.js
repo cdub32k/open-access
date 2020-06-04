@@ -38,7 +38,7 @@ const ContentActions = ({
       <span className={classes.metric}>{num2str(likeCount)}</span>
       <IconButton onClick={dislike}>{dislikeIcon}</IconButton>
       <span className={classes.metric}>{num2str(dislikeCount)}</span>
-      <IconButton>
+      <IconButton style={{ pointerEvents: "none" }}>
         <AddCommentIcon />
       </IconButton>
       <span className={classes.metric}>{num2str(commentCount)}</span>

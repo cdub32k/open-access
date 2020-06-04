@@ -7,21 +7,26 @@ import CommentForm from "./CommentForm";
 import Comment from "./Comment";
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    width: "100%",
+    minWidth: 480,
+  },
   section: {
-    maxHeight: 800,
     paddingRight: 32,
     overflowY: "scroll",
+    maxHeight: 800,
   },
 }));
 
 const CommentsSection = ({ comments, contentType, id }) => {
   const classes = useStyles();
   return (
-    <Fragment>
+    <div className={`${classes.container} comments-container`}>
       <CommentForm contentType={contentType} id={id} />
-      <hr />
-
-      <TransitionGroup component="section" className={classes.section}>
+      <TransitionGroup
+        component="section"
+        className={`${classes.section} comments-section`}
+      >
         {comments.map((comment, i) => (
           <CSSTransition
             timeout={500}
@@ -39,7 +44,7 @@ const CommentsSection = ({ comments, contentType, id }) => {
           </CSSTransition>
         ))}
       </TransitionGroup>
-    </Fragment>
+    </div>
   );
 };
 

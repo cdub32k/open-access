@@ -3,8 +3,22 @@ import { connect } from "react-redux";
 
 import { ActionCreators } from "../actions";
 
+import { makeStyles } from "@material-ui/core/styles";
 import CustomInput from "./CustomInput";
 import CustomButton from "./CustomButton";
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    marginBottom: 24,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    maxWidth: 600,
+  },
+  textField: {
+    marginRight: 12,
+  },
+}));
 
 const CommentForm = ({
   id,
@@ -13,6 +27,8 @@ const CommentForm = ({
   postToImage,
   postToNote,
 }) => {
+  const classes = useStyles();
+
   const [body, setBody] = useState("");
 
   let action;
@@ -36,17 +52,20 @@ const CommentForm = ({
   };
 
   return (
-    <form
-      onSubmit={postComment}
-      style={{ marginBottom: 24, textAlign: "right" }}
-    >
+    <form onSubmit={postComment} className={classes.container}>
       <CustomInput
         value={body}
         name="body"
         onChange={(e) => setBody(e.target.value)}
-        rows={3}
+        multiline
+        className={classes.textField}
       />
-      <CustomButton text="Post comment" onClick={postComment} size="small" />
+      <CustomButton
+        disabled={!body.trim()}
+        text="comment"
+        onClick={postComment}
+        size="small"
+      />
     </form>
   );
 };

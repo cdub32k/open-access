@@ -1,28 +1,50 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { date2rel } from "../utils/helpers";
 
-const Comment = ({ body, user, createdAt }) => (
-  <article className="center mw5 mw6-ns hidden mv4">
-    <div
-      className="b-gold white mv0 pv1 flex items-center br-pill"
-      style={{ paddingLeft: 6 }}
-    >
-      <Avatar
-        src={user.profilePic}
-        className="mr3"
-        style={{ width: 32, height: 32 }}
-      />
-      <Typography variant="subtitle2">
-        @{user.username} &#8226; {date2rel(createdAt)}
-      </Typography>
-    </div>
-    <div className="pa2 flex items-center">
-      <Typography variant="body1">{body}</Typography>
-    </div>
-  </article>
-);
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: "flex",
+    marginBottom: 32,
+  },
+  avatar: {
+    width: 44,
+    height: 44,
+    marginRight: 16,
+  },
+  textSection: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  userInfo: {
+    marginBottom: 12,
+  },
+}));
+
+const Comment = ({ body, user, createdAt }) => {
+  const classes = useStyles();
+
+  return (
+    <article className={classes.container}>
+      <Link to={`/profile/${user.username}`}>
+        <Avatar src={user.profilePic} className={classes.avatar} />
+      </Link>
+      <div className={classes.textSection}>
+        <Typography className={classes.userInfo} variant="body2">
+          <Link to={`/profile/${user.username}`}>
+            <b>@{user.username}</b>
+          </Link>
+          &nbsp;&#8226;&nbsp;{date2rel(createdAt)}
+        </Typography>
+        <Typography variant="body1">{body}</Typography>
+      </div>
+    </article>
+  );
+};
 
 export default Comment;
