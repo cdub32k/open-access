@@ -47,7 +47,7 @@ class VideoPage extends Component {
             <PreviewVideoPlayer />
           ) : (
             <VideoPlayer
-              id={videoId}
+              _id={videoId}
               user={user}
               title={title}
               caption={caption}

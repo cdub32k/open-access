@@ -39,9 +39,17 @@ const styles = (theme) => ({
 });
 
 class VideoPlayer extends Component {
+  componentDidMount() {
+    this.props.subscribeToUpdates(this.props._id);
+  }
+
+  componentWillUnmount() {
+    this.props.subscription && this.props.subscription.unsubscribe();
+  }
+
   render() {
     const {
-      id,
+      _id,
       classes,
       contentType,
       user,
@@ -71,7 +79,7 @@ class VideoPlayer extends Component {
             playing
             controls
             pip={false}
-            onStart={() => recordView(id)}
+            onStart={() => recordView(_id)}
           />
         </CardMedia>
         <CardHeader
@@ -97,8 +105,8 @@ class VideoPlayer extends Component {
           contentType="video"
           liked={liked}
           disliked={disliked}
-          like={() => likeVideo(id)}
-          dislike={() => dislikeVideo(id)}
+          like={() => likeVideo(_id)}
+          dislike={() => dislikeVideo(_id)}
           likeCount={likeCount}
           dislikeCount={dislikeCount}
           commentCount={commentCount}
@@ -114,8 +122,14 @@ const mapDispatchToProps = (dispatch) => ({
   likeVideo: (videoId) => dispatch(ActionCreators.likeVideoStart(videoId)),
   dislikeVideo: (videoId) =>
     dispatch(ActionCreators.dislikeVideoStart(videoId)),
+  subscribeToUpdates: (videoId) =>
+    dispatch(ActionCreators.subscribeToVideoItemUpdates(videoId)),
+});
+
+const mapStateToProps = (state) => ({
+  subscription: state.video.subscription,
 });
 
 export default withStyles(styles)(
-  connect(null, mapDispatchToProps)(VideoPlayer)
+  connect(mapStateToProps, mapDispatchToProps)(VideoPlayer)
 );

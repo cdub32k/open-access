@@ -51,10 +51,19 @@ const styles = (theme) => ({
 });
 
 class Image_C extends Component {
+  componentDidMount() {
+    console.log("mountedddddddddddddddddddd");
+    this.props.subscribeToUpdates(this.props._id);
+  }
+
+  componentWillUnmount() {
+    this.props.subscription && this.props.subscription.unsubscribe();
+  }
+
   render() {
     const {
       classes,
-      id,
+      _id,
       user,
       url,
       title,
@@ -67,6 +76,7 @@ class Image_C extends Component {
       dislikeImage,
       liked,
       disliked,
+      subscribeToUpdates,
     } = this.props;
 
     return (
@@ -89,12 +99,12 @@ class Image_C extends Component {
         <CardContent className={classes.caption}>{caption}</CardContent>
         <ContentActions
           contentType="image"
-          id={id}
+          id={_id}
           likeCount={likeCount}
           dislikeCount={dislikeCount}
           commentCount={commentCount}
-          like={() => likeImage(id)}
-          dislike={() => dislikeImage(id)}
+          like={() => likeImage(_id)}
+          dislike={() => dislikeImage(_id)}
           liked={liked}
           disliked={disliked}
         />
@@ -107,6 +117,14 @@ const mapDispatchToProps = (dispatch) => ({
   likeImage: (imageId) => dispatch(ActionCreators.likeImageStart(imageId)),
   dislikeImage: (imageId) =>
     dispatch(ActionCreators.dislikeImageStart(imageId)),
+  subscribeToUpdates: (imageId) =>
+    dispatch(ActionCreators.subscribeToImageItemUpdates(imageId)),
 });
 
-export default withStyles(styles)(connect(null, mapDispatchToProps)(Image_C));
+const mapStateToProps = (state) => ({
+  subscription: state.image.subscription,
+});
+
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(Image_C)
+);

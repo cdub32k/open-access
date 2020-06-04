@@ -49,10 +49,18 @@ const styles = (theme) => ({
 });
 
 class Note extends Component {
+  componentDidMount() {
+    this.props.subscribeToUpdates(this.props._id);
+  }
+
+  componentWillUnmount() {
+    this.props.subscription && this.props.subscription.unsubscribe();
+  }
+
   render() {
     const {
       classes,
-      id,
+      _id,
       user,
       body,
       likeCount,
@@ -63,6 +71,7 @@ class Note extends Component {
       dislikeNote,
       liked,
       disliked,
+      subscribeToUpdates,
     } = this.props;
     return (
       <Card className={classes.container}>
@@ -83,12 +92,12 @@ class Note extends Component {
         />
         <ContentActions
           contentType="note"
-          id={id}
+          id={_id}
           likeCount={likeCount}
           dislikeCount={dislikeCount}
           commentCount={commentCount}
-          like={() => likeNote(id)}
-          dislike={() => dislikeNote(id)}
+          like={() => likeNote(_id)}
+          dislike={() => dislikeNote(_id)}
           liked={liked}
           disliked={disliked}
         />
@@ -100,6 +109,14 @@ class Note extends Component {
 const mapDispatchToProps = (dispatch) => ({
   likeNote: (noteId) => dispatch(ActionCreators.likeNoteStart(noteId)),
   dislikeNote: (noteId) => dispatch(ActionCreators.dislikeNoteStart(noteId)),
+  subscribeToUpdates: (noteId) =>
+    dispatch(ActionCreators.subscribeToNoteItemUpdates(noteId)),
 });
 
-export default withStyles(styles)(connect(null, mapDispatchToProps)(Note));
+const mapStateToProps = (state) => ({
+  subscription: state.video.subscription,
+});
+
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(Note)
+);

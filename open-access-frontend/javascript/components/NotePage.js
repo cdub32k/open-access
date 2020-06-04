@@ -44,7 +44,7 @@ class NotePage extends Component {
             <PreviewNote />
           ) : (
             <Note
-              id={noteId}
+              _id={noteId}
               user={user}
               body={body}
               uploadedAt={uploadedAt}

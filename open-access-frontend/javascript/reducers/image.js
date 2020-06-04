@@ -1,10 +1,48 @@
 import { ActionTypes } from "../actions";
 
+import store from "../store";
+import { ActionCreators } from "../actions";
+import apolloClient from "../apollo";
+import { parse } from "graphql";
+
+import { removeNull } from "../utils/helpers";
+
 const initialState = {
   error: null,
   user: {},
-  loading: false,
+  loading: true,
   comments: [],
+};
+
+const subscribeToImageItemUpdates = (imageId) => {
+  return apolloClient
+    .subscribe({
+      query: parse(`
+        subscription ImageItem($imageId: String) {
+          imageItem(imageId: $imageId) {
+            _id
+            likeCount
+            dislikeCount
+            commentCount
+            comments {
+              _id
+              user {
+                username
+                profilePic
+              }
+              body
+              createdAt
+            }
+          }
+        }
+     `),
+      variables: { imageId },
+    })
+    .subscribe({
+      next({ data: { imageItem } }) {
+        store.dispatch(ActionCreators.imageItemUpdate(imageItem));
+      },
+    });
 };
 
 const imageReducer = (state = initialState, action) => {
@@ -18,37 +56,28 @@ const imageReducer = (state = initialState, action) => {
     case ActionTypes.GET_IMAGE_INFO_ERROR:
       return { ...state, error: action.error, loading: false };
     case ActionTypes.LIKE_IMAGE_SUCCESS:
-      let newCount = state.liked ? state.likeCount - 1 : state.likeCount + 1;
-      return { ...state, liked: !state.liked, likeCount: newCount };
-      return { ...state };
+      return { ...state, liked: !state.liked };
     case ActionTypes.LIKE_IMAGE_ERROR:
       return { ...state };
     case ActionTypes.DISLIKE_IMAGE_SUCCESS:
-      newCount = state.disliked
-        ? state.dislikeCount - 1
-        : state.dislikeCount + 1;
-      return { ...state, disliked: !state.disliked, dislikeCount: newCount };
-      return { ...state };
+      return { ...state, disliked: !state.disliked };
     case ActionTypes.DISLIKE_IMAGE_ERROR:
       return { ...state };
     case ActionTypes.POST_IMAGE_COMMENT_SUCCESS:
-      const newComment = {
-        _id: action.payload.commentId,
-        body: action.payload.body,
-        user: {
-          username: action.payload.username,
-          profilePic: action.payload.profilePic,
-        },
-      };
-      return {
-        ...state,
-        comments: [newComment, ...state.comments],
-        commentCount: state.commentCount + 1,
-      };
+      return { ...state };
     case ActionTypes.POST_IMAGE_COMMENT_ERROR:
       return { ...state, error: action.error };
     case ActionTypes.CLEAR_IMAGE_DATA:
       return { ...initialState };
+    case ActionTypes.SUBSCRIBE_IMAGE_ITEM_UPDATES:
+      const subscription = subscribeToImageItemUpdates(action.payload.imageId);
+      return { ...state, subscription };
+    case ActionTypes.IMAGE_ITEM_UPDATE:
+      let i = removeNull(action.payload.image);
+      if (i.comments && i.comments.length)
+        i.comments = [...i.comments, ...state.comments];
+      else delete i["comments"];
+      return { ...state, ...i };
     default:
       return state;
   }

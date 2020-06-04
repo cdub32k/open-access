@@ -45,3 +45,10 @@ export function validateEmail(email) {
 export function validateUsername(username) {
   return /^[a-z0-9_-]{3,16}$/.test(username);
 }
+
+export function removeNull(obj) {
+  Object.keys(obj).forEach(
+    (k) => !obj[k] && obj[k] !== undefined && obj[k] !== 0 && delete obj[k]
+  );
+  return obj;
+}

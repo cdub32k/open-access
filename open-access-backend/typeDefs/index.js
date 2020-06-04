@@ -250,10 +250,13 @@ const typeDefs = gql`
     notifications(username: String!): Notification
     newsfeedVideos: Video
     newsfeedVideoItem(videoId: String): Video
+    videoItem(videoId: String): Video
     newsfeedImages: Image
     newsfeedImageItem(imageId: String): Video
+    imageItem(imageId: String): Image
     newsfeedNotes: Note
     newsfeedNoteItem(noteId: String): Video
+    noteItem(noteId: String): Note
   }
 `;
 

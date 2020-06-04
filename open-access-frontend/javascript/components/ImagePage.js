@@ -45,7 +45,7 @@ class ImagePage extends Component {
             <PreviewImage />
           ) : (
             <Image_C
-              id={imageId}
+              _id={imageId}
               user={user}
               title={title}
               caption={caption}

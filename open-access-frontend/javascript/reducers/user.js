@@ -8,6 +8,8 @@ import { ActionCreators } from "../actions";
 import apolloClient from "../apollo";
 import { parse } from "graphql";
 
+import { removeNull } from "../utils/helpers";
+
 const initialState = {
   active: false,
   activeUntil: null,
@@ -408,9 +410,10 @@ const userReducer = (state = initialState, action) => {
       let existing = state.newsfeed.videos.findIndex(
         (v) => v._id == action.payload.video._id
       );
+      let v = removeNull(action.payload.video);
       if (existing > -1) {
         let vids = [...state.newsfeed.videos];
-        vids[existing] = { ...vids[existing], ...action.payload.video };
+        vids[existing] = { ...vids[existing], ...v };
         return {
           ...state,
           newsfeed: {
@@ -432,9 +435,10 @@ const userReducer = (state = initialState, action) => {
       existing = state.newsfeed.images.findIndex(
         (i) => i._id == action.payload.image._id
       );
+      let i = removeNull(action.payload.image);
       if (existing > -1) {
         let imgs = [...state.newsfeed.images];
-        imgs[existing] = { ...imgs[existing], ...action.payload.image };
+        imgs[existing] = { ...imgs[existing], ...i };
         return {
           ...state,
           newsfeed: {
@@ -456,9 +460,10 @@ const userReducer = (state = initialState, action) => {
       existing = state.newsfeed.notes.findIndex(
         (n) => n._id == action.payload.note._id
       );
+      let n = removeNull(action.payload.note);
       if (existing > -1) {
         let nts = [...state.newsfeed.notes];
-        nts[existing] = { ...nts[existing], ...action.payload.note };
+        nts[existing] = { ...nts[existing], ...n };
         return {
           ...state,
           newsfeed: {

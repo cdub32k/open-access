@@ -19,7 +19,9 @@ const wsLink = new WebSocketLink(
 );
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    addTypename: false,
+  }),
   link: split(
     // split based on operation type
     ({ query }) => {

@@ -78,13 +78,19 @@ export const ActionTypes = {
   MARK_NOTIFICATIONS_READ_ERROR: "MARK_NOTIFICATIONS_READ_ERROR",
   ADD_NOTIFICATION: "ADD_NOTIFICATION",
   NEWSFEED_VIDEO_UPDATE: "NEWSFEED_VIDEO_UPDATE",
+  SUBSCRIBE_VIDEO_ITEM_UPDATES: "SUBSCRIBE_VIDEO_ITEM_UPDATES",
+  VIDEO_ITEM_UPDATE: "VIDEO_ITEM_UPDATE",
   SUBSCRIBE_NEWSFEED_VIDEO_ITEM_UPDATES:
     "SUBSCRIBE_NEWSFEED_VIDEO_ITEM_UPDATES",
   NEWSFEED_VIDEO_ITEM_UPDATE: "NEWSFEED_VIDEO_ITEM_UPDATE",
   NEWSFEED_IMAGE_UPDATE: "NEWSFEED_IMAGE_UPDATE",
   SUBSCRIBE_NEWSFEED_IMAGE_ITEM_UPDATES:
     "SUBSCRIBE_NEWSFEED_IMAGE_ITEM_UPDATES",
+  SUBSCRIBE_IMAGE_ITEM_UPDATES: "SUBSCRIBE_IMAGE_ITEM_UPDATES",
+  IMAGE_ITEM_UPDATE: "IMAGE_ITEM_UPDATE",
   NEWSFEED_IMAGE_ITEM_UPDATE: "NEWSFEED_IMAGE_ITEM_UPDATE",
+  SUBSCRIBE_NOTE_ITEM_UPDATES: "SUBSCRIBE_NOTE_ITEM_UPDATES",
+  NOTE_ITEM_UPDATE: "NOTE_ITEM_UPDATE",
   NEWSFEED_NOTE_UPDATE: "NEWSFEED_NOTE_UPDATE",
   SUBSCRIBE_NEWSFEED_NOTE_ITEM_UPDATES: "SUBSCRIBE_NEWSFEED_NOTE_ITEM_UPDATES",
   NEWSFEED_NOTE_ITEM_UPDATE: "NEWSFEED_NOTE_ITEM_UPDATE",
@@ -481,5 +487,32 @@ export const ActionCreators = {
   },
   loadUserPaymentInfoError: (error) => {
     return { type: ActionTypes.LOAD_USER_PAYMENT_INFO_ERROR, error };
+  },
+  subscribeToVideoItemUpdates: (videoId) => {
+    return {
+      type: ActionTypes.SUBSCRIBE_VIDEO_ITEM_UPDATES,
+      payload: { videoId },
+    };
+  },
+  videoItemUpdate: (video) => {
+    return { type: ActionTypes.VIDEO_ITEM_UPDATE, payload: { video } };
+  },
+  subscribeToImageItemUpdates: (imageId) => {
+    return {
+      type: ActionTypes.SUBSCRIBE_IMAGE_ITEM_UPDATES,
+      payload: { imageId },
+    };
+  },
+  imageItemUpdate: (image) => {
+    return { type: ActionTypes.IMAGE_ITEM_UPDATE, payload: { image } };
+  },
+  subscribeToNoteItemUpdates: (noteId) => {
+    return {
+      type: ActionTypes.SUBSCRIBE_NOTE_ITEM_UPDATES,
+      payload: { noteId },
+    };
+  },
+  noteItemUpdate: (note) => {
+    return { type: ActionTypes.NOTE_ITEM_UPDATE, payload: { note } };
   },
 };

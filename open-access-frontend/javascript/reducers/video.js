@@ -1,10 +1,49 @@
 import { ActionTypes } from "../actions";
 
+import store from "../store";
+import { ActionCreators } from "../actions";
+import apolloClient from "../apollo";
+import { parse } from "graphql";
+
+import { removeNull } from "../utils/helpers";
+
 const initialState = {
   error: null,
   user: {},
-  loading: false,
+  loading: true,
   comments: [],
+};
+
+const subscribeToVideoItemUpdates = (videoId) => {
+  return apolloClient
+    .subscribe({
+      query: parse(`
+        subscription VideoItem($videoId: String) {
+          videoItem(videoId: $videoId) {
+            _id
+            likeCount
+            dislikeCount
+            commentCount
+            viewCount
+            comments {
+              _id
+              user {
+                username
+                profilePic
+              }
+              body
+              createdAt
+            }
+          }
+        }
+     `),
+      variables: { videoId },
+    })
+    .subscribe({
+      next({ data: { videoItem } }) {
+        store.dispatch(ActionCreators.videoItemUpdate(videoItem));
+      },
+    });
 };
 
 const videoReducer = (state = initialState, action) => {
@@ -22,35 +61,28 @@ const videoReducer = (state = initialState, action) => {
     case ActionTypes.RECORD_VIDEO_VIEW_ERROR:
       return { ...state };
     case ActionTypes.LIKE_VIDEO_SUCCESS:
-      let newCount = state.liked ? state.likeCount - 1 : state.likeCount + 1;
-      return { ...state, liked: !state.liked, likeCount: newCount };
+      return { ...state, liked: !state.liked };
     case ActionTypes.LIKE_VIDEO_ERROR:
       return { ...state };
     case ActionTypes.DISLIKE_VIDEO_SUCCESS:
-      newCount = state.disliked
-        ? state.dislikeCount - 1
-        : state.dislikeCount + 1;
-      return { ...state, disliked: !state.disliked, dislikeCount: newCount };
+      return { ...state, disliked: !state.disliked };
     case ActionTypes.DISLIKE_VIDEO_ERROR:
       return { ...state };
     case ActionTypes.POST_VIDEO_COMMENT_SUCCESS:
-      const newComment = {
-        _id: action.payload.commentId,
-        body: action.payload.body,
-        user: {
-          username: action.payload.username,
-          profilePic: action.payload.profilePic,
-        },
-      };
-      return {
-        ...state,
-        comments: [newComment, ...state.comments],
-        commentCount: state.commentCount + 1,
-      };
+      return { ...state };
     case ActionTypes.POST_VIDEO_COMMENT_ERROR:
       return { ...state, error: action.error };
     case ActionTypes.CLEAR_VIDEO_DATA:
       return { ...initialState };
+    case ActionTypes.SUBSCRIBE_VIDEO_ITEM_UPDATES:
+      const subscription = subscribeToVideoItemUpdates(action.payload.videoId);
+      return { ...state, subscription };
+    case ActionTypes.VIDEO_ITEM_UPDATE:
+      let v = removeNull(action.payload.video);
+      if (v.comments && v.comments.length)
+        v.comments = [...v.comments, ...state.comments];
+      else delete v["comments"];
+      return { ...state, ...v };
     default:
       return state;
   }
