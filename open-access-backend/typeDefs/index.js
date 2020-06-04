@@ -251,7 +251,9 @@ const typeDefs = gql`
     newsfeedVideos: Video
     newsfeedVideoItem(videoId: String): Video
     newsfeedImages: Image
+    newsfeedImageItem(imageId: String): Video
     newsfeedNotes: Note
+    newsfeedNoteItem(noteId: String): Video
   }
 `;
 

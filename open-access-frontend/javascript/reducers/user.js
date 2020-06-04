@@ -145,6 +145,31 @@ const subscribeToNewsfeedImageUpdates = () => {
       },
     });
 };
+
+const subscribeToNewsfeedImageItemUpdates = (imageId) => {
+  return apolloClient
+    .subscribe({
+      query: parse(`
+        subscription NewsfeedImageItem($imageId: String) {
+          newsfeedImageItem(imageId: $imageId) {
+            _id
+            likeCount
+            dislikeCount
+            commentCount
+          }
+        }
+     `),
+      variables: { imageId },
+    })
+    .subscribe({
+      next({ data: { newsfeedImageItem } }) {
+        store.dispatch(
+          ActionCreators.newsfeedImageItemUpdate(newsfeedImageItem)
+        );
+      },
+    });
+};
+
 const subscribeToNewsfeedNoteUpdates = () => {
   return apolloClient
     .subscribe({
@@ -168,6 +193,28 @@ const subscribeToNewsfeedNoteUpdates = () => {
     .subscribe({
       next({ data: { newsfeedNotes } }) {
         store.dispatch(ActionCreators.newsfeedNoteUpdate(newsfeedNotes));
+      },
+    });
+};
+
+const subscribeToNewsfeedNoteItemUpdates = (noteId) => {
+  return apolloClient
+    .subscribe({
+      query: parse(`
+        subscription NewsfeedNoteItem($noteId: String) {
+          newsfeedNoteItem(noteId: $noteId) {
+            _id
+            likeCount
+            dislikeCount
+            commentCount
+          }
+        }
+     `),
+      variables: { noteId },
+    })
+    .subscribe({
+      next({ data: { newsfeedNoteItem } }) {
+        store.dispatch(ActionCreators.newsfeedNoteItemUpdate(newsfeedNoteItem));
       },
     });
 };
@@ -337,6 +384,26 @@ const userReducer = (state = initialState, action) => {
           videoSubscriptions: [...state.newsfeed.videoSubscriptions, vidSub],
         },
       };
+    case ActionTypes.SUBSCRIBE_NEWSFEED_IMAGE_ITEM_UPDATES:
+      const imgSub = subscribeToNewsfeedImageItemUpdates(
+        action.payload.imageId
+      );
+      return {
+        ...state,
+        newsfeed: {
+          ...state.newsfeed,
+          imageSubscriptions: [...state.newsfeed.imageSubscriptions, imgSub],
+        },
+      };
+    case ActionTypes.SUBSCRIBE_NEWSFEED_NOTE_ITEM_UPDATES:
+      const noteSub = subscribeToNewsfeedNoteItemUpdates(action.payload.noteId);
+      return {
+        ...state,
+        newsfeed: {
+          ...state.newsfeed,
+          noteSubscriptions: [...state.newsfeed.noteSubscriptions, noteSub],
+        },
+      };
     case ActionTypes.NEWSFEED_VIDEO_ITEM_UPDATE:
       let existing = state.newsfeed.videos.findIndex(
         (v) => v._id == action.payload.video._id
@@ -361,6 +428,22 @@ const userReducer = (state = initialState, action) => {
           images: [action.payload.image, ...state.newsfeed.images],
         },
       };
+    case ActionTypes.NEWSFEED_IMAGE_ITEM_UPDATE:
+      existing = state.newsfeed.images.findIndex(
+        (i) => i._id == action.payload.image._id
+      );
+      if (existing > -1) {
+        let imgs = [...state.newsfeed.images];
+        imgs[existing] = { ...imgs[existing], ...action.payload.image };
+        return {
+          ...state,
+          newsfeed: {
+            ...state.newsfeed,
+            images: imgs,
+          },
+        };
+      }
+      return state;
     case ActionTypes.NEWSFEED_NOTE_UPDATE:
       return {
         ...state,
@@ -369,6 +452,22 @@ const userReducer = (state = initialState, action) => {
           notes: [action.payload.note, ...state.newsfeed.notes],
         },
       };
+    case ActionTypes.NEWSFEED_NOTE_ITEM_UPDATE:
+      existing = state.newsfeed.notes.findIndex(
+        (n) => n._id == action.payload.note._id
+      );
+      if (existing > -1) {
+        let nts = [...state.newsfeed.notes];
+        nts[existing] = { ...nts[existing], ...action.payload.note };
+        return {
+          ...state,
+          newsfeed: {
+            ...state.newsfeed,
+            notes: nts,
+          },
+        };
+      }
+      return state;
     case ActionTypes.LOAD_NEWSFEED_VIDEO_START:
       /// will remove this (only runs in middleware eventually)
       const vidSub2 = subscribeToNewsfeedVideoUpdates();
@@ -394,11 +493,14 @@ const userReducer = (state = initialState, action) => {
       };
     case ActionTypes.LOAD_NEWSFEED_IMAGES_START:
       /// will remove this (only runs in middleware eventually)
-      const imageSubscription = subscribeToNewsfeedImageUpdates();
+      const imgSub2 = subscribeToNewsfeedImageUpdates();
 
       return {
         ...state,
-        newsfeed: { ...state.newsfeed, imageSubscription },
+        newsfeed: {
+          ...state.newsfeed,
+          imageSubscriptions: [...state.newsfeed.imageSubscriptions, imgSub2],
+        },
       };
     case ActionTypes.LOAD_NEWSFEED_IMAGES_SUCCESS:
       return {
@@ -414,11 +516,14 @@ const userReducer = (state = initialState, action) => {
       };
     case ActionTypes.LOAD_NEWSFEED_NOTES_START:
       /// will remove this (only runs in middleware eventually)
-      const noteSubscription = subscribeToNewsfeedNoteUpdates();
+      const noteSub2 = subscribeToNewsfeedNoteUpdates();
 
       return {
         ...state,
-        newsfeed: { ...state.newsfeed, noteSubscription },
+        newsfeed: {
+          ...state.newsfeed,
+          noteSubscriptions: [...state.newsfeed.noteSubscriptions, noteSub2],
+        },
       };
     case ActionTypes.LOAD_NEWSFEED_NOTES_SUCCESS:
       return {

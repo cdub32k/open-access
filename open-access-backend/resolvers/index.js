@@ -234,7 +234,7 @@ const resolvers = {
     likeNote: async (
       parent,
       { id },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -269,6 +269,10 @@ const resolvers = {
           await note.save();
         }
 
+        pubsub.publish(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX + note._id, {
+          newsfeedNoteItem: note,
+        });
+
         return true;
       } catch (error) {
         return false;
@@ -277,7 +281,7 @@ const resolvers = {
     dislikeNote: async (
       parent,
       { id },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -315,6 +319,11 @@ const resolvers = {
           note.dislikeCount--;
           await note.save();
         }
+
+        pubsub.publish(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX + note._id, {
+          newsfeedNoteItem: note,
+        });
+
         return true;
       } catch (error) {
         return false;
@@ -323,7 +332,7 @@ const resolvers = {
     commentNote: async (
       parent,
       { id, body },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -354,6 +363,10 @@ const resolvers = {
             body,
           });
 
+        pubsub.publish(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX + note._id, {
+          newsfeedNoteItem: note,
+        });
+
         return comment._id;
       } catch (error) {
         return null;
@@ -362,7 +375,7 @@ const resolvers = {
     likeImage: async (
       parent,
       { id },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -397,6 +410,10 @@ const resolvers = {
           await image.save();
         }
 
+        pubsub.publish(NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX + image._id, {
+          newsfeedImageItem: image,
+        });
+
         return true;
       } catch (error) {
         return false;
@@ -405,7 +422,7 @@ const resolvers = {
     dislikeImage: async (
       parent,
       { id },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -443,6 +460,11 @@ const resolvers = {
           image.dislikeCount--;
           await image.save();
         }
+
+        pubsub.publish(NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX + image._id, {
+          newsfeedImageItem: image,
+        });
+
         return true;
       } catch (error) {
         return false;
@@ -451,7 +473,7 @@ const resolvers = {
     commentImage: async (
       parent,
       { id, body },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -481,6 +503,10 @@ const resolvers = {
             targetId: image._id,
             body,
           });
+
+        pubsub.publish(NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX + image._id, {
+          newsfeedImageItem: image,
+        });
 
         return comment._id;
       } catch (error) {
@@ -537,7 +563,7 @@ const resolvers = {
     dislikeVideo: async (
       parent,
       { id },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -575,6 +601,11 @@ const resolvers = {
           video.dislikeCount--;
           await video.save();
         }
+
+        pubsub.publish(NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX + video._id, {
+          newsfeedVideoItem: video,
+        });
+
         return true;
       } catch (error) {
         return false;
@@ -610,7 +641,7 @@ const resolvers = {
     commentVideo: async (
       parent,
       { id, body },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -640,6 +671,10 @@ const resolvers = {
             targetId: video._id,
             body,
           });
+
+        pubsub.publish(NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX + video._id, {
+          newsfeedVideoItem: video,
+        });
 
         return comment._id;
       } catch (error) {
@@ -971,9 +1006,21 @@ const resolvers = {
         return pubsub.asyncIterator(NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX);
       },
     },
+    newsfeedImageItem: {
+      subscribe: (parent, { imageId }, { pubsub }, info) => {
+        return pubsub.asyncIterator(
+          NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX + imageId
+        );
+      },
+    },
     newsfeedNotes: {
       subscribe: (parent, args, { pubsub }, info) => {
         return pubsub.asyncIterator(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX);
+      },
+    },
+    newsfeedNoteItem: {
+      subscribe: (parent, { noteId }, { pubsub }, info) => {
+        return pubsub.asyncIterator(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX + noteId);
       },
     },
   },

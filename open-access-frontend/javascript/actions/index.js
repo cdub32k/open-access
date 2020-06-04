@@ -82,7 +82,12 @@ export const ActionTypes = {
     "SUBSCRIBE_NEWSFEED_VIDEO_ITEM_UPDATES",
   NEWSFEED_VIDEO_ITEM_UPDATE: "NEWSFEED_VIDEO_ITEM_UPDATE",
   NEWSFEED_IMAGE_UPDATE: "NEWSFEED_IMAGE_UPDATE",
+  SUBSCRIBE_NEWSFEED_IMAGE_ITEM_UPDATES:
+    "SUBSCRIBE_NEWSFEED_IMAGE_ITEM_UPDATES",
+  NEWSFEED_IMAGE_ITEM_UPDATE: "NEWSFEED_IMAGE_ITEM_UPDATE",
   NEWSFEED_NOTE_UPDATE: "NEWSFEED_NOTE_UPDATE",
+  SUBSCRIBE_NEWSFEED_NOTE_ITEM_UPDATES: "SUBSCRIBE_NEWSFEED_NOTE_ITEM_UPDATES",
+  NEWSFEED_NOTE_ITEM_UPDATE: "NEWSFEED_NOTE_ITEM_UPDATE",
   LOAD_NEWSFEED_VIDEO_START: "LOAD_NEWSFEED_VIDEO_START",
   LOAD_NEWSFEED_VIDEO_SUCCESS: "LOAD_NEWSFEED_VIDEO_SUCCESS",
   LOAD_NEWSFEED_VIDEO_ERROR: "LOAD_NEWSFEED_VIDEO_START",
@@ -398,8 +403,27 @@ export const ActionCreators = {
   newsfeedImageUpdate: (image) => {
     return { type: ActionTypes.NEWSFEED_IMAGE_UPDATE, payload: { image } };
   },
+  subscribeNewsfeedImageItemUpdate: (imageId) => {
+    return {
+      type: ActionTypes.SUBSCRIBE_NEWSFEED_IMAGE_ITEM_UPDATES,
+      payload: { imageId },
+    };
+  },
+  newsfeedImageItemUpdate: (image) => {
+    return { type: ActionTypes.NEWSFEED_IMAGE_ITEM_UPDATE, payload: { image } };
+  },
   newsfeedNoteUpdate: (note) => {
     return { type: ActionTypes.NEWSFEED_NOTE_UPDATE, payload: { note } };
+  },
+  subscribeNewsfeedNoteItemUpdate: (noteId) => {
+    return {
+      type: ActionTypes.SUBSCRIBE_NEWSFEED_NOTE_ITEM_UPDATES,
+      payload: { noteId },
+    };
+  },
+
+  newsfeedNoteItemUpdate: (note) => {
+    return { type: ActionTypes.NEWSFEED_NOTE_ITEM_UPDATE, payload: { note } };
   },
   loadNewsfeedVideoStart: () => {
     return { type: ActionTypes.LOAD_NEWSFEED_VIDEO_START };

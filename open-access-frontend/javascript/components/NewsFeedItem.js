@@ -61,7 +61,7 @@ const NewsFeedItem = ({
   subscribeToUpdates,
 }) => {
   useEffect(() => {
-    subscribeToUpdates(_id);
+    subscribeToUpdates(type, _id);
   }, []);
 
   const classes = useStyles();
@@ -159,8 +159,19 @@ const NewsFeedItem = ({
 
 const mapStateToProps = (state) => ({});
 const mapDispatchToProps = (dispatch) => ({
-  subscribeToUpdates: (videoId) =>
-    dispatch(ActionCreators.subscribeNewsfeedVideoItemUpdate(videoId)),
+  subscribeToUpdates: (type, _id) => {
+    switch (type) {
+      case "video":
+        dispatch(ActionCreators.subscribeNewsfeedVideoItemUpdate(_id));
+        break;
+      case "image":
+        dispatch(ActionCreators.subscribeNewsfeedImageItemUpdate(_id));
+        break;
+      case "note":
+        dispatch(ActionCreators.subscribeNewsfeedNoteItemUpdate(_id));
+        break;
+    }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewsFeedItem);
