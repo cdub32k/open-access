@@ -15,7 +15,7 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => ({});
 const initApp = () => {
-  const token = localStorage.getItem("open-access-api-token");
+  const token = localStorage.getItem("open-access-api-refresh-token");
   if (token) {
     let decodedToken = jwt_decode(token);
     let d = new Date(0);

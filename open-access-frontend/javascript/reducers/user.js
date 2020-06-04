@@ -29,9 +29,10 @@ const initialState = {
     notes: [],
     images: [],
     videos: [],
-    videoSubscription: null,
-    imageSubscription: null,
-    noteSubscription: null,
+
+    videoSubscriptions: [],
+    imageSubscriptions: [],
+    noteSubscriptions: [],
   },
   payment: {
     charges: [],
@@ -93,6 +94,31 @@ const subscribeToNewsfeedVideoUpdates = () => {
       },
     });
 };
+
+const subscribeToNewsfeedVideoItemUpdates = (videoId) => {
+  return apolloClient
+    .subscribe({
+      query: parse(`
+        subscription NewsfeedVideoItem($videoId: String) {
+          newsfeedVideoItem(videoId: $videoId) {
+            _id
+            likeCount
+            dislikeCount
+            commentCount
+          }
+        }
+     `),
+      variables: { videoId },
+    })
+    .subscribe({
+      next({ data: { newsfeedVideoItem } }) {
+        store.dispatch(
+          ActionCreators.newsfeedVideoItemUpdate(newsfeedVideoItem)
+        );
+      },
+    });
+};
+
 const subscribeToNewsfeedImageUpdates = () => {
   return apolloClient
     .subscribe({
@@ -181,8 +207,8 @@ const userReducer = (state = initialState, action) => {
       );
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       axios.defaults.headers.common["x-refresh-token"] = refreshToken;
-
-      const { username, email, profilePic } = action.payload.token;
+      let decodedToken = jwt_decode(token);
+      const { username, email, profilePic } = decodedToken;
 
       const notificationsSubscription = subscribeToNotifications(username);
 
@@ -300,6 +326,33 @@ const userReducer = (state = initialState, action) => {
           videos: [action.payload.video, ...state.newsfeed.videos],
         },
       };
+    case ActionTypes.SUBSCRIBE_NEWSFEED_VIDEO_ITEM_UPDATES:
+      const vidSub = subscribeToNewsfeedVideoItemUpdates(
+        action.payload.videoId
+      );
+      return {
+        ...state,
+        newsfeed: {
+          ...state.newsfeed,
+          videoSubscriptions: [...state.newsfeed.videoSubscriptions, vidSub],
+        },
+      };
+    case ActionTypes.NEWSFEED_VIDEO_ITEM_UPDATE:
+      let existing = state.newsfeed.videos.findIndex(
+        (v) => v._id == action.payload.video._id
+      );
+      if (existing > -1) {
+        let vids = [...state.newsfeed.videos];
+        vids[existing] = { ...vids[existing], ...action.payload.video };
+        return {
+          ...state,
+          newsfeed: {
+            ...state.newsfeed,
+            videos: vids,
+          },
+        };
+      }
+      return state;
     case ActionTypes.NEWSFEED_IMAGE_UPDATE:
       return {
         ...state,
@@ -318,11 +371,14 @@ const userReducer = (state = initialState, action) => {
       };
     case ActionTypes.LOAD_NEWSFEED_VIDEO_START:
       /// will remove this (only runs in middleware eventually)
-      const videoSubscription = subscribeToNewsfeedVideoUpdates();
+      const vidSub2 = subscribeToNewsfeedVideoUpdates();
 
       return {
         ...state,
-        newsfeed: { ...state.newsfeed, videoSubscription },
+        newsfeed: {
+          ...state.newsfeed,
+          videoSubscriptions: [...state.newsfeed.videoSubscriptions, vidSub2],
+        },
       };
     case ActionTypes.LOAD_NEWSFEED_VIDEO_SUCCESS:
       return {

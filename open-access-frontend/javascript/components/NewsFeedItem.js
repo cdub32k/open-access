@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import { ActionCreators } from "../actions";
+
 import { Link } from "react-router-dom";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -55,7 +58,12 @@ const NewsFeedItem = ({
     thumbUrl,
     body,
   },
+  subscribeToUpdates,
 }) => {
+  useEffect(() => {
+    subscribeToUpdates(_id);
+  }, []);
+
   const classes = useStyles();
   const theme = useTheme();
 
@@ -149,4 +157,10 @@ const NewsFeedItem = ({
   );
 };
 
-export default NewsFeedItem;
+const mapStateToProps = (state) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  subscribeToUpdates: (videoId) =>
+    dispatch(ActionCreators.subscribeNewsfeedVideoItemUpdate(videoId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewsFeedItem);

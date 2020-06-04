@@ -78,6 +78,9 @@ export const ActionTypes = {
   MARK_NOTIFICATIONS_READ_ERROR: "MARK_NOTIFICATIONS_READ_ERROR",
   ADD_NOTIFICATION: "ADD_NOTIFICATION",
   NEWSFEED_VIDEO_UPDATE: "NEWSFEED_VIDEO_UPDATE",
+  SUBSCRIBE_NEWSFEED_VIDEO_ITEM_UPDATES:
+    "SUBSCRIBE_NEWSFEED_VIDEO_ITEM_UPDATES",
+  NEWSFEED_VIDEO_ITEM_UPDATE: "NEWSFEED_VIDEO_ITEM_UPDATE",
   NEWSFEED_IMAGE_UPDATE: "NEWSFEED_IMAGE_UPDATE",
   NEWSFEED_NOTE_UPDATE: "NEWSFEED_NOTE_UPDATE",
   LOAD_NEWSFEED_VIDEO_START: "LOAD_NEWSFEED_VIDEO_START",
@@ -382,6 +385,15 @@ export const ActionCreators = {
   },
   newsfeedVideoUpdate: (video) => {
     return { type: ActionTypes.NEWSFEED_VIDEO_UPDATE, payload: { video } };
+  },
+  subscribeNewsfeedVideoItemUpdate: (videoId) => {
+    return {
+      type: ActionTypes.SUBSCRIBE_NEWSFEED_VIDEO_ITEM_UPDATES,
+      payload: { videoId },
+    };
+  },
+  newsfeedVideoItemUpdate: (video) => {
+    return { type: ActionTypes.NEWSFEED_VIDEO_ITEM_UPDATE, payload: { video } };
   },
   newsfeedImageUpdate: (image) => {
     return { type: ActionTypes.NEWSFEED_IMAGE_UPDATE, payload: { image } };

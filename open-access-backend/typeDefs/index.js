@@ -249,6 +249,7 @@ const typeDefs = gql`
   type Subscription {
     notifications(username: String!): Notification
     newsfeedVideos: Video
+    newsfeedVideoItem(videoId: String): Video
     newsfeedImages: Image
     newsfeedNotes: Note
   }

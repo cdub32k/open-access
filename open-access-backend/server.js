@@ -53,7 +53,6 @@ const verifyTokenMiddleware = (req, res, next) => {
         process.env.JWT_REFRESH_SECRET + user.passwordHash,
         (err, decoded) => {
           if (err) return res.status(403).send({ error: "Forbidden" });
-          console.log(Math.random() * 1000000);
           const token = jwt.sign(
             { username, email: user.email, profilePic: user.profilePic },
             process.env.JWT_SECRET,

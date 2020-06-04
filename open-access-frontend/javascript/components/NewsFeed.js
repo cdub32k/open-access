@@ -35,6 +35,9 @@ const NewsFeed = ({
   loadMoreVideo,
   loadMoreImages,
   loadMoreNotes,
+  newsfeedVideoSubscriptions,
+  newsfeedImageSubscriptions,
+  newsfeedNoteSubscriptions,
   videos,
   images,
   notes,
@@ -50,6 +53,11 @@ const NewsFeed = ({
   const classes = useStyles();
   useEffect(() => {
     if (videos.length == 0) loadNewsfeedVideos();
+    return () => {
+      newsfeedVideoSubscriptions.forEach((sub) => sub.unsubscribe());
+      newsfeedImageSubscriptions.forEach((sub) => sub.unsubscribe());
+      newsfeedNoteSubscriptions.forEach((sub) => sub.unsubscribe());
+    };
   }, []);
 
   return (
@@ -91,7 +99,9 @@ const mapStateToProps = (state) => ({
   videos: state.user.newsfeed.videos,
   images: state.user.newsfeed.images,
   notes: state.user.newsfeed.notes,
-  newsfeedVideoSubscription: state.user.newsfeed.videoSubscription,
+  newsfeedVideoSubscriptions: state.user.newsfeed.videoSubscriptions,
+  newsfeedImageSubscriptions: state.user.newsfeed.imageSubscriptions,
+  newsfeedNoteSubscriptions: state.user.newsfeed.noteSubscriptions,
 });
 
 const mapDispatchToProps = (dispatch) => ({

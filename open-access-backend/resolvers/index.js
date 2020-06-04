@@ -490,7 +490,7 @@ const resolvers = {
     likeVideo: async (
       parent,
       { id },
-      { req: { username, authorized } },
+      { req: { username, authorized }, pubsub },
       info
     ) => {
       if (!authorized) return null;
@@ -524,6 +524,10 @@ const resolvers = {
           video.likeCount--;
           await video.save();
         }
+
+        pubsub.publish(NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX + video._id, {
+          newsfeedVideoItem: video,
+        });
 
         return true;
       } catch (error) {
@@ -951,17 +955,24 @@ const resolvers = {
       },
     },
     newsfeedVideos: {
-      subscribe: (parent, { username }, { pubsub }, info) => {
+      subscribe: (parent, args, { pubsub }, info) => {
         return pubsub.asyncIterator(NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX);
       },
     },
+    newsfeedVideoItem: {
+      subscribe: (parent, { videoId }, { pubsub }, info) => {
+        return pubsub.asyncIterator(
+          NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX + videoId
+        );
+      },
+    },
     newsfeedImages: {
-      subscribe: (parent, { username }, { pubsub }, info) => {
+      subscribe: (parent, args, { pubsub }, info) => {
         return pubsub.asyncIterator(NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX);
       },
     },
     newsfeedNotes: {
-      subscribe: (parent, { username }, { pubsub }, info) => {
+      subscribe: (parent, args, { pubsub }, info) => {
         return pubsub.asyncIterator(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX);
       },
     },
