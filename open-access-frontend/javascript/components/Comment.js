@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
   textSection: {
     display: "flex",
     flexDirection: "column",
+    wordBreak: "break-word",
   },
   userInfo: {
     marginBottom: 12,

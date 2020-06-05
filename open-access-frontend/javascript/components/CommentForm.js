@@ -64,6 +64,7 @@ const CommentForm = ({
         disabled={!body.trim()}
         text="comment"
         onClick={postComment}
+        style={{ width: 100 }}
         size="small"
       />
     </form>

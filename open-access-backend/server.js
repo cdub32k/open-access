@@ -16,6 +16,7 @@ import userRouter from "./routes/user";
 import paymentRouter from "./routes/payment";
 import imageRouter from "./routes/image";
 import videoRouter from "./routes/video";
+import noteRouter from "./routes/note";
 import newsletterRouter from "./routes/newsletter";
 
 import typeDefs from "./typeDefs";
@@ -95,6 +96,8 @@ app.use("/payment", verifyTokenMiddleware, paymentRouter);
 app.use("/images", verifyTokenMiddleware, imageRouter);
 
 app.use("/videos", verifyTokenMiddleware, videoRouter);
+
+app.use("/notes", verifyTokenMiddleware, noteRouter);
 
 app.use("/newsletter", newsletterRouter);
 

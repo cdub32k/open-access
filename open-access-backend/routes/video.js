@@ -6,7 +6,14 @@ import multer from "multer";
 import pubsub from "../PubSub";
 import { NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX } from "../constants";
 
-const { Video, User } = require("../database");
+const {
+  Video,
+  VideoView,
+  VideoLike,
+  VideoDislike,
+  VideoComment,
+  User,
+} = require("../database");
 
 const router = require("express").Router();
 
@@ -48,7 +55,26 @@ router.post("/upload", upload, async (req, res) => {
 
     return res.send({ video });
   } catch (error) {
-    return res.status(500).send({ error: "Something went wrong" + error });
+    return res.status(500).send({ error: "Something went wrong" });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const video = await Video.findOne({ _id: req.params.id });
+
+    fs.unlink(`public/${video.url.split("5000/")[1]}`);
+    fs.unlink(`public/${video.thumbUrl.split("5000/")[1]}`);
+
+    await VideoLike.deleteMany({ videoId: video._id });
+    await VideoDislike.deleteMany({ videoId: video._id });
+    await VideoComment.deleteMany({ videoId: video._id });
+    await VideoView.deleteMany({ videoId: video._id });
+    await video.delete();
+
+    return res.status(200).send(true);
+  } catch (e) {
+    res.status(500).send({ error: "Something went wrong" });
   }
 });
 

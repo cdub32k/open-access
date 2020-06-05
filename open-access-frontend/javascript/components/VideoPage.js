@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 
 import { connect } from "react-redux";
 
@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import VideoPlayer from "./VideoPlayer";
 import PreviewVideoPlayer from "./PreviewVideoPlayer";
 import CommentsSection from "./CommentsSection";
+import MediaOwnerActions from "./MediaOwnerActions";
 
 class VideoPage extends Component {
   componentDidMount() {
@@ -39,6 +40,7 @@ class VideoPage extends Component {
       match: {
         params: { videoId },
       },
+      mineUsername,
     } = this.props;
     return (
       <Grid container>
@@ -46,21 +48,26 @@ class VideoPage extends Component {
           {loading ? (
             <PreviewVideoPlayer />
           ) : (
-            <VideoPlayer
-              _id={videoId}
-              user={user}
-              title={title}
-              caption={caption}
-              viewCount={viewCount}
-              url={url}
-              thumbUrl={thumbUrl}
-              likeCount={likeCount}
-              dislikeCount={dislikeCount}
-              commentCount={commentCount}
-              uploadedAt={uploadedAt}
-              liked={liked}
-              disliked={disliked}
-            />
+            <Fragment>
+              <VideoPlayer
+                _id={videoId}
+                user={user}
+                title={title}
+                caption={caption}
+                viewCount={viewCount}
+                url={url}
+                thumbUrl={thumbUrl}
+                likeCount={likeCount}
+                dislikeCount={dislikeCount}
+                commentCount={commentCount}
+                uploadedAt={uploadedAt}
+                liked={liked}
+                disliked={disliked}
+              />
+              {user.username == mineUsername && (
+                <MediaOwnerActions _id={videoId} type="video" />
+              )}
+            </Fragment>
           )}
         </Grid>
         <Grid item xs={12} md={4}>
@@ -90,6 +97,7 @@ const mapStateToProps = (state) => ({
   thumbUrl: state.video.thumbUrl,
   uploadedAt: state.video.uploadedAt,
   comments: state.video.comments,
+  mineUsername: state.user.username,
 });
 
 const mapDispatchToProps = (dispatch) => ({

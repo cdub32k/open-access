@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 
 import { connect } from "react-redux";
 
@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Image_C from "./Image";
 import PreviewImage from "./PreviewImage";
 import CommentsSection from "./CommentsSection";
+import MediaOwnerActions from "./MediaOwnerActions";
 
 class ImagePage extends Component {
   componentDidMount() {
@@ -37,6 +38,7 @@ class ImagePage extends Component {
       match: {
         params: { imageId },
       },
+      mineUsername,
     } = this.props;
     return (
       <Grid container>
@@ -44,19 +46,24 @@ class ImagePage extends Component {
           {loading ? (
             <PreviewImage />
           ) : (
-            <Image_C
-              _id={imageId}
-              user={user}
-              title={title}
-              caption={caption}
-              url={url}
-              uploadedAt={uploadedAt}
-              likeCount={likeCount}
-              dislikeCount={dislikeCount}
-              commentCount={commentCount}
-              liked={liked}
-              disliked={disliked}
-            />
+            <Fragment>
+              <Image_C
+                _id={imageId}
+                user={user}
+                title={title}
+                caption={caption}
+                url={url}
+                uploadedAt={uploadedAt}
+                likeCount={likeCount}
+                dislikeCount={dislikeCount}
+                commentCount={commentCount}
+                liked={liked}
+                disliked={disliked}
+              />
+              {user.username == mineUsername && (
+                <MediaOwnerActions _id={imageId} type="image" />
+              )}
+            </Fragment>
           )}
         </Grid>
         <Grid item xs={12} md={4}>
@@ -84,6 +91,7 @@ const mapStateToProps = (state) => ({
   liked: state.image.liked,
   disliked: state.image.disliked,
   comments: state.image.comments,
+  mineUsername: state.user.username,
 });
 
 const mapDispatchToProps = (dispatch) => ({

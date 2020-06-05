@@ -9,7 +9,6 @@ import Comment from "./Comment";
 const useStyles = makeStyles((theme) => ({
   container: {
     width: "100%",
-    minWidth: 480,
   },
   section: {
     paddingRight: 32,

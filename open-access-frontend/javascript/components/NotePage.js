@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 
 import { connect } from "react-redux";
 
@@ -10,6 +10,7 @@ import Note from "./Note";
 import PreviewNote from "./PreviewNote";
 import CommentForm from "./CommentForm";
 import CommentsSection from "./CommentsSection";
+import MediaOwnerActions from "./MediaOwnerActions";
 
 class NotePage extends Component {
   componentDidMount() {
@@ -36,6 +37,7 @@ class NotePage extends Component {
       match: {
         params: { noteId },
       },
+      mineUsername,
     } = this.props;
     return (
       <Grid container>
@@ -43,17 +45,22 @@ class NotePage extends Component {
           {loading ? (
             <PreviewNote />
           ) : (
-            <Note
-              _id={noteId}
-              user={user}
-              body={body}
-              uploadedAt={uploadedAt}
-              likeCount={likeCount}
-              dislikeCount={dislikeCount}
-              commentCount={commentCount}
-              liked={liked}
-              disliked={disliked}
-            />
+            <Fragment>
+              <Note
+                _id={noteId}
+                user={user}
+                body={body}
+                uploadedAt={uploadedAt}
+                likeCount={likeCount}
+                dislikeCount={dislikeCount}
+                commentCount={commentCount}
+                liked={liked}
+                disliked={disliked}
+              />
+              {user.username == mineUsername && (
+                <MediaOwnerActions _id={noteId} type="note" />
+              )}
+            </Fragment>
           )}
         </Grid>
         <Grid item xs={12} md={4}>
@@ -75,6 +82,7 @@ const mapStateToProps = (state) => ({
   liked: state.note.liked,
   disliked: state.note.disliked,
   comments: state.note.comments,
+  mineUsername: state.user.username,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,11 +1,18 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import fs from "fs";
 import multer from "multer";
 import pubsub from "../PubSub";
 import { NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX } from "../constants";
 
-const { Image, User } = require("../database");
+const {
+  Image,
+  ImageLike,
+  ImageDislike,
+  ImageComment,
+  User,
+} = require("../database");
 
 const router = require("express").Router();
 
@@ -72,6 +79,24 @@ router.post("/profile/upload", profUpload, async (req, res) => {
     res.send({ user });
   } catch (error) {
     return res.status(500).send({ error: "Something went wrong" + error });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const image = await Image.findOne({ _id: req.params.id });
+
+    fs.unlink(`public/${image.url.split("5000/")[1]}`);
+    //fs.unlink(`public/${image.thumbUrl.split("5000/")[1]}`);
+
+    await ImageLike.deleteMany({ imageId: image._id });
+    await ImageDislike.deleteMany({ imageId: image._id });
+    await ImageComment.deleteMany({ imageId: image._id });
+    await image.delete();
+
+    return res.status(200).send(true);
+  } catch (e) {
+    res.status(500).send({ error: "Something went wrong" + e });
   }
 });
 

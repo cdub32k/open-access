@@ -234,6 +234,7 @@ const resolvers = {
 
       return note;
     },
+
     likeNote: async (
       parent,
       { id },
