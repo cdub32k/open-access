@@ -59,6 +59,22 @@ router.post("/upload", upload, async (req, res) => {
   }
 });
 
+router.delete("/comments/:id", async (req, res) => {
+  try {
+    const vComment = await VideoComment.findOne({ _id: req.params.id });
+    if (vComment) {
+      await Video.updateOne(
+        { _id: vComment.videoId },
+        { $inc: { commentCount: -1 } }
+      );
+      await vComment.delete();
+    }
+
+    return res.status(200).send(true);
+  } catch (e) {
+    res.status(500).send({ error: "Something went wrong" + e });
+  }
+});
 router.delete("/:id", async (req, res) => {
   try {
     const video = await Video.findOne({ _id: req.params.id });

@@ -82,6 +82,21 @@ router.post("/profile/upload", profUpload, async (req, res) => {
   }
 });
 
+router.delete("/comments/:id", async (req, res) => {
+  try {
+    const iComment = await ImageComment.findOne({ _id: req.params.id });
+    if (iComment) {
+      await Image.updateOne(
+        { _id: iComment.imageId },
+        { $inc: { commentCount: -1 } }
+      );
+      await iComment.delete();
+    }
+    return res.status(200).send(true);
+  } catch (e) {
+    res.status(500).send({ error: "Something went wrong" });
+  }
+});
 router.delete("/:id", async (req, res) => {
   try {
     const image = await Image.findOne({ _id: req.params.id });
@@ -96,7 +111,7 @@ router.delete("/:id", async (req, res) => {
 
     return res.status(200).send(true);
   } catch (e) {
-    res.status(500).send({ error: "Something went wrong" + e });
+    res.status(500).send({ error: "Something went wrong" });
   }
 });
 

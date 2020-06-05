@@ -35,11 +35,7 @@ const CommentsSection = ({ comments, contentType, id }) => {
             enter
             key={comment._id}
           >
-            <Comment
-              body={comment.body}
-              user={comment.user}
-              createdAt={comment.createdAt}
-            />
+            <Comment type={contentType} comment={comment} />
           </CSSTransition>
         ))}
       </TransitionGroup>

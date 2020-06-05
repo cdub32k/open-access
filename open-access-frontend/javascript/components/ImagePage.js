@@ -1,82 +1,92 @@
-import React, { Component, Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 
 import { connect } from "react-redux";
 
 import { ActionCreators } from "../actions";
 
 import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
 
 import Image_C from "./Image";
 import PreviewImage from "./PreviewImage";
 import CommentsSection from "./CommentsSection";
 import MediaOwnerActions from "./MediaOwnerActions";
 
-class ImagePage extends Component {
-  componentDidMount() {
-    const { imageId } = this.props.match.params;
-    this.props.getImageInfo(imageId);
-  }
+const useStyles = makeStyles((theme) => ({
+  ownerActions: {
+    position: "absolute",
+    top: 0,
+    right: 56,
+  },
+}));
 
-  componentWillUnmount() {
-    this.props.clearImageData();
-  }
+const ImagePage = ({
+  loading,
+  user,
+  title,
+  caption,
+  url,
+  likeCount,
+  dislikeCount,
+  commentCount,
+  uploadedAt,
+  liked,
+  disliked,
+  comments,
+  match,
+  mineUsername,
+  getImageInfo,
+  clearImageData,
+}) => {
+  const { imageId } = match.params;
+  useEffect(() => {
+    getImageInfo(imageId);
+    return () => clearImageData();
+  }, []);
 
-  render() {
-    const {
-      loading,
-      user,
-      title,
-      caption,
-      url,
-      likeCount,
-      dislikeCount,
-      commentCount,
-      uploadedAt,
-      liked,
-      disliked,
-      comments,
-      match: {
-        params: { imageId },
-      },
-      mineUsername,
-    } = this.props;
-    return (
-      <Grid container>
-        <Grid item xs={12} md={8} style={{ paddingRight: 32 }}>
-          {loading ? (
-            <PreviewImage />
-          ) : (
-            <Fragment>
-              <Image_C
+  const classes = useStyles();
+
+  return (
+    <Grid container>
+      <Grid
+        item
+        xs={12}
+        md={8}
+        style={{ paddingRight: 32, position: "relative" }}
+      >
+        {loading ? (
+          <PreviewImage />
+        ) : (
+          <Fragment>
+            <Image_C
+              _id={imageId}
+              user={user}
+              title={title}
+              caption={caption}
+              url={url}
+              uploadedAt={uploadedAt}
+              likeCount={likeCount}
+              dislikeCount={dislikeCount}
+              commentCount={commentCount}
+              liked={liked}
+              disliked={disliked}
+            />
+            {user.username == mineUsername && (
+              <MediaOwnerActions
+                className={classes.ownerActions}
                 _id={imageId}
-                user={user}
-                title={title}
-                caption={caption}
-                url={url}
-                uploadedAt={uploadedAt}
-                likeCount={likeCount}
-                dislikeCount={dislikeCount}
-                commentCount={commentCount}
-                liked={liked}
-                disliked={disliked}
+                type="image"
               />
-              {user.username == mineUsername && (
-                <MediaOwnerActions _id={imageId} type="image" />
-              )}
-            </Fragment>
-          )}
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <CommentsSection
-            comments={comments}
-            contentType="image"
-            id={imageId}
-          />
-        </Grid>
+            )}
+          </Fragment>
+        )}
       </Grid>
-    );
-  }
-}
+      <Grid item xs={12} md={4}>
+        <CommentsSection comments={comments} contentType="image" id={imageId} />
+      </Grid>
+    </Grid>
+  );
+};
 
 const mapStateToProps = (state) => ({
   loading: state.image.loading,

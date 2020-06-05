@@ -83,6 +83,13 @@ const videoReducer = (state = initialState, action) => {
         v.comments = [...v.comments, ...state.comments];
       else delete v["comments"];
       return { ...state, ...v };
+    case ActionTypes.DELETE_VIDEO_COMMENT:
+      let fComments = state.comments.filter((c) => c._id != action.payload._id);
+      return {
+        ...state,
+        commentCount: state.commentCount - 1,
+        comments: fComments,
+      };
     default:
       return state;
   }

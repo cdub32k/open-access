@@ -78,6 +78,13 @@ const imageReducer = (state = initialState, action) => {
         i.comments = [...i.comments, ...state.comments];
       else delete i["comments"];
       return { ...state, ...i };
+    case ActionTypes.DELETE_IMAGE_COMMENT:
+      let fComments = state.comments.filter((c) => c._id != action.payload._id);
+      return {
+        ...state,
+        commentCount: state.commentCount - 1,
+        comments: fComments,
+      };
     default:
       return state;
   }

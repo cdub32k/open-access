@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { ActionCreators } from "../actions";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
 
@@ -8,6 +9,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import MoreIcon from "@material-ui/icons/MoreVert";
 
 import CustomButton from "./CustomButton";
 
@@ -28,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OwnerActions = ({ _id, type, username }) => {
+const OwnerActions = ({ _id, type, username, deleteComment, ...rest }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -45,21 +48,38 @@ const OwnerActions = ({ _id, type, username }) => {
 
   const deleteMedia = () => {
     let path;
+    let redirect = false;
     switch (type) {
       case "video":
         path = `/videos/${_id}`;
+        redirect = true;
         break;
       case "image":
         path = `/images/${_id}`;
+        redirect = true;
         break;
       case "note":
         path = `/notes/${_id}`;
+        redirect = true;
+      case "videoComment":
+        path = `/videos/comments/${_id}`;
+        break;
+      case "imageComment":
+        path = `/images/comments/${_id}`;
+        break;
+      case "noteComment":
+        path = `/notes/comments/${_id}`;
         break;
     }
     axios
       .delete(path)
       .then((res) => {
-        setGoToProfile(true);
+        if (redirect) setGoToProfile(true);
+        else {
+          deleteComment(type, _id);
+          setConfirmOpen(false);
+          handleClose();
+        }
       })
       .catch((error) => {
         setConfirmOpen(false);
@@ -75,8 +95,10 @@ const OwnerActions = ({ _id, type, username }) => {
   if (goToProfile) return <Redirect to={`/profile/${username}`} />;
 
   return (
-    <div>
-      <CustomButton text="actions" onClick={handleClick} />
+    <div {...rest}>
+      <IconButton onClick={handleClick} color="inherit">
+        <MoreIcon className={classes.icon} />
+      </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={() => {}}>edit</MenuItem>
         <MenuItem onClick={() => setConfirmOpen(true)}>delete</MenuItem>
@@ -108,6 +130,9 @@ const mapStateToProps = (state) => ({
   username: state.user.username,
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  deleteComment: (type, _id) =>
+    dispatch(ActionCreators.deleteComment(type, _id)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(OwnerActions);

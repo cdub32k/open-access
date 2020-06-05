@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
@@ -7,10 +8,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { date2rel } from "../utils/helpers";
 
+import MediaOwnerActions from "./MediaOwnerActions";
+
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     marginBottom: 32,
+    position: "relative",
   },
   avatar: {
     width: 44,
@@ -25,11 +29,16 @@ const useStyles = makeStyles((theme) => ({
   userInfo: {
     marginBottom: 12,
   },
+  ownerActions: {
+    position: "absolute",
+    right: 10,
+    top: -14,
+  },
 }));
 
-const Comment = ({ body, user, createdAt }) => {
+const Comment = ({ comment, type, mineUsername }) => {
   const classes = useStyles();
-
+  const { _id, body, user, createdAt } = comment;
   return (
     <article className={classes.container}>
       <Link to={`/profile/${user.username}`}>
@@ -44,8 +53,19 @@ const Comment = ({ body, user, createdAt }) => {
         </Typography>
         <Typography variant="body1">{body}</Typography>
       </div>
+      {user.username == mineUsername && (
+        <MediaOwnerActions
+          className={classes.ownerActions}
+          _id={_id}
+          type={type + "Comment"}
+        />
+      )}
     </article>
   );
 };
 
-export default Comment;
+const mapStateToProps = (state) => ({
+  mineUsername: state.user.username,
+});
+
+export default connect(mapStateToProps)(Comment);

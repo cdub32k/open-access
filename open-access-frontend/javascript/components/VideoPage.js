@@ -1,86 +1,96 @@
-import React, { Component, Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
 
 import { connect } from "react-redux";
 
 import { ActionCreators } from "../actions";
 
 import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
 
 import VideoPlayer from "./VideoPlayer";
 import PreviewVideoPlayer from "./PreviewVideoPlayer";
 import CommentsSection from "./CommentsSection";
 import MediaOwnerActions from "./MediaOwnerActions";
 
-class VideoPage extends Component {
-  componentDidMount() {
-    const { videoId } = this.props.match.params;
-    this.props.getVideoInfo(videoId);
-  }
+const useStyles = makeStyles((theme) => ({
+  ownerActions: {
+    position: "absolute",
+    top: 0,
+    right: 56,
+  },
+}));
 
-  componentWillUnmount() {
-    this.props.clearVideoData();
-  }
+const VideoPage = ({
+  loading,
+  user,
+  title,
+  caption,
+  viewCount,
+  likeCount,
+  dislikeCount,
+  commentCount,
+  url,
+  thumbUrl,
+  uploadedAt,
+  liked,
+  disliked,
+  comments,
+  match,
+  mineUsername,
+  getVideoInfo,
+  clearVideoData,
+}) => {
+  const { videoId } = match.params;
 
-  render() {
-    const {
-      loading,
-      user,
-      title,
-      caption,
-      viewCount,
-      likeCount,
-      dislikeCount,
-      commentCount,
-      url,
-      thumbUrl,
-      uploadedAt,
-      liked,
-      disliked,
-      comments,
-      match: {
-        params: { videoId },
-      },
-      mineUsername,
-    } = this.props;
-    return (
-      <Grid container>
-        <Grid item xs={12} md={8} style={{ paddingRight: 32 }}>
-          {loading ? (
-            <PreviewVideoPlayer />
-          ) : (
-            <Fragment>
-              <VideoPlayer
+  useEffect(() => {
+    getVideoInfo(videoId);
+    return () => clearVideoData();
+  }, []);
+
+  const classes = useStyles();
+  return (
+    <Grid container>
+      <Grid
+        item
+        xs={12}
+        md={8}
+        style={{ paddingRight: 32, position: "relative" }}
+      >
+        {loading ? (
+          <PreviewVideoPlayer />
+        ) : (
+          <Fragment>
+            <VideoPlayer
+              _id={videoId}
+              user={user}
+              title={title}
+              caption={caption}
+              viewCount={viewCount}
+              url={url}
+              thumbUrl={thumbUrl}
+              likeCount={likeCount}
+              dislikeCount={dislikeCount}
+              commentCount={commentCount}
+              uploadedAt={uploadedAt}
+              liked={liked}
+              disliked={disliked}
+            />
+            {user.username == mineUsername && (
+              <MediaOwnerActions
+                className={classes.ownerActions}
                 _id={videoId}
-                user={user}
-                title={title}
-                caption={caption}
-                viewCount={viewCount}
-                url={url}
-                thumbUrl={thumbUrl}
-                likeCount={likeCount}
-                dislikeCount={dislikeCount}
-                commentCount={commentCount}
-                uploadedAt={uploadedAt}
-                liked={liked}
-                disliked={disliked}
+                type="video"
               />
-              {user.username == mineUsername && (
-                <MediaOwnerActions _id={videoId} type="video" />
-              )}
-            </Fragment>
-          )}
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <CommentsSection
-            comments={comments}
-            contentType="video"
-            id={videoId}
-          />
-        </Grid>
+            )}
+          </Fragment>
+        )}
       </Grid>
-    );
-  }
-}
+      <Grid item xs={12} md={4}>
+        <CommentsSection comments={comments} contentType="video" id={videoId} />
+      </Grid>
+    </Grid>
+  );
+};
 
 const mapStateToProps = (state) => ({
   loading: state.video.loading,

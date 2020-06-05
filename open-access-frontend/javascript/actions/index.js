@@ -109,6 +109,9 @@ export const ActionTypes = {
   LOAD_USER_PAYMENT_INFO_START: "LOAD_USER_PAYMENT_INFO_START",
   LOAD_USER_PAYMENT_INFO_SUCCESS: "LOAD_USER_PAYMENT_INFO_SUCCESS",
   LOAD_USER_PAYMENT_INFO_ERROR: "LOAD_USER_PAYMENT_INFO_ERROR",
+  DELETE_VIDEO_COMMENT: "DELETE_VIDEO_COMMENT",
+  DELETE_IMAGE_COMMENT: "DELETE_IMAGE_COMMENT",
+  DELETE_NOTE_COMMENT: "DELETE_NOTE_COMMENT",
 };
 
 export const ActionCreators = {
@@ -514,5 +517,15 @@ export const ActionCreators = {
   },
   noteItemUpdate: (note) => {
     return { type: ActionTypes.NOTE_ITEM_UPDATE, payload: { note } };
+  },
+  deleteComment: (type, _id) => {
+    switch (type) {
+      case "videoComment":
+        return { type: ActionTypes.DELETE_VIDEO_COMMENT, payload: { _id } };
+      case "imageComment":
+        return { type: ActionTypes.DELETE_IMAGE_COMMENT, payload: { _id } };
+      case "noteComment":
+        return { type: ActionTypes.DELETE_NOTE_COMMENT, payload: { _id } };
+    }
   },
 };

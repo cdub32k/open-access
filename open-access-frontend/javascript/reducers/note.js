@@ -78,6 +78,13 @@ const noteReducer = (state = initialState, action) => {
         n.comments = [...n.comments, ...state.comments];
       else delete n["comments"];
       return { ...state, ...n };
+    case ActionTypes.DELETE_NOTE_COMMENT:
+      let fComments = state.comments.filter((c) => c._id != action.payload._id);
+      return {
+        ...state,
+        commentCount: state.commentCount - 1,
+        comments: fComments,
+      };
     default:
       return state;
   }
