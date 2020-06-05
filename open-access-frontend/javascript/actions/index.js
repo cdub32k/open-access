@@ -112,6 +112,12 @@ export const ActionTypes = {
   DELETE_VIDEO_COMMENT: "DELETE_VIDEO_COMMENT",
   DELETE_IMAGE_COMMENT: "DELETE_IMAGE_COMMENT",
   DELETE_NOTE_COMMENT: "DELETE_NOTE_COMMENT",
+  LOAD_MORE_VIDEO_COMMENTS: "LOAD_MORE_VIDEO_COMMENTS",
+  LOAD_MORE_IMAGE_COMMENTS: "LOAD_MORE_IMAGE_COMMENTS",
+  LOAD_MORE_NOTE_COMMENTS: "LOAD_MORE_NOTE_COMMENTS",
+  LOAD_MORE_VIDEO_COMMENTS_SUCCESS: "LOAD_MORE_VIDEO_COMMENTS_SUCCESS",
+  LOAD_MORE_IMAGE_COMMENTS_SUCCESS: "LOAD_MORE_IMAGE_COMMENTS_SUCCESS",
+  LOAD_MORE_NOTE_COMMENTS_SUCCESS: "LOAD_MORE_NOTE_COMMENTS_SUCCESS",
 };
 
 export const ActionCreators = {
@@ -526,6 +532,44 @@ export const ActionCreators = {
         return { type: ActionTypes.DELETE_IMAGE_COMMENT, payload: { _id } };
       case "noteComment":
         return { type: ActionTypes.DELETE_NOTE_COMMENT, payload: { _id } };
+    }
+  },
+  loadMoreComments: (type, _id) => {
+    switch (type) {
+      case "video":
+        return {
+          type: ActionTypes.LOAD_MORE_VIDEO_COMMENTS,
+          payload: { videoId: _id },
+        };
+      case "image":
+        return {
+          type: ActionTypes.LOAD_MORE_IMAGE_COMMENTS,
+          payload: { imageId: _id },
+        };
+      case "note":
+        return {
+          type: ActionTypes.LOAD_MORE_NOTE_COMMENTS,
+          payload: { noteId: _id },
+        };
+    }
+  },
+  loadMoreCommentsSuccess: (type, items) => {
+    switch (type) {
+      case "video":
+        return {
+          type: ActionTypes.LOAD_MORE_VIDEO_COMMENTS_SUCCESS,
+          payload: { items },
+        };
+      case "image":
+        return {
+          type: ActionTypes.LOAD_MORE_IMAGE_COMMENTS_SUCCESS,
+          payload: { items },
+        };
+      case "note":
+        return {
+          type: ActionTypes.LOAD_MORE_NOTE_COMMENTS_SUCCESS,
+          payload: { items },
+        };
     }
   },
 };

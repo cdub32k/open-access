@@ -833,12 +833,16 @@ const resolvers = {
       const dislikes = await DB.NoteDislike.find({ noteId: _id });
       return dislikes;
     },
-    comments: async ({ _id, comments }, args, context, info) => {
+    comments: async ({ _id, comments }, { lastOldest }, context, info) => {
       if (comments) return comments;
 
-      const c = await DB.NoteComment.find({ noteId: _id }).sort({
-        createdAt: -1,
-      });
+      const criteria = lastOldest ? { createdAt: { $lt: lastOldest } } : {};
+
+      const c = await DB.NoteComment.find({ noteId: _id, ...criteria })
+        .sort({
+          createdAt: -1,
+        })
+        .limit(10);
       return c;
     },
   },
@@ -874,12 +878,16 @@ const resolvers = {
       const dislikes = await DB.ImageDislike.find({ imageId: _id });
       return dislikes;
     },
-    comments: async ({ _id, comments }, args, context, info) => {
+    comments: async ({ _id, comments }, { lastOldest }, context, info) => {
       if (comments) return comments;
 
-      const c = await DB.ImageComment.find({ imageId: _id }).sort({
-        createdAt: -1,
-      });
+      const criteria = lastOldest ? { createdAt: { $lt: lastOldest } } : {};
+
+      const c = await DB.ImageComment.find({ imageId: _id, ...criteria })
+        .sort({
+          createdAt: -1,
+        })
+        .limit(10);
       return c;
     },
 
@@ -924,12 +932,16 @@ const resolvers = {
       const views = await DB.VideoView.find({ videoId: _id });
       return views;
     },
-    comments: async ({ _id, comments }, args, context, info) => {
+    comments: async ({ _id, comments }, { lastOldest }, context, info) => {
       if (comments) return comments;
 
-      const c = await DB.VideoComment.find({ videoId: _id }).sort({
-        createdAt: -1,
-      });
+      const criteria = lastOldest ? { createdAt: { $lt: lastOldest } } : {};
+
+      const c = await DB.VideoComment.find({ videoId: _id, ...criteria })
+        .sort({
+          createdAt: -1,
+        })
+        .limit(10);
       return c;
     },
   },

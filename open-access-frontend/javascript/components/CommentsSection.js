@@ -1,10 +1,13 @@
 import React, { Fragment } from "react";
+import { connect } from "react-redux";
+import { ActionCreators } from "../actions";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import { makeStyles } from "@material-ui/core/styles";
 
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
+import CustomButton from "./CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -17,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CommentsSection = ({ comments, contentType, id }) => {
+const CommentsSection = ({ comments, contentType, id, loadMoreComments }) => {
   const classes = useStyles();
   return (
     <div className={`${classes.container} comments-container`}>
@@ -39,8 +42,19 @@ const CommentsSection = ({ comments, contentType, id }) => {
           </CSSTransition>
         ))}
       </TransitionGroup>
+      <CustomButton
+        text="Load More"
+        onClick={() => loadMoreComments(contentType, id)}
+      />
     </div>
   );
 };
 
-export default CommentsSection;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = (dispatch) => ({
+  loadMoreComments: (type, _id) =>
+    dispatch(ActionCreators.loadMoreComments(type, _id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentsSection);

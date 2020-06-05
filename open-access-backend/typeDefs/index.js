@@ -192,7 +192,7 @@ const typeDefs = gql`
     uploadedAt: Date
     likes: [NoteLike]
     dislikes: [NoteDislike]
-    comments: [NoteComment]
+    comments(lastOldest: Date): [NoteComment]
     liked: Boolean
     disliked: Boolean
   }
@@ -210,7 +210,7 @@ const typeDefs = gql`
     uploadedAt: Date
     likes: [ImageLike]
     dislikes: [ImageDislike]
-    comments: [ImageComment]
+    comments(lastOldest: Date): [ImageComment]
     liked: Boolean
     disliked: Boolean
   }
@@ -230,7 +230,7 @@ const typeDefs = gql`
     likes: [VideoLike]
     dislikes: [VideoDislike]
     views: [VideoView]
-    comments: [VideoComment]
+    comments(lastOldest: Date): [VideoComment]
     liked: Boolean
     disliked: Boolean
   }

@@ -90,6 +90,11 @@ const videoReducer = (state = initialState, action) => {
         commentCount: state.commentCount - 1,
         comments: fComments,
       };
+    case ActionTypes.LOAD_MORE_VIDEO_COMMENTS_SUCCESS:
+      return {
+        ...state,
+        comments: [...state.comments, ...action.payload.items],
+      };
     default:
       return state;
   }
