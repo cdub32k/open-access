@@ -103,7 +103,7 @@ const VideoPlayer = ({
           </span>
         }
       />
-      <CardContent style={{ paddingTop: 0 }}>
+      <CardContent style={{ paddingTop: 0, whiteSpace: "pre-wrap" }}>
         <div style={{ fontWeight: 400 }}>
           {thousandsSeparators(viewCount)} views
         </div>

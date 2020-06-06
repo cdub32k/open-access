@@ -1,8 +1,7 @@
-import React, { useEffect, Fragment } from "react";
-
+import React, { useState, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
-
 import { ActionCreators } from "../actions";
+import axios from "axios";
 
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,6 +10,7 @@ import Image_C from "./Image";
 import PreviewImage from "./PreviewImage";
 import CommentsSection from "./CommentsSection";
 import MediaOwnerActions from "./MediaOwnerActions";
+import CustomInput from "./CustomInput";
 
 const useStyles = makeStyles((theme) => ({
   ownerActions: {
@@ -38,14 +38,30 @@ const ImagePage = ({
   getImageInfo,
   clearImageData,
   hasMoreComments,
+  updateImage,
 }) => {
+  const [newTitle, setNewTitle] = useState(title);
+  const [newCaption, setNewCaption] = useState(caption);
+
   const { imageId } = match.params;
   useEffect(() => {
     getImageInfo(imageId);
     return () => clearImageData();
   }, []);
+  useEffect(() => {
+    setNewTitle(title);
+    setNewCaption(caption);
+  }, [title, caption]);
 
   const classes = useStyles();
+
+  const update = () => {
+    return axios
+      .put(`/images/${imageId}`, { title: newTitle, caption: newCaption })
+      .then((res) => {
+        updateImage(newTitle, newCaption);
+      });
+  };
 
   return (
     <Grid container>
@@ -77,6 +93,26 @@ const ImagePage = ({
                 className={classes.ownerActions}
                 _id={imageId}
                 type="image"
+                editTitle="Edit Image"
+                editCallback={update}
+                editForm={
+                  <Fragment>
+                    <CustomInput
+                      name="title"
+                      label="Title"
+                      value={newTitle}
+                      multiline={true}
+                      onChange={(e) => setNewTitle(e.target.value)}
+                    />
+                    <CustomInput
+                      name="caption"
+                      label="Caption"
+                      value={newCaption}
+                      multiline={true}
+                      onChange={(e) => setNewCaption(e.target.value)}
+                    />
+                  </Fragment>
+                }
               />
             )}
           </Fragment>
@@ -115,6 +151,8 @@ const mapDispatchToProps = (dispatch) => ({
   getImageInfo: (imageId) =>
     dispatch(ActionCreators.getImageInfoStart(imageId)),
   clearImageData: () => dispatch(ActionCreators.clearImageData()),
+  updateImage: (title, caption) =>
+    dispatch(ActionCreators.updateImage(title, caption)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImagePage);

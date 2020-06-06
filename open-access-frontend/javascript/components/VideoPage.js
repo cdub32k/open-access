@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from "react";
-
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { ActionCreators } from "../actions";
@@ -81,6 +81,7 @@ const VideoPage = ({
                 className={classes.ownerActions}
                 _id={videoId}
                 type="video"
+                editForm={<Redirect to={`/video/edit/${videoId}`} />}
               />
             )}
           </Fragment>

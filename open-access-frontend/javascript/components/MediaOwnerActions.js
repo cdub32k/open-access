@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-evenly",
     padding: 10,
+    marginBottom: 12,
   },
 }));
 
@@ -37,6 +38,7 @@ const OwnerActions = ({
   type,
   username,
   deleteComment,
+  editTitle,
   editForm,
   editCallback,
   ...rest
@@ -153,7 +155,7 @@ const OwnerActions = ({
         </div>
       </Dialog>
       <Dialog className={classes.dialog} onClose={confirmClose} open={editOpen}>
-        <DialogTitle>Edit comment</DialogTitle>
+        <DialogTitle>{editTitle}</DialogTitle>
         <DialogContent style={{ minWidth: 320 }}>{editForm}</DialogContent>
         <div className={classes.dialogActions}>
           <CustomButton

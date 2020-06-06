@@ -90,6 +90,7 @@ const Comment = ({
           className={classes.ownerActions}
           _id={_id}
           type={type + "Comment"}
+          editTitle={"Edit Comment"}
           editForm={
             <CustomInput
               name="body"

@@ -6,6 +6,7 @@ import axios from "axios";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
 
+import Typography from "@material-ui/core/Typography";
 import FormGroup from "@material-ui/core/FormGroup";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
@@ -131,6 +132,7 @@ class VideoUploader extends Component {
       if (res.data)
         this.setState({
           goToProfile: true,
+          _id: res.data._id,
         });
     });
   };
@@ -144,18 +146,20 @@ class VideoUploader extends Component {
   };
 
   render() {
-    if (this.state.goToProfile)
-      return <Redirect to={`/profile/${this.props.username}`} />;
+    if (this.state.goToProfile) return <Redirect to={`/video/${_id}`} />;
 
     const { classes } = this.props;
-    const { crop, thumbSrc, videoSrc, title, caption } = this.state;
+    const { _id, crop, thumbSrc, videoSrc, title, caption } = this.state;
 
     return (
       <div style={{ width: "100%" }}>
         <form className={classes.form} onSubmit={this.onSubmitHandler}>
           <Grid container>
             <Grid item xs={12}>
-              <FormGroup>
+              <Typography color="primary" variant="h3">
+                Upload Video
+              </Typography>
+              <FormGroup style={{ marginTop: 48 }}>
                 <input
                   hidden
                   ref={this.videoInput}

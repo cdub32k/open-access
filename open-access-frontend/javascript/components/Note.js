@@ -79,7 +79,7 @@ class Note extends Component {
       <Card className={classes.container}>
         <CardContent className={classes.noteContainer}>
           <div className={classes.note}>
-            <div>{body}</div>
+            <div style={{ whiteSpace: "pre-wrap" }}>{body}</div>
           </div>
         </CardContent>
         <CardHeader

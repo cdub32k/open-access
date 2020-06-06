@@ -106,6 +106,8 @@ const imageReducer = (state = initialState, action) => {
       nComments[nComments.findIndex((c) => c._id == action.payload._id)].body =
         action.payload.body;
       return { ...state, comments: nComments };
+    case ActionTypes.UPDATE_IMAGE:
+      return { ...state, ...action.payload };
     default:
       return state;
   }

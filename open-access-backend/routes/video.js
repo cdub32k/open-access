@@ -87,6 +87,23 @@ router.delete("/comments/:id", async (req, res) => {
     res.status(500).send({ error: "Something went wrong" });
   }
 });
+router.put("/:id", upload, async (req, res) => {
+  try {
+    let video = await Video.findOne({ _id: req.params.id });
+    let criteria = { title: req.body.title, caption: req.body.caption };
+    if (req.files && req.files["thumb"]) {
+      criteria[
+        "thumbUrl"
+      ] = `http://localhost:5000/vid/${req.username}/${req.files["thumb"][0].filename}`;
+      fs.unlink(`public/${video.thumbUrl.split("5000/")[1]}`);
+    }
+    await Video.updateOne({ _id: req.params.id }, criteria);
+
+    return res.status(200).send(true);
+  } catch (e) {
+    res.status(500).send({ error: "Something went wrong" });
+  }
+});
 router.delete("/:id", async (req, res) => {
   try {
     const video = await Video.findOne({ _id: req.params.id });

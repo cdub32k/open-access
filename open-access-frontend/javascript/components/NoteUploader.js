@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 
 import axios from "axios";
 
+import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import CustomInput from "./CustomInput";
 import CustomButton from "./CustomButton";
@@ -50,7 +51,10 @@ class NoteUploader extends Component {
     const { body } = this.state;
     return (
       <div>
-        <form onSubmit={this.onSubmitHandler}>
+        <Typography color="primary" variant="h3">
+          Post Note
+        </Typography>
+        <form onSubmit={this.onSubmitHandler} style={{ marginTop: 48 }}>
           <CustomInput
             value={body}
             onChange={this.updateBody}

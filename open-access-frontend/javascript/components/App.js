@@ -136,6 +136,15 @@ const VideoUploader = (props) => (
   </DynamicImport>
 );
 
+//import VideoUploader from "./VideoUploader";
+const VideoEdit = (props) => (
+  <DynamicImport load={() => import("./VideoEdit")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
 //import ImagePage from "./ImagePage";
 const ImagePage = (props) => (
   <DynamicImport load={() => import("./ImagePage")}>
@@ -258,6 +267,12 @@ class App extends Component {
                 path="/video-upload"
                 render={(props) => (
                   <UnAuthRedirect {...props} component={VideoUploader} />
+                )}
+              />
+              <Route
+                path="/video/edit/:videoId"
+                render={(props) => (
+                  <UnAuthRedirect {...props} component={VideoEdit} />
                 )}
               />
               <Route

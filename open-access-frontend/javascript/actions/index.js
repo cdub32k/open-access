@@ -121,6 +121,7 @@ export const ActionTypes = {
   UPDATE_VIDEO_COMMENT: "UPDATE_VIDEO_COMMENT",
   UPDATE_IMAGE_COMMENT: "UPDATE_IMAGE_COMMENT",
   UPDATE_NOTE_COMMENT: "UPDATE_NOTE_COMMENT",
+  UPDATE_IMAGE: "UPDATE_IMAGE",
 };
 
 export const ActionCreators = {
@@ -593,5 +594,8 @@ export const ActionCreators = {
           payload: { _id, body },
         };
     }
+  },
+  updateImage: (title, caption) => {
+    return { type: ActionTypes.UPDATE_IMAGE, payload: { title, caption } };
   },
 };

@@ -28,18 +28,13 @@ const CommentsSection = ({
   hasMoreComments,
 }) => {
   const classes = useStyles();
-  let section = useRef();
 
-  useEffect(() => {
-    section.current.scrollTop = section.current.scrollHeight;
-  }, [comments]);
   return (
     <div className={`${classes.container} comments-container`}>
       <CommentForm contentType={contentType} id={id} />
       <TransitionGroup
         component="section"
         className={`${classes.section} comments-section`}
-        ref={section}
       >
         {comments.map((comment, i) => (
           <CSSTransition
@@ -63,9 +58,7 @@ const CommentsSection = ({
       {hasMoreComments && (
         <CustomButton
           text="Load More"
-          onClick={() => {
-            loadMoreComments(contentType, id);
-          }}
+          onClick={() => loadMoreComments(contentType, id)}
         />
       )}
     </div>

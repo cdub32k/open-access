@@ -110,6 +110,20 @@ router.delete("/comments/:id", async (req, res) => {
     res.status(500).send({ error: "Something went wrong" });
   }
 });
+
+router.put("/:id", async (req, res) => {
+  try {
+    await Image.updateOne(
+      { _id: req.params.id },
+      { title: req.body.title, caption: req.body.caption }
+    );
+
+    return res.status(200).send(true);
+  } catch (e) {
+    res.status(500).send({ error: "Something went wrong" });
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   try {
     const image = await Image.findOne({ _id: req.params.id });

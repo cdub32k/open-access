@@ -45,6 +45,7 @@ const styles = (theme) => ({
   caption: {
     fontSize: 15,
     fontWeight: 400,
+    whiteSpace: "pre-wrap",
   },
   metric: {
     fontSize: 14,
@@ -54,7 +55,6 @@ const styles = (theme) => ({
 
 class Image_C extends Component {
   componentDidMount() {
-    console.log("mountedddddddddddddddddddd");
     this.props.subscribeToUpdates(this.props._id);
   }
 
