@@ -37,6 +37,7 @@ const ImagePage = ({
   mineUsername,
   getImageInfo,
   clearImageData,
+  hasMoreComments,
 }) => {
   const { imageId } = match.params;
   useEffect(() => {
@@ -82,7 +83,12 @@ const ImagePage = ({
         )}
       </Grid>
       <Grid item xs={12} md={4}>
-        <CommentsSection comments={comments} contentType="image" id={imageId} />
+        <CommentsSection
+          comments={comments}
+          contentType="image"
+          id={imageId}
+          hasMoreComments={hasMoreComments}
+        />
       </Grid>
     </Grid>
   );
@@ -102,6 +108,7 @@ const mapStateToProps = (state) => ({
   disliked: state.image.disliked,
   comments: state.image.comments,
   mineUsername: state.user.username,
+  hasMoreComments: state.image.hasMoreComments,
 });
 
 const mapDispatchToProps = (dispatch) => ({

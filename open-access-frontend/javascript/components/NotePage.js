@@ -36,6 +36,7 @@ const NotePage = ({
   mineUsername,
   getNoteInfo,
   clearNoteData,
+  hasMoreComments,
 }) => {
   const { noteId } = match.params;
   useEffect(() => {
@@ -78,7 +79,12 @@ const NotePage = ({
         )}
       </Grid>
       <Grid item xs={12} md={4}>
-        <CommentsSection comments={comments} contentType="note" id={noteId} />
+        <CommentsSection
+          comments={comments}
+          contentType="note"
+          id={noteId}
+          hasMoreComments={hasMoreComments}
+        />
       </Grid>
     </Grid>
   );
@@ -96,6 +102,7 @@ const mapStateToProps = (state) => ({
   disliked: state.note.disliked,
   comments: state.note.comments,
   mineUsername: state.user.username,
+  hasMoreComments: state.note.hasMoreComments,
 });
 
 const mapDispatchToProps = (dispatch) => ({

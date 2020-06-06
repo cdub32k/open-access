@@ -78,7 +78,20 @@ router.post("/profile/upload", profUpload, async (req, res) => {
 
     res.send({ user });
   } catch (error) {
-    return res.status(500).send({ error: "Something went wrong" + error });
+    return res.status(500).send({ error: "Something went wrong" });
+  }
+});
+
+router.put("/comments/:id", async (req, res) => {
+  try {
+    await ImageComment.updateOne(
+      { _id: req.params.id },
+      { body: req.body.body }
+    );
+
+    return res.status(200).send(true);
+  } catch (e) {
+    res.status(500).send({ error: "Something went wrong" });
   }
 });
 

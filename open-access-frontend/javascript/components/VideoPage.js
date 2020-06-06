@@ -39,6 +39,7 @@ const VideoPage = ({
   mineUsername,
   getVideoInfo,
   clearVideoData,
+  hasMoreComments,
 }) => {
   const { videoId } = match.params;
 
@@ -86,7 +87,12 @@ const VideoPage = ({
         )}
       </Grid>
       <Grid item xs={12} md={4}>
-        <CommentsSection comments={comments} contentType="video" id={videoId} />
+        <CommentsSection
+          comments={comments}
+          contentType="video"
+          id={videoId}
+          hasMoreComments={hasMoreComments}
+        />
       </Grid>
     </Grid>
   );
@@ -108,6 +114,7 @@ const mapStateToProps = (state) => ({
   uploadedAt: state.video.uploadedAt,
   comments: state.video.comments,
   mineUsername: state.user.username,
+  hasMoreComments: state.video.hasMoreComments,
 });
 
 const mapDispatchToProps = (dispatch) => ({

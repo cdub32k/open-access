@@ -52,7 +52,15 @@ const imageReducer = (state = initialState, action) => {
     case ActionTypes.IMAGE_LOADING:
       return { ...state, loading: true };
     case ActionTypes.GET_IMAGE_INFO_SUCCESS:
-      return { ...state, ...action.payload.imageData, loading: false };
+      let hasMoreComments = true;
+      if (action.payload.imageData.comments.length < 10)
+        hasMoreComments = false;
+      return {
+        ...state,
+        ...action.payload.imageData,
+        hasMoreComments,
+        loading: false,
+      };
     case ActionTypes.GET_IMAGE_INFO_ERROR:
       return { ...state, error: action.error, loading: false };
     case ActionTypes.LIKE_IMAGE_SUCCESS:
@@ -86,10 +94,18 @@ const imageReducer = (state = initialState, action) => {
         comments: fComments,
       };
     case ActionTypes.LOAD_MORE_IMAGE_COMMENTS_SUCCESS:
+      hasMoreComments = true;
+      if (action.payload.items.length < 10) hasMoreComments = false;
       return {
         ...state,
         comments: [...state.comments, ...action.payload.items],
+        hasMoreComments,
       };
+    case ActionTypes.UPDATE_IMAGE_COMMENT:
+      let nComments = [...state.comments];
+      nComments[nComments.findIndex((c) => c._id == action.payload._id)].body =
+        action.payload.body;
+      return { ...state, comments: nComments };
     default:
       return state;
   }

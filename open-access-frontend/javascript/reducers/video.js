@@ -12,6 +12,7 @@ const initialState = {
   user: {},
   loading: true,
   comments: [],
+  hasMoreComments: false,
 };
 
 const subscribeToVideoItemUpdates = (videoId) => {
@@ -53,7 +54,15 @@ const videoReducer = (state = initialState, action) => {
     case ActionTypes.VIDEO_LOADING:
       return { ...state, loading: true };
     case ActionTypes.GET_VIDEO_INFO_SUCCESS:
-      return { ...state, ...action.payload.videoData, loading: false };
+      let hasMoreComments = true;
+      if (action.payload.videoData.comments.length < 10)
+        hasMoreComments = false;
+      return {
+        ...state,
+        ...action.payload.videoData,
+        hasMoreComments,
+        loading: false,
+      };
     case ActionTypes.GET_VIDEO_INFO_ERROR:
       return { ...state, error: action.error, loading: false };
     case ActionTypes.RECORD_VIDEO_VIEW_SUCCESS:
@@ -91,10 +100,18 @@ const videoReducer = (state = initialState, action) => {
         comments: fComments,
       };
     case ActionTypes.LOAD_MORE_VIDEO_COMMENTS_SUCCESS:
+      hasMoreComments = true;
+      if (action.payload.items.length < 10) hasMoreComments = false;
       return {
         ...state,
         comments: [...state.comments, ...action.payload.items],
+        hasMoreComments,
       };
+    case ActionTypes.UPDATE_VIDEO_COMMENT:
+      let nComments = [...state.comments];
+      nComments[nComments.findIndex((c) => c._id == action.payload._id)].body =
+        action.payload.body;
+      return { ...state, comments: nComments };
     default:
       return state;
   }

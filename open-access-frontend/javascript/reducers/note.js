@@ -52,7 +52,14 @@ const noteReducer = (state = initialState, action) => {
     case ActionTypes.NOTE_LOADING:
       return { ...state, loading: true };
     case ActionTypes.GET_NOTE_INFO_SUCCESS:
-      return { ...state, ...action.payload.noteData, loading: false };
+      let hasMoreComments = true;
+      if (action.payload.noteData.comments.length < 10) hasMoreComments = false;
+      return {
+        ...state,
+        ...action.payload.noteData,
+        hasMoreComments,
+        loading: false,
+      };
     case ActionTypes.GET_NOTE_INFO_ERROR:
       return { ...state, error: action.error, loading: false };
     case ActionTypes.LIKE_NOTE_SUCCESS:
@@ -86,10 +93,18 @@ const noteReducer = (state = initialState, action) => {
         comments: fComments,
       };
     case ActionTypes.LOAD_MORE_NOTE_COMMENTS_SUCCESS:
+      hasMoreComments = true;
+      if (action.payload.items.length < 10) hasMoreComments = false;
       return {
         ...state,
         comments: [...state.comments, ...action.payload.items],
+        hasMoreComments,
       };
+    case ActionTypes.UPDATE_NOTE_COMMENT:
+      let nComments = [...state.comments];
+      nComments[nComments.findIndex((c) => c._id == action.payload._id)].body =
+        action.payload.body;
+      return { ...state, comments: nComments };
     default:
       return state;
   }

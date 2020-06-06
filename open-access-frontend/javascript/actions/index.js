@@ -118,6 +118,9 @@ export const ActionTypes = {
   LOAD_MORE_VIDEO_COMMENTS_SUCCESS: "LOAD_MORE_VIDEO_COMMENTS_SUCCESS",
   LOAD_MORE_IMAGE_COMMENTS_SUCCESS: "LOAD_MORE_IMAGE_COMMENTS_SUCCESS",
   LOAD_MORE_NOTE_COMMENTS_SUCCESS: "LOAD_MORE_NOTE_COMMENTS_SUCCESS",
+  UPDATE_VIDEO_COMMENT: "UPDATE_VIDEO_COMMENT",
+  UPDATE_IMAGE_COMMENT: "UPDATE_IMAGE_COMMENT",
+  UPDATE_NOTE_COMMENT: "UPDATE_NOTE_COMMENT",
 };
 
 export const ActionCreators = {
@@ -569,6 +572,25 @@ export const ActionCreators = {
         return {
           type: ActionTypes.LOAD_MORE_NOTE_COMMENTS_SUCCESS,
           payload: { items },
+        };
+    }
+  },
+  updateComment: (type, _id, body) => {
+    switch (type) {
+      case "video":
+        return {
+          type: ActionTypes.UPDATE_VIDEO_COMMENT,
+          payload: { _id, body },
+        };
+      case "image":
+        return {
+          type: ActionTypes.UPDATE_IMAGE_COMMENT,
+          payload: { _id, body },
+        };
+      case "note":
+        return {
+          type: ActionTypes.UPDATE_NOTE_COMMENT,
+          payload: { _id, body },
         };
     }
   },

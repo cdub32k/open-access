@@ -5,6 +5,19 @@ const { Note, NoteLike, NoteDislike, NoteComment } = require("../database");
 
 const router = require("express").Router();
 
+router.put("/comments/:id", async (req, res) => {
+  try {
+    await NoteComment.updateOne(
+      { _id: req.params.id },
+      { body: req.body.body }
+    );
+
+    return res.status(200).send(true);
+  } catch (e) {
+    res.status(500).send({ error: "Something went wrong" });
+  }
+});
+
 router.delete("/comments/:id", async (req, res) => {
   try {
     const nComment = await NoteComment.findOne({ _id: req.params.id });

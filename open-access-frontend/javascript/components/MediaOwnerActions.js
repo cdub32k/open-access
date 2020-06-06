@@ -8,6 +8,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import MoreIcon from "@material-ui/icons/MoreVert";
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menu: {},
   dialog: {
-    padding: 10,
+    padding: 14,
     display: "flex",
     flexDirection: "column",
   },
@@ -31,11 +32,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OwnerActions = ({ _id, type, username, deleteComment, ...rest }) => {
+const OwnerActions = ({
+  _id,
+  type,
+  username,
+  deleteComment,
+  editForm,
+  editCallback,
+  ...rest
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [goToProfile, setGoToProfile] = useState(false);
 
   const handleClick = (event) => {
@@ -87,8 +97,21 @@ const OwnerActions = ({ _id, type, username, deleteComment, ...rest }) => {
       });
   };
 
+  const editMedia = () => {
+    editCallback()
+      .then((res) => {
+        setEditOpen(false);
+        handleClose();
+      })
+      .catch((error) => {
+        setEditOpen(false);
+        handleClose();
+      });
+  };
+
   const confirmClose = () => {
     setConfirmOpen(false);
+    setEditOpen(false);
     handleClose();
   };
 
@@ -100,7 +123,7 @@ const OwnerActions = ({ _id, type, username, deleteComment, ...rest }) => {
         <MoreIcon className={classes.icon} />
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={() => {}}>edit</MenuItem>
+        <MenuItem onClick={() => setEditOpen(true)}>edit</MenuItem>
         <MenuItem onClick={() => setConfirmOpen(true)}>delete</MenuItem>
       </Menu>
 
@@ -119,7 +142,36 @@ const OwnerActions = ({ _id, type, username, deleteComment, ...rest }) => {
             text="DELETE"
             onClick={deleteMedia}
           />
-          <CustomButton text="cancel" onClick={confirmClose} />
+          <CustomButton
+            style={{
+              backgroundColor: theme.palette.secondary.main,
+              color: theme.palette.light.main,
+            }}
+            text="cancel"
+            onClick={confirmClose}
+          />
+        </div>
+      </Dialog>
+      <Dialog className={classes.dialog} onClose={confirmClose} open={editOpen}>
+        <DialogTitle>Edit comment</DialogTitle>
+        <DialogContent style={{ minWidth: 320 }}>{editForm}</DialogContent>
+        <div className={classes.dialogActions}>
+          <CustomButton
+            style={{
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.light.main,
+            }}
+            text="SAVE"
+            onClick={editMedia}
+          />
+          <CustomButton
+            style={{
+              backgroundColor: theme.palette.secondary.main,
+              color: theme.palette.light.main,
+            }}
+            text="cancel"
+            onClick={confirmClose}
+          />
         </div>
       </Dialog>
     </div>

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { useRef, useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -20,14 +20,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CommentsSection = ({ comments, contentType, id, loadMoreComments }) => {
+const CommentsSection = ({
+  comments,
+  contentType,
+  id,
+  loadMoreComments,
+  hasMoreComments,
+}) => {
   const classes = useStyles();
+  let section = useRef();
+
+  useEffect(() => {
+    section.current.scrollTop = section.current.scrollHeight;
+  }, [comments]);
   return (
     <div className={`${classes.container} comments-container`}>
       <CommentForm contentType={contentType} id={id} />
       <TransitionGroup
         component="section"
         className={`${classes.section} comments-section`}
+        ref={section}
       >
         {comments.map((comment, i) => (
           <CSSTransition
@@ -38,14 +50,24 @@ const CommentsSection = ({ comments, contentType, id, loadMoreComments }) => {
             enter
             key={comment._id}
           >
-            <Comment type={contentType} comment={comment} />
+            <Comment
+              type={contentType}
+              _id={comment._id}
+              body={comment.body}
+              user={comment.user}
+              createdAt={comment.createdAt}
+            />
           </CSSTransition>
         ))}
       </TransitionGroup>
-      <CustomButton
-        text="Load More"
-        onClick={() => loadMoreComments(contentType, id)}
-      />
+      {hasMoreComments && (
+        <CustomButton
+          text="Load More"
+          onClick={() => {
+            loadMoreComments(contentType, id);
+          }}
+        />
+      )}
     </div>
   );
 };

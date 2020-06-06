@@ -59,6 +59,18 @@ router.post("/upload", upload, async (req, res) => {
   }
 });
 
+router.put("/comments/:id", async (req, res) => {
+  try {
+    await VideoComment.updateOne(
+      { _id: req.params.id },
+      { body: req.body.body }
+    );
+
+    return res.status(200).send(true);
+  } catch (e) {
+    res.status(500).send({ error: "Something went wrong" });
+  }
+});
 router.delete("/comments/:id", async (req, res) => {
   try {
     const vComment = await VideoComment.findOne({ _id: req.params.id });
@@ -72,7 +84,7 @@ router.delete("/comments/:id", async (req, res) => {
 
     return res.status(200).send(true);
   } catch (e) {
-    res.status(500).send({ error: "Something went wrong" + e });
+    res.status(500).send({ error: "Something went wrong" });
   }
 });
 router.delete("/:id", async (req, res) => {
