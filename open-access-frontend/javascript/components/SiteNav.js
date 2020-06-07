@@ -172,17 +172,22 @@ const SiteNav = ({
           case "comment":
             msg += "commented on your ";
             break;
+          case "reply":
+            msg += "replied to your ";
           default:
             break;
         }
         switch (notif.target) {
           case "note":
+          case "note comment":
             contentUrl = "/note/" + notif.targetId;
             break;
           case "image":
+          case "image comment":
             contentUrl = "/image/" + notif.targetId;
             break;
           case "video":
+          case "video comment":
             contentUrl = "/video-player/" + notif.targetId;
             break;
           default:

@@ -5,7 +5,11 @@ import { ActionCreators } from "../actions";
 import apolloClient from "../apollo";
 import { parse } from "graphql";
 
-import { removeNull } from "../utils/helpers";
+import {
+  removeNull,
+  findComment,
+  findAndDeleteComment,
+} from "../utils/helpers";
 
 const initialState = {
   error: null,
@@ -32,6 +36,8 @@ const subscribeToNoteItemUpdates = (noteId) => {
               }
               body
               createdAt
+              replyId
+              replyCount
             }
           }
         }
@@ -80,16 +86,37 @@ const noteReducer = (state = initialState, action) => {
       const subscription = subscribeToNoteItemUpdates(action.payload.noteId);
       return { ...state, subscription };
     case ActionTypes.NOTE_ITEM_UPDATE:
-      let n = removeNull(action.payload.note);
-      if (n.comments && n.comments.length)
-        n.comments = [...n.comments, ...state.comments];
-      else delete n["comments"];
-      return { ...state, ...n };
+      let i = removeNull(action.payload.note);
+      if (i.comments && i.comments.length) {
+        if (i.comments[0].replyId) {
+          let reply = i.comments[0];
+
+          let nComments = [...state.comments];
+          let parent;
+          for (let i = 0; i < nComments.length; i++) {
+            let found = findComment(nComments[i], reply.replyId);
+            if (found) {
+              parent = found;
+              break;
+            }
+          }
+          parent.replies
+            ? (parent.replies = [reply, ...parent.replies])
+            : (parent.replies = [reply]);
+          parent.replyCount++;
+          i.comments = nComments;
+        } else i.comments = [...i.comments, ...state.comments];
+      } else delete i["comments"];
+      return { ...state, ...i };
     case ActionTypes.DELETE_NOTE_COMMENT:
-      let fComments = state.comments.filter((c) => c._id != action.payload._id);
+      let fComments = findAndDeleteComment(
+        [...state.comments],
+        action.payload._id
+      );
+
       return {
         ...state,
-        commentCount: state.commentCount - 1,
+        commentCount: action.payload.commentCount,
         comments: fComments,
       };
     case ActionTypes.LOAD_MORE_NOTE_COMMENTS_SUCCESS:
@@ -102,8 +129,28 @@ const noteReducer = (state = initialState, action) => {
       };
     case ActionTypes.UPDATE_NOTE_COMMENT:
       let nComments = [...state.comments];
-      nComments[nComments.findIndex((c) => c._id == action.payload._id)].body =
-        action.payload.body;
+      let c;
+      for (let i = 0; i < nComments.length; i++) {
+        let found = findComment(nComments[i], action.payload._id);
+        if (found) {
+          c = found;
+          break;
+        }
+      }
+      c.body = action.payload.body;
+      return { ...state, comments: nComments };
+    case ActionTypes.GET_NOTE_COMMENT_REPLIES_SUCCESS:
+      let parent;
+      nComments = [...state.comments];
+      for (let i = 0; i < nComments.length; i++) {
+        let found = findComment(nComments[i], action.payload._id);
+        if (found) {
+          parent = found;
+          break;
+        }
+      }
+      parent.replies = action.payload.replies;
+
       return { ...state, comments: nComments };
     default:
       return state;

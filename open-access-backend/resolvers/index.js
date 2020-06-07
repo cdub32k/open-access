@@ -376,7 +376,7 @@ const resolvers = {
     },
     commentNote: async (
       parent,
-      { id, body },
+      { id, body, replyId },
       { req: { username, authorized }, pubsub },
       info
     ) => {
@@ -387,18 +387,14 @@ const resolvers = {
           username,
           noteId: id,
           body,
+          replyId,
         });
 
         const note = await DB.Note.findOne({ _id: id });
         note.commentCount++;
         await note.save();
 
-        const notified = await DB.Notification.findOne({
-          sender: username,
-          targetId: note._id,
-          type: "comment",
-        });
-        if (!notified)
+        if (!replyId)
           DB.Notification.create({
             sender: username,
             receiver: note.username,
@@ -407,6 +403,20 @@ const resolvers = {
             targetId: note._id,
             body,
           });
+
+        if (replyId) {
+          const comm = await DB.NoteComment.findOne({ _id: replyId });
+          comm.replyCount++;
+          await comm.save();
+          DB.Notification.create({
+            sender: username,
+            receiver: comm.username,
+            type: "reply",
+            target: "note comment",
+            targetId: note._id,
+            body,
+          });
+        }
 
         pubsub.publish(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX + note._id, {
           newsfeedNoteItem: {
@@ -586,7 +596,7 @@ const resolvers = {
             sender: username,
             receiver: comm.username,
             type: "reply",
-            target: "imageComment",
+            target: "image comment",
             targetId: image._id,
             body,
           });
@@ -805,7 +815,7 @@ const resolvers = {
             sender: username,
             receiver: comm.username,
             type: "reply",
-            target: "videoComment",
+            target: "video comment",
             targetId: video._id,
             body,
           });
@@ -875,7 +885,9 @@ const resolvers = {
     comments: async ({ _id, comments }, { lastOldest }, context, info) => {
       if (comments) return comments;
 
-      const criteria = lastOldest ? { createdAt: { $lt: lastOldest } } : {};
+      const criteria = lastOldest
+        ? { createdAt: { $lt: lastOldest }, replyId: null }
+        : { replyId: null };
 
       const c = await DB.NoteComment.find({ noteId: _id, ...criteria })
         .sort({

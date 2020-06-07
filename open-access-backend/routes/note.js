@@ -18,20 +18,42 @@ router.put("/comments/:id", async (req, res) => {
   }
 });
 
+let deleteReplies = async (comm, img) => {
+  let replies = await NoteComment.find({ replyId: comm._id });
+  if (replies) {
+    await img.update({ $inc: { commentCount: -replies.length } });
+    replies.forEach(async (reply) => {
+      await deleteReplies(reply, img);
+      await reply.delete();
+    });
+  }
+};
+
 router.delete("/comments/:id", async (req, res) => {
   try {
-    const nComment = await NoteComment.findOne({ _id: req.params.id });
-    if (nComment) {
+    const iComment = await NoteComment.findOne({ _id: req.params.id });
+    if (iComment) {
       await Note.updateOne(
-        { _id: nComment.noteId },
+        { _id: iComment.noteId },
         { $inc: { commentCount: -1 } }
       );
-      await nComment.delete();
-    }
+      if (iComment.replyId) {
+        const rComment = await NoteComment.findOne({ _id: iComment.replyId });
+        rComment.replyCount--;
+        await rComment.save();
+      }
 
-    return res.status(200).send(true);
+      let note = await Note.findOne({ _id: iComment.noteId });
+      await deleteReplies(iComment, note);
+
+      await iComment.delete();
+    }
+    let note = await Note.findOne({ _id: iComment.noteId });
+    return res
+      .status(200)
+      .send({ createdAt: note.createdAt, commentCount: note.commentCount });
   } catch (e) {
-    res.status(500).send({ error: "Something went wrong" });
+    res.status(500).send({ error: "Something went wrong" + e });
   }
 });
 

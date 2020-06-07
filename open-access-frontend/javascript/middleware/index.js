@@ -183,6 +183,7 @@ const GET_NOTE_INFO_QUERY = `
         }
         body
         createdAt
+        replyCount
       }
       body      
       likeCount
@@ -397,6 +398,21 @@ const LOAD_VIDEO_COMMENT_REPLIES_QUERY = `
 const LOAD_IMAGE_COMMENT_REPLIES_QUERY = `
   query ImageCommentReplies($commentId: String!) {
     imageCommentReplies(commentId:$commentId) {
+      _id
+        user {
+          username
+          profilePic
+        }
+        body
+        createdAt
+        replyCount
+        replyId
+    }
+  }
+`;
+const LOAD_NOTE_COMMENT_REPLIES_QUERY = `
+  query NoteCommentReplies($commentId: String!) {
+    noteCommentReplies(commentId:$commentId) {
       _id
         user {
           username
@@ -829,18 +845,7 @@ export default [
             replyId: action.payload.replyId,
           },
         })
-        .then((res) => {
-          if (res.data.data.commentImage)
-            next(
-              ActionCreators.postImageCommentSuccess(
-                res.data.data.commentImage,
-                action.payload.body,
-                store.getState().user.username,
-                store.getState().user.profilePic
-              )
-            );
-          else next(ActionCreators.postImageCommentError());
-        });
+        .then((res) => {});
     } else if (action.type == ActionTypes.GET_NOTE_INFO_START) {
       next(ActionCreators.noteLoading());
 
@@ -874,23 +879,17 @@ export default [
       axios
         .post("/api", {
           query: `
-            mutation {
-              commentNote(id:"${action.payload.noteId}",body:"${action.payload.body}")
+            mutation  CommentNote($id:String!,$body:String!,$replyId:String) {
+              commentNote(id:$id,body:$body,replyId:$replyId)
             }
           `,
+          variables: {
+            id: action.payload.noteId,
+            body: action.payload.body,
+            replyId: action.payload.replyId,
+          },
         })
-        .then((res) => {
-          if (res.data.data.commentNote)
-            next(
-              ActionCreators.postNoteCommentSuccess(
-                res.data.data.commentNote,
-                action.payload.body,
-                store.getState().user.username,
-                store.getState().user.profilePic
-              )
-            );
-          else next(ActionCreators.postNoteCommentError());
-        });
+        .then((res) => {});
     } else if (action.type == ActionTypes.LOAD_NEWSFEED_VIDEO_START) {
       axios
         .post("/api", {
@@ -1104,6 +1103,24 @@ export default [
           next(
             ActionCreators.getCommentRepliesSuccess(
               "image",
+              action.payload._id,
+              replyData
+            )
+          );
+        });
+    } else if (action.type == ActionTypes.GET_NOTE_COMMENT_REPLIES) {
+      axios
+        .post("api", {
+          query: LOAD_NOTE_COMMENT_REPLIES_QUERY,
+          variables: {
+            commentId: action.payload._id,
+          },
+        })
+        .then((res) => {
+          const replyData = res.data.data.noteCommentReplies;
+          next(
+            ActionCreators.getCommentRepliesSuccess(
+              "note",
               action.payload._id,
               replyData
             )

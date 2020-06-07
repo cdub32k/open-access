@@ -329,10 +329,10 @@ export const ActionCreators = {
   noteLoading: () => {
     return { type: ActionTypes.NOTE_LOADING };
   },
-  postNoteCommentStart: (noteId, body) => {
+  postNoteCommentStart: (noteId, body, replyId) => {
     return {
       type: ActionTypes.POST_NOTE_COMMENT_START,
-      payload: { noteId, body },
+      payload: { noteId, body, replyId },
     };
   },
   postNoteCommentSuccess: (commentId, body, username, profilePic) => {
