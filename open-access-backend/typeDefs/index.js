@@ -20,6 +20,8 @@ const typeDefs = gql`
     newsfeedNotes(lastOldest: Date): [Note]
 
     videoCommentReplies(commentId: String!): [VideoComment]
+    imageCommentReplies(commentId: String!): [ImageComment]
+    noteCommentReplies(commentId: String!): [NoteComment]
   }
 
   type UserResponse {
@@ -70,10 +72,10 @@ const typeDefs = gql`
     commentVideo(id: String!, body: String!, replyId: String): String
     likeImage(id: String!): Boolean
     dislikeImage(id: String!): Boolean
-    commentImage(id: String!, body: String!): String
+    commentImage(id: String!, body: String!, replyId: String): String
     likeNote(id: String!): Boolean
     dislikeNote(id: String!): Boolean
-    commentNote(id: String!, body: String!): String
+    commentNote(id: String!, body: String!, replyId: String): String
     markNotificationsRead(ids: [String]!): Boolean
   }
 
@@ -163,6 +165,9 @@ const typeDefs = gql`
     Image: Image
     body: String
     createdAt: Date
+    replies: [ImageComment]
+    replyCount: Int
+    replyId: String
   }
 
   type NoteLike {
@@ -185,6 +190,9 @@ const typeDefs = gql`
     Note: Note
     body: String
     createdAt: Date
+    replies: [NoteComment]
+    replyCount: Int
+    replyId: String
   }
 
   type Note {

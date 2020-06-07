@@ -275,10 +275,10 @@ export const ActionCreators = {
   dislikeImageError: (error) => {
     return { type: ActionTypes.DISLIKE_IMAGE_ERROR, error };
   },
-  postImageCommentStart: (imageId, body) => {
+  postImageCommentStart: (imageId, body, replyId) => {
     return {
       type: ActionTypes.POST_IMAGE_COMMENT_START,
-      payload: { imageId, body },
+      payload: { imageId, body, replyId },
     };
   },
   postImageCommentSuccess: (commentId, body, username, profilePic) => {
@@ -542,9 +542,15 @@ export const ActionCreators = {
           payload: { _id, commentCount },
         };
       case "imageComment":
-        return { type: ActionTypes.DELETE_IMAGE_COMMENT, payload: { _id } };
+        return {
+          type: ActionTypes.DELETE_IMAGE_COMMENT,
+          payload: { _id, commentCount },
+        };
       case "noteComment":
-        return { type: ActionTypes.DELETE_NOTE_COMMENT, payload: { _id } };
+        return {
+          type: ActionTypes.DELETE_NOTE_COMMENT,
+          payload: { _id, commentCount },
+        };
     }
   },
   loadMoreComments: (type, _id) => {
@@ -632,13 +638,13 @@ export const ActionCreators = {
         };
       case "image":
         return {
-          type: ActionTypes.GET_IMAGE_COMMENT_REPLIES,
-          payload: { _id, body },
+          type: ActionTypes.GET_IMAGE_COMMENT_REPLIES_SUCCESS,
+          payload: { _id, replies },
         };
       case "note":
         return {
-          type: ActionTypes.GET_NOTE_COMMENT_REPLIES,
-          payload: { _id, body },
+          type: ActionTypes.GET_NOTE_COMMENT_REPLIES_SUCCESS,
+          payload: { _id, replies },
         };
     }
   },

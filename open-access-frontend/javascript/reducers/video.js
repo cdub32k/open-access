@@ -5,7 +5,11 @@ import { ActionCreators } from "../actions";
 import apolloClient from "../apollo";
 import { parse } from "graphql";
 
-import { removeNull } from "../utils/helpers";
+import {
+  removeNull,
+  findComment,
+  findAndDeleteComment,
+} from "../utils/helpers";
 
 const initialState = {
   error: null,
@@ -47,36 +51,6 @@ const subscribeToVideoItemUpdates = (videoId) => {
         store.dispatch(ActionCreators.videoItemUpdate(videoItem));
       },
     });
-};
-
-const findComment = (comm, replyId) => {
-  if (comm._id == replyId) return comm;
-  if (comm.replies) {
-    for (let i = 0; i < comm.replies.length; i++) {
-      let found = findComment(comm.replies[i], replyId);
-      if (found) {
-        comm.replies = [...comm.replies];
-        return found;
-      }
-    }
-  }
-};
-
-const findAndDeleteComment = (comms, id) => {
-  if (comms.findIndex((c) => c._id == id) > -1) {
-    comms = comms.filter((c) => c._id != id);
-    return comms;
-  }
-  for (let i = 0; i < comms.length; i++) {
-    if (comms[i].replies) {
-      let found = findAndDeleteComment(comms[i].replies, id);
-      if (found) {
-        comms[i].replies = [...found];
-        return [...comms];
-      }
-    }
-  }
-  return false;
 };
 
 const videoReducer = (state = initialState, action) => {
@@ -142,7 +116,6 @@ const videoReducer = (state = initialState, action) => {
       } else delete v["comments"];
       return { ...state, ...v };
     case ActionTypes.DELETE_VIDEO_COMMENT:
-      //let fComments = state.comments.filter((c) => c._id != action.payload._id);
       let fComments = findAndDeleteComment(
         [...state.comments],
         action.payload._id

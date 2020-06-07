@@ -52,3 +52,33 @@ export function removeNull(obj) {
   );
   return obj;
 }
+
+export function findComment(comm, replyId) {
+  if (comm._id == replyId) return comm;
+  if (comm.replies) {
+    for (let i = 0; i < comm.replies.length; i++) {
+      let found = findComment(comm.replies[i], replyId);
+      if (found) {
+        comm.replies = [...comm.replies];
+        return found;
+      }
+    }
+  }
+}
+
+export function findAndDeleteComment(comms, id) {
+  if (comms.findIndex((c) => c._id == id) > -1) {
+    comms = comms.filter((c) => c._id != id);
+    return comms;
+  }
+  for (let i = 0; i < comms.length; i++) {
+    if (comms[i].replies) {
+      let found = findAndDeleteComment(comms[i].replies, id);
+      if (found) {
+        comms[i].replies = [...found];
+        return [...comms];
+      }
+    }
+  }
+  return false;
+}

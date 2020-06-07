@@ -153,6 +153,7 @@ const GET_IMAGE_INFO_QUERY = `
         }
         body
         createdAt
+        replyCount
       }
       title
       caption
@@ -380,6 +381,22 @@ const LOAD_MORE_NOTE_COMMENTS_QUERY = `
 const LOAD_VIDEO_COMMENT_REPLIES_QUERY = `
   query VideoCommentReplies($commentId: String!) {
     videoCommentReplies(commentId:$commentId) {
+      _id
+        user {
+          username
+          profilePic
+        }
+        body
+        createdAt
+        replyCount
+        replyId
+    }
+  }
+`;
+
+const LOAD_IMAGE_COMMENT_REPLIES_QUERY = `
+  query ImageCommentReplies($commentId: String!) {
+    imageCommentReplies(commentId:$commentId) {
       _id
         user {
           username
@@ -802,10 +819,15 @@ export default [
       axios
         .post("/api", {
           query: `
-            mutation {
-              commentImage(id:"${action.payload.imageId}",body:"${action.payload.body}")
+            mutation CommentImage($id:String!,$body:String!,$replyId:String)  {
+              commentImage(id:$id,body:$body,replyId:$replyId)
             }
           `,
+          variables: {
+            id: action.payload.imageId,
+            body: action.payload.body,
+            replyId: action.payload.replyId,
+          },
         })
         .then((res) => {
           if (res.data.data.commentImage)
@@ -1064,6 +1086,24 @@ export default [
           next(
             ActionCreators.getCommentRepliesSuccess(
               "video",
+              action.payload._id,
+              replyData
+            )
+          );
+        });
+    } else if (action.type == ActionTypes.GET_IMAGE_COMMENT_REPLIES) {
+      axios
+        .post("api", {
+          query: LOAD_IMAGE_COMMENT_REPLIES_QUERY,
+          variables: {
+            commentId: action.payload._id,
+          },
+        })
+        .then((res) => {
+          const replyData = res.data.data.imageCommentReplies;
+          next(
+            ActionCreators.getCommentRepliesSuccess(
+              "image",
               action.payload._id,
               replyData
             )
