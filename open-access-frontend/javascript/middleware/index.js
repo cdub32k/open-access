@@ -388,6 +388,7 @@ const LOAD_VIDEO_COMMENT_REPLIES_QUERY = `
         body
         createdAt
         replyCount
+        replyId
     }
   }
 `;
@@ -650,18 +651,7 @@ export default [
             replyId: action.payload.replyId,
           },
         })
-        .then((res) => {
-          if (res.data.data.commentVideo)
-            next(
-              ActionCreators.postVideoCommentSuccess(
-                res.data.data.commentVideo,
-                action.payload.body,
-                store.getState().user.username,
-                store.getState().user.profilePic
-              )
-            );
-          else next(ActionCreators.postVideoCommentError());
-        });
+        .then((res) => {});
     } else if (action.type == ActionTypes.LOAD_USER_VIDEO_PAGE_START) {
       const { username, page } = action.payload;
 

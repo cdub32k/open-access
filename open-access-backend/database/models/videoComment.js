@@ -7,6 +7,8 @@ let videoCommentSchema = new mongoose.Schema(
     username: String,
     replyId: mongoose.Types.ObjectId,
     replyCount: { type: Number, default: 0 },
+    likeCount: { type: Number, default: 0 },
+    dislikeCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

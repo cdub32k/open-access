@@ -88,7 +88,7 @@ const OwnerActions = ({
       .then((res) => {
         if (redirect) setGoToProfile(true);
         else {
-          deleteComment(type, _id);
+          deleteComment(type, _id, res.data.commentCount);
           setConfirmOpen(false);
           handleClose();
         }
@@ -185,8 +185,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  deleteComment: (type, _id) =>
-    dispatch(ActionCreators.deleteComment(type, _id)),
+  deleteComment: (type, _id, commentCount) =>
+    dispatch(ActionCreators.deleteComment(type, _id, commentCount)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OwnerActions);

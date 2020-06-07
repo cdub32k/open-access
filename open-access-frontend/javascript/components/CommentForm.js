@@ -67,7 +67,7 @@ const CommentForm = ({
       />
       <CustomButton
         disabled={!body.trim()}
-        text="comment"
+        text={!replyId ? "comment" : "reply"}
         onClick={postComment}
         style={{ width: 100 }}
         size="small"

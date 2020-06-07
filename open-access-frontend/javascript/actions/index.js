@@ -534,10 +534,13 @@ export const ActionCreators = {
   noteItemUpdate: (note) => {
     return { type: ActionTypes.NOTE_ITEM_UPDATE, payload: { note } };
   },
-  deleteComment: (type, _id) => {
+  deleteComment: (type, _id, commentCount) => {
     switch (type) {
       case "videoComment":
-        return { type: ActionTypes.DELETE_VIDEO_COMMENT, payload: { _id } };
+        return {
+          type: ActionTypes.DELETE_VIDEO_COMMENT,
+          payload: { _id, commentCount },
+        };
       case "imageComment":
         return { type: ActionTypes.DELETE_IMAGE_COMMENT, payload: { _id } };
       case "noteComment":

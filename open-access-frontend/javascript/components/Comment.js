@@ -6,6 +6,11 @@ import axios from "axios";
 
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import ThumbDownOutline from "@material-ui/icons/ThumbDownOutlined";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { date2rel } from "../utils/helpers";
@@ -16,7 +21,8 @@ import CommentForm from "./CommentForm";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginBottom: 32,
+    marginBottom: 54,
+    minWidth: 320,
   },
   comment: {
     display: "flex",
@@ -46,14 +52,14 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   replyForm: {
-    marginLeft: 30,
+    marginLeft: 12,
   },
   repliesSection: {
-    marginLeft: 30,
+    marginLeft: 12,
   },
 }));
 
-const Comment = ({
+let Comment = ({
   _id,
   mediaId,
   body,
@@ -63,6 +69,7 @@ const Comment = ({
   mineUsername,
   updateComment,
   replyCount,
+  replyId,
   getReplies,
   replies,
 }) => {
@@ -72,7 +79,7 @@ const Comment = ({
   const [showReplies, setShowReplies] = useState(false);
 
   useEffect(() => {
-    if (replies) {
+    if (replies && replyFormOpen) {
       setShowReplies(true);
       setReplyFormOpen(false);
     }
@@ -100,11 +107,21 @@ const Comment = ({
     setReplyFormOpen(!replyFormOpen);
   };
 
+  const replyStyle = {};
+  if (replyId) {
+    replyStyle.avatar = { width: 28, height: 28 };
+    replyStyle.container = { marginBottom: 20 };
+  }
+
   return (
-    <div className={classes.container}>
+    <div className={classes.container} style={replyStyle.container}>
       <article className={classes.comment}>
         <Link to={`/profile/${user.username}`}>
-          <Avatar src={user.profilePic} className={classes.avatar} />
+          <Avatar
+            src={user.profilePic}
+            className={classes.avatar}
+            style={replyStyle.avatar}
+          />
         </Link>
         <div className={classes.textSection}>
           <Typography className={classes.userInfo} variant="body2">
@@ -173,6 +190,7 @@ const Comment = ({
                   user={reply.user}
                   createdAt={reply.createdAt}
                   replyCount={reply.replyCount}
+                  replyId={reply.replyId}
                   replies={reply.replies}
                 />
               );
@@ -193,4 +211,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreators.getCommentReplies(type, _id)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Comment);
+Comment = connect(mapStateToProps, mapDispatchToProps)(Comment);
+
+export default Comment;

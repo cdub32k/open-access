@@ -71,6 +71,17 @@ router.put("/comments/:id", async (req, res) => {
     res.status(500).send({ error: "Something went wrong" });
   }
 });
+let deleteReplies = async (comm, vid) => {
+  let replies = await VideoComment.find({ replyId: comm._id });
+  if (replies) {
+    await vid.update({ $inc: { commentCount: -replies.length } });
+    replies.forEach(async (reply) => {
+      await deleteReplies(reply, vid);
+      await reply.delete();
+    });
+  }
+};
+
 router.delete("/comments/:id", async (req, res) => {
   try {
     const vComment = await VideoComment.findOne({ _id: req.params.id });
@@ -79,12 +90,23 @@ router.delete("/comments/:id", async (req, res) => {
         { _id: vComment.videoId },
         { $inc: { commentCount: -1 } }
       );
+      if (vComment.replyId) {
+        const rComment = await VideoComment.findOne({ _id: vComment.replyId });
+        rComment.replyCount--;
+        await rComment.save();
+      }
+
+      let video = await Video.findOne({ _id: vComment.videoId });
+      await deleteReplies(vComment, video);
+
       await vComment.delete();
     }
-
-    return res.status(200).send(true);
+    let video = await Video.findOne({ _id: vComment.videoId });
+    return res
+      .status(200)
+      .send({ createdAt: video.createdAt, commentCount: video.commentCount });
   } catch (e) {
-    res.status(500).send({ error: "Something went wrong" });
+    res.status(500).send({ error: "Something went wrong" + e });
   }
 });
 router.put("/:id", upload, async (req, res) => {
