@@ -18,6 +18,8 @@ const typeDefs = gql`
     newsfeedVideos(lastOldest: Date): [Video]
     newsfeedImages(lastOldest: Date): [Image]
     newsfeedNotes(lastOldest: Date): [Note]
+
+    videoCommentReplies(commentId: String!): [VideoComment]
   }
 
   type UserResponse {
@@ -65,7 +67,7 @@ const typeDefs = gql`
     likeVideo(id: String!): Boolean
     dislikeVideo(id: String!): Boolean
     viewVideo(id: String!): Boolean
-    commentVideo(id: String!, body: String!): String
+    commentVideo(id: String!, body: String!, replyId: String): String
     likeImage(id: String!): Boolean
     dislikeImage(id: String!): Boolean
     commentImage(id: String!, body: String!): String
@@ -136,6 +138,9 @@ const typeDefs = gql`
     Video: Video
     body: String
     createdAt: Date
+    replies: [VideoComment]
+    replyCount: Int
+    replyId: String
   }
 
   type ImageLike {

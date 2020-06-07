@@ -121,6 +121,12 @@ export const ActionTypes = {
   UPDATE_VIDEO_COMMENT: "UPDATE_VIDEO_COMMENT",
   UPDATE_IMAGE_COMMENT: "UPDATE_IMAGE_COMMENT",
   UPDATE_NOTE_COMMENT: "UPDATE_NOTE_COMMENT",
+  GET_VIDEO_COMMENT_REPLIES: "GET_VIDEO_COMMENT_REPLIES",
+  GET_IMAGE_COMMENT_REPLIES: "GET_IMAGE_COMMENT_REPLIES",
+  GET_NOTE_COMMENT_REPLIES: "GET_NOTE_COMMENT_REPLIES",
+  GET_VIDEO_COMMENT_REPLIES_SUCCESS: "GET_VIDEO_COMMENT_REPLIES_SUCCESS",
+  GET_IMAGE_COMMENT_REPLIES_SUCCESS: "GET_IMAGE_COMMENT_REPLIES_SUCCESS",
+  GET_NOTE_COMMENT_REPLIES_SUCCESS: "GET_NOTE_COMMENT_REPLIES_SUCCESS",
   UPDATE_IMAGE: "UPDATE_IMAGE",
 };
 
@@ -206,10 +212,10 @@ export const ActionCreators = {
   dislikeVideoError: (error) => {
     return { type: ActionTypes.DISLIKE_VIDEO_ERROR, error };
   },
-  postVideoCommentStart: (videoId, body) => {
+  postVideoCommentStart: (videoId, body, replyId) => {
     return {
       type: ActionTypes.POST_VIDEO_COMMENT_START,
-      payload: { videoId, body },
+      payload: { videoId, body, replyId },
     };
   },
   postVideoCommentSuccess: (commentId, body, username, profilePic) => {
@@ -591,6 +597,44 @@ export const ActionCreators = {
       case "note":
         return {
           type: ActionTypes.UPDATE_NOTE_COMMENT,
+          payload: { _id, body },
+        };
+    }
+  },
+  getCommentReplies: (type, _id) => {
+    switch (type) {
+      case "video":
+        return {
+          type: ActionTypes.GET_VIDEO_COMMENT_REPLIES,
+          payload: { _id },
+        };
+      case "image":
+        return {
+          type: ActionTypes.GET_IMAGE_COMMENT_REPLIES,
+          payload: { _id },
+        };
+      case "note":
+        return {
+          type: ActionTypes.GET_NOTE_COMMENT_REPLIES,
+          payload: { _id },
+        };
+    }
+  },
+  getCommentRepliesSuccess: (type, _id, replies) => {
+    switch (type) {
+      case "video":
+        return {
+          type: ActionTypes.GET_VIDEO_COMMENT_REPLIES_SUCCESS,
+          payload: { _id, replies },
+        };
+      case "image":
+        return {
+          type: ActionTypes.GET_IMAGE_COMMENT_REPLIES,
+          payload: { _id, body },
+        };
+      case "note":
+        return {
+          type: ActionTypes.GET_NOTE_COMMENT_REPLIES,
           payload: { _id, body },
         };
     }

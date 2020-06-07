@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 import { Link } from "react-router-dom";
@@ -12,11 +12,15 @@ import { date2rel } from "../utils/helpers";
 
 import CustomInput from "./CustomInput";
 import MediaOwnerActions from "./MediaOwnerActions";
+import CommentForm from "./CommentForm";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    display: "flex",
     marginBottom: 32,
+  },
+  comment: {
+    display: "flex",
+    marginBottom: 8,
     position: "relative",
   },
   avatar: {
@@ -37,19 +41,42 @@ const useStyles = makeStyles((theme) => ({
     right: 10,
     top: -14,
   },
+  replyLink: {
+    fontSize: 11,
+    cursor: "pointer",
+  },
+  replyForm: {
+    marginLeft: 30,
+  },
+  repliesSection: {
+    marginLeft: 30,
+  },
 }));
 
 const Comment = ({
   _id,
+  mediaId,
   body,
   user,
   createdAt,
   type,
   mineUsername,
   updateComment,
+  replyCount,
+  getReplies,
+  replies,
 }) => {
   const classes = useStyles();
   const [newBody, setNewBody] = useState(body);
+  const [replyFormOpen, setReplyFormOpen] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+
+  useEffect(() => {
+    if (replies) {
+      setShowReplies(true);
+      setReplyFormOpen(false);
+    }
+  }, [replies]);
 
   const update = () => {
     let path;
@@ -69,40 +96,90 @@ const Comment = ({
     });
   };
 
+  const showReplyForm = () => {
+    setReplyFormOpen(!replyFormOpen);
+  };
+
   return (
-    <article className={classes.container}>
-      <Link to={`/profile/${user.username}`}>
-        <Avatar src={user.profilePic} className={classes.avatar} />
-      </Link>
-      <div className={classes.textSection}>
-        <Typography className={classes.userInfo} variant="body2">
-          <Link to={`/profile/${user.username}`}>
-            <b>@{user.username}</b>
-          </Link>
-          &nbsp;&#8226;&nbsp;{date2rel(createdAt)}
-        </Typography>
-        <Typography style={{ whiteSpace: "pre-wrap" }} variant="body1">
-          {body}
-        </Typography>
+    <div className={classes.container}>
+      <article className={classes.comment}>
+        <Link to={`/profile/${user.username}`}>
+          <Avatar src={user.profilePic} className={classes.avatar} />
+        </Link>
+        <div className={classes.textSection}>
+          <Typography className={classes.userInfo} variant="body2">
+            <Link to={`/profile/${user.username}`}>
+              <b>@{user.username}</b>
+            </Link>
+            &nbsp;&#8226;&nbsp;{date2rel(createdAt)}
+          </Typography>
+          <Typography style={{ whiteSpace: "pre-wrap" }} variant="body1">
+            {body}
+          </Typography>
+        </div>
+        {user.username == mineUsername && (
+          <MediaOwnerActions
+            className={classes.ownerActions}
+            _id={_id}
+            type={type + "Comment"}
+            editTitle={"Edit Comment"}
+            editForm={
+              <CustomInput
+                name="body"
+                value={newBody}
+                multiline={true}
+                onChange={(e) => setNewBody(e.target.value)}
+              />
+            }
+            editCallback={update}
+          />
+        )}
+      </article>
+      <div className={classes.actionSection}>
+        <a className={classes.replyLink} onClick={showReplyForm}>
+          {!replyFormOpen ? "REPLY" : "CANCEL"}
+        </a>
+        {replyFormOpen && (
+          <CommentForm
+            className={classes.replyForm}
+            contentType={type}
+            id={mediaId}
+            replyId={_id}
+          />
+        )}
       </div>
-      {user.username == mineUsername && (
-        <MediaOwnerActions
-          className={classes.ownerActions}
-          _id={_id}
-          type={type + "Comment"}
-          editTitle={"Edit Comment"}
-          editForm={
-            <CustomInput
-              name="body"
-              value={newBody}
-              multiline={true}
-              onChange={(e) => setNewBody(e.target.value)}
-            />
-          }
-          editCallback={update}
-        />
+      {replyCount > 0 && (
+        <div className={classes.repliesSection}>
+          <a
+            className={classes.replyLink}
+            onClick={() => {
+              if (!showReplies && (!replies || replies.length != replyCount))
+                getReplies(type, _id);
+              setShowReplies(!showReplies);
+            }}
+          >
+            {!showReplies ? `show ${replyCount} ` : "hide "} replies
+          </a>
+          {showReplies &&
+            replies &&
+            replies.map((reply) => {
+              return (
+                <Comment
+                  key={reply._id}
+                  type={type}
+                  mediaId={mediaId}
+                  _id={reply._id}
+                  body={reply.body}
+                  user={reply.user}
+                  createdAt={reply.createdAt}
+                  replyCount={reply.replyCount}
+                  replies={reply.replies}
+                />
+              );
+            })}
+        </div>
       )}
-    </article>
+    </div>
   );
 };
 
@@ -112,6 +189,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   updateComment: (type, _id, body) =>
     dispatch(ActionCreators.updateComment(type, _id, body)),
+  getReplies: (type, _id) =>
+    dispatch(ActionCreators.getCommentReplies(type, _id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Comment);

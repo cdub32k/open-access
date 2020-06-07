@@ -22,10 +22,12 @@ const useStyles = makeStyles((theme) => ({
 
 const CommentForm = ({
   id,
+  replyId,
   contentType,
   postToVideo,
   postToImage,
   postToNote,
+  className,
 }) => {
   const classes = useStyles();
 
@@ -47,12 +49,15 @@ const CommentForm = ({
 
   const postComment = (e) => {
     e.preventDefault();
-    action(id, body);
+    action(id, body, replyId);
     setBody("");
   };
 
   return (
-    <form onSubmit={postComment} className={classes.container}>
+    <form
+      onSubmit={postComment}
+      className={`${classes.container} ${className}`}
+    >
       <CustomInput
         value={body}
         name="body"
@@ -72,12 +77,12 @@ const CommentForm = ({
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  postToVideo: (id, body) =>
-    dispatch(ActionCreators.postVideoCommentStart(id, body)),
-  postToImage: (id, body) =>
-    dispatch(ActionCreators.postImageCommentStart(id, body)),
-  postToNote: (id, body) =>
-    dispatch(ActionCreators.postNoteCommentStart(id, body)),
+  postToVideo: (id, body, replyId) =>
+    dispatch(ActionCreators.postVideoCommentStart(id, body, replyId)),
+  postToImage: (id, body, replyId) =>
+    dispatch(ActionCreators.postImageCommentStart(id, body, replyId)),
+  postToNote: (id, body, replyId) =>
+    dispatch(ActionCreators.postNoteCommentStart(id, body, replyId)),
 });
 
 export default connect(null, mapDispatchToProps)(CommentForm);

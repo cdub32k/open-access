@@ -209,6 +209,13 @@ const resolvers = {
 
       return notes;
     },
+
+    videoCommentReplies: async (parent, { commentId }) => {
+      const replies = await DB.VideoComment.find({ replyId: commentId }).sort({
+        createdAt: -1,
+      });
+      return replies;
+    },
   },
 
   Mutation: {
@@ -740,7 +747,7 @@ const resolvers = {
     },
     commentVideo: async (
       parent,
-      { id, body },
+      { id, body, replyId },
       { req: { username, authorized }, pubsub },
       info
     ) => {
@@ -751,26 +758,35 @@ const resolvers = {
           username,
           videoId: id,
           body,
+          replyId,
         });
 
         const video = await DB.Video.findOne({ _id: id });
         video.commentCount++;
         await video.save();
 
-        const notified = await DB.Notification.findOne({
+        DB.Notification.create({
           sender: username,
-          targetId: video._id,
+          receiver: video.username,
           type: "comment",
+          target: "video",
+          targetId: video._id,
+          body,
         });
-        if (!notified)
+
+        if (replyId) {
+          const comm = await DB.VideoComment.findOne({ _id: replyId });
+          comm.replyCount++;
+          await comm.save();
           DB.Notification.create({
             sender: username,
-            receiver: video.username,
-            type: "comment",
-            target: "video",
+            receiver: comm.username,
+            type: "reply",
+            target: "videoComment",
             targetId: video._id,
             body,
           });
+        }
 
         pubsub.publish(NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX + video._id, {
           newsfeedVideoItem: {
@@ -789,7 +805,7 @@ const resolvers = {
 
         return comment._id;
       } catch (error) {
-        return null;
+        return error;
       }
     },
     markNotificationsRead: async (
@@ -935,7 +951,9 @@ const resolvers = {
     comments: async ({ _id, comments }, { lastOldest }, context, info) => {
       if (comments) return comments;
 
-      const criteria = lastOldest ? { createdAt: { $lt: lastOldest } } : {};
+      const criteria = lastOldest
+        ? { createdAt: { $lt: lastOldest }, replyId: null }
+        : { replyId: null };
 
       const c = await DB.VideoComment.find({ videoId: _id, ...criteria })
         .sort({

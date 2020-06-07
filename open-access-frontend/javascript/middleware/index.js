@@ -121,6 +121,7 @@ const GET_VIDEO_INFO_QUERY = `
         }
         body
         createdAt
+        replyCount
       }
       title
       caption
@@ -376,7 +377,20 @@ const LOAD_MORE_NOTE_COMMENTS_QUERY = `
     }
   }
 `;
-
+const LOAD_VIDEO_COMMENT_REPLIES_QUERY = `
+  query VideoCommentReplies($commentId: String!) {
+    videoCommentReplies(commentId:$commentId) {
+      _id
+        user {
+          username
+          profilePic
+        }
+        body
+        createdAt
+        replyCount
+    }
+  }
+`;
 export default [
   (store) => (next) => (action) => {
     next(ActionCreators.clearErrors());
@@ -626,10 +640,15 @@ export default [
       axios
         .post("/api", {
           query: `
-        mutation {
-          commentVideo(id:"${action.payload.videoId}",body:"${action.payload.body}")
-        }
+            mutation CommentVideo($id:String!,$body:String!,$replyId:String) {
+              commentVideo(id:$id,body:$body,replyId:$replyId)
+            },
       `,
+          variables: {
+            id: action.payload.videoId,
+            body: action.payload.body,
+            replyId: action.payload.replyId,
+          },
         })
         .then((res) => {
           if (res.data.data.commentVideo)
@@ -1041,6 +1060,24 @@ export default [
                 noteData.note.comments
               )
             );
+        });
+    } else if (action.type == ActionTypes.GET_VIDEO_COMMENT_REPLIES) {
+      axios
+        .post("api", {
+          query: LOAD_VIDEO_COMMENT_REPLIES_QUERY,
+          variables: {
+            commentId: action.payload._id,
+          },
+        })
+        .then((res) => {
+          const replyData = res.data.data.videoCommentReplies;
+          next(
+            ActionCreators.getCommentRepliesSuccess(
+              "video",
+              action.payload._id,
+              replyData
+            )
+          );
         });
     } else next(action);
   },

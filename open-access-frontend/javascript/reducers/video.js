@@ -34,6 +34,8 @@ const subscribeToVideoItemUpdates = (videoId) => {
               }
               body
               createdAt
+              replyId
+              replyCount
             }
           }
         }
@@ -88,9 +90,19 @@ const videoReducer = (state = initialState, action) => {
       return { ...state, subscription };
     case ActionTypes.VIDEO_ITEM_UPDATE:
       let v = removeNull(action.payload.video);
-      if (v.comments && v.comments.length)
-        v.comments = [...v.comments, ...state.comments];
-      else delete v["comments"];
+      if (v.comments && v.comments.length) {
+        if (v.comments[0].replyId) {
+          let reply = v.comments[0];
+          let nComments = [...state.comments];
+          let parent =
+            nComments[nComments.findIndex((c) => c._id == reply.replyId)];
+          parent.replies
+            ? parent.replies.unshift(reply)
+            : (parent.replies = [reply]);
+          parent.replyCount++;
+          v.comments = nComments;
+        } else v.comments = [...v.comments, ...state.comments];
+      } else delete v["comments"];
       return { ...state, ...v };
     case ActionTypes.DELETE_VIDEO_COMMENT:
       let fComments = state.comments.filter((c) => c._id != action.payload._id);
@@ -111,6 +123,11 @@ const videoReducer = (state = initialState, action) => {
       let nComments = [...state.comments];
       nComments[nComments.findIndex((c) => c._id == action.payload._id)].body =
         action.payload.body;
+      return { ...state, comments: nComments };
+    case ActionTypes.GET_VIDEO_COMMENT_REPLIES_SUCCESS:
+      nComments = [...state.comments];
+      let cIndex = nComments.findIndex((c) => c._id == action.payload._id);
+      nComments[cIndex].replies = action.payload.replies;
       return { ...state, comments: nComments };
     default:
       return state;

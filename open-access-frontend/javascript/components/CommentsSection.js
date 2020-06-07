@@ -47,10 +47,13 @@ const CommentsSection = ({
           >
             <Comment
               type={contentType}
+              mediaId={id}
               _id={comment._id}
               body={comment.body}
               user={comment.user}
               createdAt={comment.createdAt}
+              replyCount={comment.replyCount}
+              replies={comment.replies}
             />
           </CSSTransition>
         ))}
