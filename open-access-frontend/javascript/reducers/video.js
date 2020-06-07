@@ -40,6 +40,8 @@ const subscribeToVideoItemUpdates = (videoId) => {
               createdAt
               replyId
               replyCount
+              likeCount
+              dislikeCount
             }
           }
         }
@@ -112,6 +114,40 @@ const videoReducer = (state = initialState, action) => {
             : (parent.replies = [reply]);
           parent.replyCount++;
           v.comments = nComments;
+        } else if (
+          (v.comments[0].likeCount || v.comments[0].likeCount === 0) &&
+          !v.comments[0].body
+        ) {
+          let c = v.comments[0];
+
+          let nComments = [...state.comments];
+          let comm;
+          for (let i = 0; i < nComments.length; i++) {
+            let found = findComment(nComments[i], c._id);
+            if (found) {
+              comm = found;
+              break;
+            }
+          }
+          comm.likeCount = c.likeCount;
+          v.comments = nComments;
+        } else if (
+          (v.comments[0].dislikeCount || v.comments[0].dislikeCount === 0) &&
+          !v.comments[0].body
+        ) {
+          let c = v.comments[0];
+
+          let nComments = [...state.comments];
+          let comm;
+          for (let i = 0; i < nComments.length; i++) {
+            let found = findComment(nComments[i], c._id);
+            if (found) {
+              comm = found;
+              break;
+            }
+          }
+          comm.dislikeCount = c.dislikeCount;
+          v.comments = nComments;
         } else v.comments = [...v.comments, ...state.comments];
       } else delete v["comments"];
       return { ...state, ...v };
@@ -158,6 +194,31 @@ const videoReducer = (state = initialState, action) => {
       }
       parent.replies = action.payload.replies;
 
+      return { ...state, comments: nComments };
+
+    case ActionTypes.LIKE_VIDEO_COMMENT_SUCCESS:
+      nComments = [...state.comments];
+      c;
+      for (let i = 0; i < nComments.length; i++) {
+        let found = findComment(nComments[i], action.payload._id);
+        if (found) {
+          c = found;
+          break;
+        }
+      }
+      c.liked = !c.liked;
+      return { ...state, comments: nComments };
+    case ActionTypes.DISLIKE_VIDEO_COMMENT_SUCCESS:
+      nComments = [...state.comments];
+      c;
+      for (let i = 0; i < nComments.length; i++) {
+        let found = findComment(nComments[i], action.payload._id);
+        if (found) {
+          c = found;
+          break;
+        }
+      }
+      c.disliked = !c.disliked;
       return { ...state, comments: nComments };
     default:
       return state;

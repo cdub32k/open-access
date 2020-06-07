@@ -54,6 +54,10 @@ const CommentsSection = ({
               createdAt={comment.createdAt}
               replyCount={comment.replyCount}
               replies={comment.replies}
+              likeCount={comment.likeCount}
+              dislikeCount={comment.dislikeCount}
+              liked={comment.liked}
+              disliked={comment.disliked}
             />
           </CSSTransition>
         ))}

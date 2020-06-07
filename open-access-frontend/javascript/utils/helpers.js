@@ -53,11 +53,11 @@ export function removeNull(obj) {
   return obj;
 }
 
-export function findComment(comm, replyId) {
-  if (comm._id == replyId) return comm;
+export function findComment(comm, id) {
+  if (comm._id == id) return comm;
   if (comm.replies) {
     for (let i = 0; i < comm.replies.length; i++) {
-      let found = findComment(comm.replies[i], replyId);
+      let found = findComment(comm.replies[i], id);
       if (found) {
         comm.replies = [...comm.replies];
         return found;

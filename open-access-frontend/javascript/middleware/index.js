@@ -122,6 +122,10 @@ const GET_VIDEO_INFO_QUERY = `
         body
         createdAt
         replyCount
+        likeCount
+        dislikeCount
+        liked
+        disliked
       }
       title
       caption
@@ -154,6 +158,10 @@ const GET_IMAGE_INFO_QUERY = `
         body
         createdAt
         replyCount
+        likeCount
+        dislikeCount
+        liked
+        disliked
       }
       title
       caption
@@ -184,6 +192,10 @@ const GET_NOTE_INFO_QUERY = `
         body
         createdAt
         replyCount
+        likeCount
+        dislikeCount
+        liked
+        disliked
       }
       body      
       likeCount
@@ -391,6 +403,10 @@ const LOAD_VIDEO_COMMENT_REPLIES_QUERY = `
         createdAt
         replyCount
         replyId
+        likeCount
+        dislikeCount
+        liked
+        disliked
     }
   }
 `;
@@ -407,6 +423,10 @@ const LOAD_IMAGE_COMMENT_REPLIES_QUERY = `
         createdAt
         replyCount
         replyId
+        likeCount
+        dislikeCount
+        liked
+        disliked
     }
   }
 `;
@@ -422,6 +442,10 @@ const LOAD_NOTE_COMMENT_REPLIES_QUERY = `
         createdAt
         replyCount
         replyId
+        likeCount
+        dislikeCount
+        liked
+        disliked
     }
   }
 `;
@@ -1125,6 +1149,114 @@ export default [
               replyData
             )
           );
+        });
+    } else if (action.type == ActionTypes.LIKE_VIDEO_COMMENT) {
+      axios
+        .post("/api", {
+          query: `
+            mutation {
+              likeVideoComment(videoId:"${action.payload.mediaId}" , commentId:"${action.payload.commentId}")
+            }
+          `,
+        })
+        .then((res) => {
+          if (res.data.data.likeVideoComment)
+            next(
+              ActionCreators.likeCommentSuccess(
+                "video",
+                action.payload.commentId
+              )
+            );
+        });
+    } else if (action.type == ActionTypes.DISLIKE_VIDEO_COMMENT) {
+      axios
+        .post("/api", {
+          query: `
+            mutation {
+              dislikeVideoComment(videoId:"${action.payload.mediaId}" , commentId:"${action.payload.commentId}")
+            }
+          `,
+        })
+        .then((res) => {
+          if (res.data.data.dislikeVideoComment)
+            next(
+              ActionCreators.dislikeCommentSuccess(
+                "video",
+                action.payload.commentId
+              )
+            );
+        });
+    } else if (action.type == ActionTypes.LIKE_IMAGE_COMMENT) {
+      axios
+        .post("/api", {
+          query: `
+            mutation {
+              likeImageComment(imageId:"${action.payload.mediaId}" , commentId:"${action.payload.commentId}")
+            }
+          `,
+        })
+        .then((res) => {
+          if (res.data.data.likeImageComment)
+            next(
+              ActionCreators.likeCommentSuccess(
+                "image",
+                action.payload.commentId
+              )
+            );
+        });
+    } else if (action.type == ActionTypes.DISLIKE_IMAGE_COMMENT) {
+      axios
+        .post("/api", {
+          query: `
+            mutation {
+              dislikeImageComment(imageId:"${action.payload.mediaId}" , commentId:"${action.payload.commentId}")
+            }
+          `,
+        })
+        .then((res) => {
+          if (res.data.data.dislikeImageComment)
+            next(
+              ActionCreators.dislikeCommentSuccess(
+                "image",
+                action.payload.commentId
+              )
+            );
+        });
+    } else if (action.type == ActionTypes.LIKE_NOTE_COMMENT) {
+      axios
+        .post("/api", {
+          query: `
+            mutation {
+              likeNoteComment(noteId:"${action.payload.mediaId}" , commentId:"${action.payload.commentId}")
+            }
+          `,
+        })
+        .then((res) => {
+          if (res.data.data.likeNoteComment)
+            next(
+              ActionCreators.likeCommentSuccess(
+                "note",
+                action.payload.commentId
+              )
+            );
+        });
+    } else if (action.type == ActionTypes.DISLIKE_NOTE_COMMENT) {
+      axios
+        .post("/api", {
+          query: `
+            mutation {
+              dislikeNoteComment(noteId:"${action.payload.mediaId}" , commentId:"${action.payload.commentId}")
+            }
+          `,
+        })
+        .then((res) => {
+          if (res.data.data.dislikeNoteComment)
+            next(
+              ActionCreators.dislikeCommentSuccess(
+                "note",
+                action.payload.commentId
+              )
+            );
         });
     } else next(action);
   },

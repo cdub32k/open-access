@@ -77,6 +77,13 @@ const typeDefs = gql`
     dislikeNote(id: String!): Boolean
     commentNote(id: String!, body: String!, replyId: String): String
     markNotificationsRead(ids: [String]!): Boolean
+
+    likeVideoComment(videoId: String!, commentId: String!): String
+    dislikeVideoComment(videoId: String!, commentId: String!): String
+    likeImageComment(imageId: String!, commentId: String!): String
+    dislikeImageComment(imageId: String!, commentId: String!): String
+    likeNoteComment(noteId: String!, commentId: String!): String
+    dislikeNoteComment(noteId: String!, commentId: String!): String
   }
 
   scalar Date
@@ -143,6 +150,10 @@ const typeDefs = gql`
     replies: [VideoComment]
     replyCount: Int
     replyId: String
+    likeCount: Int
+    dislikeCount: Int
+    liked: Boolean
+    disliked: Boolean
   }
 
   type ImageLike {
@@ -168,6 +179,10 @@ const typeDefs = gql`
     replies: [ImageComment]
     replyCount: Int
     replyId: String
+    likeCount: Int
+    dislikeCount: Int
+    liked: Boolean
+    disliked: Boolean
   }
 
   type NoteLike {
@@ -193,6 +208,10 @@ const typeDefs = gql`
     replies: [NoteComment]
     replyCount: Int
     replyId: String
+    likeCount: Int
+    dislikeCount: Int
+    liked: Boolean
+    disliked: Boolean
   }
 
   type Note {

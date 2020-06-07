@@ -56,7 +56,7 @@ const CommentForm = ({
   return (
     <form
       onSubmit={postComment}
-      className={`${classes.container} ${className}`}
+      className={`${classes.container} ${className || ""}`}
     >
       <CustomInput
         value={body}

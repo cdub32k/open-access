@@ -841,6 +841,252 @@ const resolvers = {
         return error;
       }
     },
+    likeVideoComment: async (
+      parent,
+      { videoId, commentId },
+      { req: { username, authorized }, pubsub },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      try {
+        const liked = await DB.VideoCommentLike.findOne({
+          username,
+          commentId,
+        });
+        const videoComment = await DB.VideoComment.findOne({ _id: commentId });
+        if (!liked) {
+          await DB.VideoCommentLike.create({
+            username,
+            videoId,
+            commentId,
+          });
+          videoComment.likeCount++;
+          await videoComment.save();
+        } else {
+          await DB.VideoCommentLike.deleteOne({ username, commentId });
+          videoComment.likeCount--;
+          await videoComment.save();
+        }
+
+        pubsub.publish(VIDEO_SUBSCRIPTION_PREFIX + videoId, {
+          videoItem: {
+            _id: videoId,
+            comments: [{ _id: commentId, likeCount: videoComment.likeCount }],
+          },
+        });
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    dislikeVideoComment: async (
+      parent,
+      { videoId, commentId },
+      { req: { username, authorized }, pubsub },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      try {
+        const disliked = await DB.VideoCommentDislike.findOne({
+          username,
+          commentId,
+        });
+        const videoComment = await DB.VideoComment.findOne({ _id: commentId });
+        if (!disliked) {
+          await DB.VideoCommentDislike.create({
+            username,
+            videoId,
+            commentId,
+          });
+          videoComment.dislikeCount++;
+          await videoComment.save();
+        } else {
+          await DB.VideoCommentDislike.deleteOne({ username, commentId });
+          videoComment.dislikeCount--;
+          await videoComment.save();
+        }
+
+        pubsub.publish(VIDEO_SUBSCRIPTION_PREFIX + videoId, {
+          videoItem: {
+            _id: videoId,
+            comments: [
+              { _id: commentId, dislikeCount: videoComment.dislikeCount },
+            ],
+          },
+        });
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    likeNoteComment: async (
+      parent,
+      { noteId, commentId },
+      { req: { username, authorized }, pubsub },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      try {
+        const liked = await DB.NoteCommentLike.findOne({
+          username,
+          commentId,
+        });
+        const noteComment = await DB.NoteComment.findOne({ _id: commentId });
+        if (!liked) {
+          await DB.NoteCommentLike.create({
+            username,
+            noteId,
+            commentId,
+          });
+          noteComment.likeCount++;
+          await noteComment.save();
+        } else {
+          await DB.NoteCommentLike.deleteOne({ username, commentId });
+          noteComment.likeCount--;
+          await noteComment.save();
+        }
+
+        pubsub.publish(NOTE_SUBSCRIPTION_PREFIX + noteId, {
+          noteItem: {
+            _id: noteId,
+            comments: [{ _id: commentId, likeCount: noteComment.likeCount }],
+          },
+        });
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    dislikeNoteComment: async (
+      parent,
+      { noteId, commentId },
+      { req: { username, authorized }, pubsub },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      try {
+        const disliked = await DB.NoteCommentDislike.findOne({
+          username,
+          commentId,
+        });
+        const noteComment = await DB.NoteComment.findOne({ _id: commentId });
+        if (!disliked) {
+          await DB.NoteCommentDislike.create({
+            username,
+            noteId,
+            commentId,
+          });
+          noteComment.dislikeCount++;
+          await noteComment.save();
+        } else {
+          await DB.NoteCommentDislike.deleteOne({ username, commentId });
+          noteComment.dislikeCount--;
+          await noteComment.save();
+        }
+
+        pubsub.publish(NOTE_SUBSCRIPTION_PREFIX + noteId, {
+          noteItem: {
+            _id: noteId,
+            comments: [
+              { _id: commentId, dislikeCount: noteComment.dislikeCount },
+            ],
+          },
+        });
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    likeImageComment: async (
+      parent,
+      { imageId, commentId },
+      { req: { username, authorized }, pubsub },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      try {
+        const liked = await DB.ImageCommentLike.findOne({
+          username,
+          commentId,
+        });
+        const imageComment = await DB.ImageComment.findOne({ _id: commentId });
+        if (!liked) {
+          await DB.ImageCommentLike.create({
+            username,
+            imageId,
+            commentId,
+          });
+          imageComment.likeCount++;
+          await imageComment.save();
+        } else {
+          await DB.ImageCommentLike.deleteOne({ username, commentId });
+          imageComment.likeCount--;
+          await imageComment.save();
+        }
+
+        pubsub.publish(IMAGE_SUBSCRIPTION_PREFIX + imageId, {
+          imageItem: {
+            _id: imageId,
+            comments: [{ _id: commentId, likeCount: imageComment.likeCount }],
+          },
+        });
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
+    dislikeImageComment: async (
+      parent,
+      { imageId, commentId },
+      { req: { username, authorized }, pubsub },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      try {
+        const disliked = await DB.ImageCommentDislike.findOne({
+          username,
+          commentId,
+        });
+        const imageComment = await DB.ImageComment.findOne({ _id: commentId });
+        if (!disliked) {
+          await DB.ImageCommentDislike.create({
+            username,
+            imageId,
+            commentId,
+          });
+          imageComment.dislikeCount++;
+          await imageComment.save();
+        } else {
+          await DB.ImageCommentDislike.deleteOne({ username, commentId });
+          imageComment.dislikeCount--;
+          await imageComment.save();
+        }
+
+        pubsub.publish(IMAGE_SUBSCRIPTION_PREFIX + imageId, {
+          imageItem: {
+            _id: imageId,
+            comments: [
+              { _id: commentId, dislikeCount: imageComment.dislikeCount },
+            ],
+          },
+        });
+
+        return true;
+      } catch (error) {
+        return false;
+      }
+    },
     markNotificationsRead: async (
       parent,
       { ids },
@@ -903,6 +1149,21 @@ const resolvers = {
       const user = await DB.User.findOne({ username });
       return user;
     },
+    liked: async ({ _id, username }, args, context, info) => {
+      const liked = await DB.NoteCommentLike.findOne({
+        username,
+        commentId: _id,
+      });
+      return !!liked;
+    },
+    disliked: async ({ _id, username }, args, context, info) => {
+      const disliked = await DB.NoteCommentDislike.findOne({
+        username,
+        commentId: _id,
+      });
+
+      return !!disliked;
+    },
   },
 
   Image: {
@@ -953,6 +1214,21 @@ const resolvers = {
     user: async ({ username }, args, context) => {
       const user = await DB.User.findOne({ username });
       return user;
+    },
+    liked: async ({ _id, username }, args, context, info) => {
+      const liked = await DB.ImageCommentLike.findOne({
+        username,
+        commentId: _id,
+      });
+      return !!liked;
+    },
+    disliked: async ({ _id, username }, args, context, info) => {
+      const disliked = await DB.ImageCommentDislike.findOne({
+        username,
+        commentId: _id,
+      });
+
+      return !!disliked;
     },
   },
 
@@ -1005,6 +1281,21 @@ const resolvers = {
     user: async ({ username }, args, context) => {
       const user = await DB.User.findOne({ username });
       return user;
+    },
+    liked: async ({ _id, username }, args, context, info) => {
+      const liked = await DB.VideoCommentLike.findOne({
+        username,
+        commentId: _id,
+      });
+      return !!liked;
+    },
+    disliked: async ({ _id, username }, args, context, info) => {
+      const disliked = await DB.VideoCommentDislike.findOne({
+        username,
+        commentId: _id,
+      });
+
+      return !!disliked;
     },
   },
 

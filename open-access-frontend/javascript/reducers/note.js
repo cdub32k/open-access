@@ -38,6 +38,8 @@ const subscribeToNoteItemUpdates = (noteId) => {
               createdAt
               replyId
               replyCount
+              likeCount
+              dislikeCount
             }
           }
         }
@@ -105,6 +107,40 @@ const noteReducer = (state = initialState, action) => {
             : (parent.replies = [reply]);
           parent.replyCount++;
           i.comments = nComments;
+        } else if (
+          (i.comments[0].likeCount || i.comments[0].likeCount === 0) &&
+          !i.comments[0].body
+        ) {
+          let c = i.comments[0];
+
+          let nComments = [...state.comments];
+          let comm;
+          for (let i = 0; i < nComments.length; i++) {
+            let found = findComment(nComments[i], c._id);
+            if (found) {
+              comm = found;
+              break;
+            }
+          }
+          comm.likeCount = c.likeCount;
+          i.comments = nComments;
+        } else if (
+          (i.comments[0].dislikeCount || i.comments[0].dislikeCount === 0) &&
+          !i.comments[0].body
+        ) {
+          let c = i.comments[0];
+
+          let nComments = [...state.comments];
+          let comm;
+          for (let i = 0; i < nComments.length; i++) {
+            let found = findComment(nComments[i], c._id);
+            if (found) {
+              comm = found;
+              break;
+            }
+          }
+          comm.dislikeCount = c.dislikeCount;
+          i.comments = nComments;
         } else i.comments = [...i.comments, ...state.comments];
       } else delete i["comments"];
       return { ...state, ...i };
@@ -151,6 +187,30 @@ const noteReducer = (state = initialState, action) => {
       }
       parent.replies = action.payload.replies;
 
+      return { ...state, comments: nComments };
+    case ActionTypes.LIKE_NOTE_COMMENT_SUCCESS:
+      nComments = [...state.comments];
+      c;
+      for (let i = 0; i < nComments.length; i++) {
+        let found = findComment(nComments[i], action.payload._id);
+        if (found) {
+          c = found;
+          break;
+        }
+      }
+      c.liked = !c.liked;
+      return { ...state, comments: nComments };
+    case ActionTypes.DISLIKE_NOTE_COMMENT_SUCCESS:
+      nComments = [...state.comments];
+      c;
+      for (let i = 0; i < nComments.length; i++) {
+        let found = findComment(nComments[i], action.payload._id);
+        if (found) {
+          c = found;
+          break;
+        }
+      }
+      c.disliked = !c.disliked;
       return { ...state, comments: nComments };
     default:
       return state;

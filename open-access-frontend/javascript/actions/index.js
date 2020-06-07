@@ -128,6 +128,18 @@ export const ActionTypes = {
   GET_IMAGE_COMMENT_REPLIES_SUCCESS: "GET_IMAGE_COMMENT_REPLIES_SUCCESS",
   GET_NOTE_COMMENT_REPLIES_SUCCESS: "GET_NOTE_COMMENT_REPLIES_SUCCESS",
   UPDATE_IMAGE: "UPDATE_IMAGE",
+  LIKE_VIDEO_COMMENT: "LIKE_VIDEO_COMMENT",
+  LIKE_IMAGE_COMMENT: "LIKE_IMAGE_COMMENT",
+  LIKE_NOTE_COMMENT: "LIKE_NOTE_COMMENT",
+  LIKE_VIDEO_COMMENT_SUCCESS: "LIKE_VIDEO_COMMENT_SUCCESS",
+  LIKE_IMAGE_COMMENT_SUCCESS: "LIKE_IMAGE_COMMENT_SUCCESS",
+  LIKE_NOTE_COMMENT_SUCCESS: "LIKE_NOTE_COMMENT_SUCCESS",
+  DISLIKE_VIDEO_COMMENT: "DISLIKE_VIDEO_COMMENT",
+  DISLIKE_IMAGE_COMMENT: "DISLIKE_IMAGE_COMMENT",
+  DISLIKE_NOTE_COMMENT: "DISLIKE_NOTE_COMMENT",
+  DISLIKE_VIDEO_COMMENT_SUCCESS: "DISLIKE_VIDEO_COMMENT_SUCCESS",
+  DISLIKE_IMAGE_COMMENT_SUCCESS: "DISLIKE_IMAGE_COMMENT_SUCCESS",
+  DISLIKE_NOTE_COMMENT_SUCCESS: "DISLIKE_NOTE_COMMENT_SUCCESS",
 };
 
 export const ActionCreators = {
@@ -645,6 +657,82 @@ export const ActionCreators = {
         return {
           type: ActionTypes.GET_NOTE_COMMENT_REPLIES_SUCCESS,
           payload: { _id, replies },
+        };
+    }
+  },
+  likeComment: (type, mediaId, commentId) => {
+    switch (type) {
+      case "video":
+        return {
+          type: ActionTypes.LIKE_VIDEO_COMMENT,
+          payload: { mediaId, commentId },
+        };
+      case "image":
+        return {
+          type: ActionTypes.LIKE_IMAGE_COMMENT,
+          payload: { mediaId, commentId },
+        };
+      case "note":
+        return {
+          type: ActionTypes.LIKE_NOTE_COMMENT,
+          payload: { mediaId, commentId },
+        };
+    }
+  },
+  likeCommentSuccess: (type, _id) => {
+    switch (type) {
+      case "video":
+        return {
+          type: ActionTypes.LIKE_VIDEO_COMMENT_SUCCESS,
+          payload: { _id },
+        };
+      case "image":
+        return {
+          type: ActionTypes.LIKE_IMAGE_COMMENT_SUCCESS,
+          payload: { _id },
+        };
+      case "note":
+        return {
+          type: ActionTypes.LIKE_NOTE_COMMENT_SUCCESS,
+          payload: { _id },
+        };
+    }
+  },
+  dislikeComment: (type, mediaId, commentId) => {
+    switch (type) {
+      case "video":
+        return {
+          type: ActionTypes.DISLIKE_VIDEO_COMMENT,
+          payload: { mediaId, commentId },
+        };
+      case "image":
+        return {
+          type: ActionTypes.DISLIKE_IMAGE_COMMENT,
+          payload: { mediaId, commentId },
+        };
+      case "note":
+        return {
+          type: ActionTypes.DISLIKE_NOTE_COMMENT,
+          payload: { mediaId, commentId },
+        };
+    }
+  },
+  dislikeCommentSuccess: (type, _id) => {
+    switch (type) {
+      case "video":
+        return {
+          type: ActionTypes.DISLIKE_VIDEO_COMMENT_SUCCESS,
+          payload: { _id },
+        };
+      case "image":
+        return {
+          type: ActionTypes.DISLIKE_IMAGE_COMMENT_SUCCESS,
+          payload: { _id },
+        };
+      case "note":
+        return {
+          type: ActionTypes.DISLIKE_NOTE_COMMENT_SUCCESS,
+          payload: { _id },
         };
     }
   },

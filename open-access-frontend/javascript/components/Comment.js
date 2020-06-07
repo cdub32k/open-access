@@ -13,7 +13,7 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ThumbDownOutline from "@material-ui/icons/ThumbDownOutlined";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { date2rel } from "../utils/helpers";
+import { date2rel, num2str } from "../utils/helpers";
 
 import CustomInput from "./CustomInput";
 import MediaOwnerActions from "./MediaOwnerActions";
@@ -50,12 +50,21 @@ const useStyles = makeStyles((theme) => ({
   replyLink: {
     fontSize: 11,
     cursor: "pointer",
+    marginLeft: 12,
+  },
+  showRepliesLink: {
+    fontSize: 11,
+    cursor: "pointer",
   },
   replyForm: {
     marginLeft: 12,
   },
   repliesSection: {
     marginLeft: 12,
+  },
+  actionSection: {
+    "& svg": { fontSize: 12 },
+    "& span": { fontSize: 11, marginLeft: -5 },
   },
 }));
 
@@ -72,6 +81,12 @@ let Comment = ({
   replyId,
   getReplies,
   replies,
+  likeCount,
+  dislikeCount,
+  liked,
+  disliked,
+  like,
+  dislike,
 }) => {
   const classes = useStyles();
   const [newBody, setNewBody] = useState(body);
@@ -113,6 +128,9 @@ let Comment = ({
     replyStyle.container = { marginBottom: 20 };
   }
 
+  const likeIcon = liked ? <FavoriteIcon /> : <FavoriteBorderIcon />;
+  const dislikeIcon = disliked ? <ThumbDownIcon /> : <ThumbDownOutline />;
+
   return (
     <div className={classes.container} style={replyStyle.container}>
       <article className={classes.comment}>
@@ -153,6 +171,16 @@ let Comment = ({
         )}
       </article>
       <div className={classes.actionSection}>
+        <div>
+          <IconButton onClick={() => like(type, mediaId, _id)}>
+            {likeIcon}
+          </IconButton>
+          <span className={classes.metric}>{num2str(likeCount)}</span>
+          <IconButton onClick={() => dislike(type, mediaId, _id)}>
+            {dislikeIcon}
+          </IconButton>
+          <span className={classes.metric}>{num2str(dislikeCount)}</span>
+        </div>
         <a className={classes.replyLink} onClick={showReplyForm}>
           {!replyFormOpen ? "REPLY" : "CANCEL"}
         </a>
@@ -168,7 +196,7 @@ let Comment = ({
       {replyCount > 0 && (
         <div className={classes.repliesSection}>
           <a
-            className={classes.replyLink}
+            className={classes.showRepliesLink}
             onClick={() => {
               if (!showReplies && (!replies || replies.length != replyCount))
                 getReplies(type, _id);
@@ -192,6 +220,10 @@ let Comment = ({
                   replyCount={reply.replyCount}
                   replyId={reply.replyId}
                   replies={reply.replies}
+                  likeCount={reply.likeCount}
+                  dislikeCount={reply.dislikeCount}
+                  liked={reply.liked}
+                  disliked={reply.disliked}
                 />
               );
             })}
@@ -209,6 +241,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreators.updateComment(type, _id, body)),
   getReplies: (type, _id) =>
     dispatch(ActionCreators.getCommentReplies(type, _id)),
+  like: (type, mediaId, commentId) =>
+    dispatch(ActionCreators.likeComment(type, mediaId, commentId)),
+  dislike: (type, mediaId, commentId) =>
+    dispatch(ActionCreators.dislikeComment(type, mediaId, commentId)),
 });
 
 Comment = connect(mapStateToProps, mapDispatchToProps)(Comment);
