@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
@@ -205,28 +206,39 @@ let Comment = ({
           >
             {!showReplies ? `show ${replyCount} ` : "hide "} replies
           </a>
-          {showReplies &&
-            replies &&
-            replies.map((reply) => {
-              return (
-                <Comment
-                  key={reply._id}
-                  type={type}
-                  mediaId={mediaId}
-                  _id={reply._id}
-                  body={reply.body}
-                  user={reply.user}
-                  createdAt={reply.createdAt}
-                  replyCount={reply.replyCount}
-                  replyId={reply.replyId}
-                  replies={reply.replies}
-                  likeCount={reply.likeCount}
-                  dislikeCount={reply.dislikeCount}
-                  liked={reply.liked}
-                  disliked={reply.disliked}
-                />
-              );
-            })}
+          <TransitionGroup component="section">
+            {showReplies &&
+              replies &&
+              replies.map((reply) => {
+                return (
+                  <CSSTransition
+                    timeout={500}
+                    classNames="comment"
+                    unmountOnExit
+                    appear
+                    enter
+                    key={reply._id}
+                  >
+                    <Comment
+                      key={reply._id}
+                      type={type}
+                      mediaId={mediaId}
+                      _id={reply._id}
+                      body={reply.body}
+                      user={reply.user}
+                      createdAt={reply.createdAt}
+                      replyCount={reply.replyCount}
+                      replyId={reply.replyId}
+                      replies={reply.replies}
+                      likeCount={reply.likeCount}
+                      dislikeCount={reply.dislikeCount}
+                      liked={reply.liked}
+                      disliked={reply.disliked}
+                    />
+                  </CSSTransition>
+                );
+              })}
+          </TransitionGroup>
         </div>
       )}
     </div>
