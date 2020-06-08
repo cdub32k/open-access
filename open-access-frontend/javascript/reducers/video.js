@@ -101,14 +101,7 @@ const videoReducer = (state = initialState, action) => {
           let reply = v.comments[0];
 
           let nComments = [...state.comments];
-          let parent;
-          for (let i = 0; i < nComments.length; i++) {
-            let found = findComment(nComments[i], reply.replyId);
-            if (found) {
-              parent = found;
-              break;
-            }
-          }
+          let parent = findComment(nComments, reply.replyId);
           parent.replies
             ? (parent.replies = [reply, ...parent.replies])
             : (parent.replies = [reply]);
@@ -119,16 +112,8 @@ const videoReducer = (state = initialState, action) => {
           !v.comments[0].body
         ) {
           let c = v.comments[0];
-
           let nComments = [...state.comments];
-          let comm;
-          for (let i = 0; i < nComments.length; i++) {
-            let found = findComment(nComments[i], c._id);
-            if (found) {
-              comm = found;
-              break;
-            }
-          }
+          let comm = findComment(nComments, c._id);
           comm.likeCount = c.likeCount;
           v.comments = nComments;
         } else if (
@@ -136,16 +121,9 @@ const videoReducer = (state = initialState, action) => {
           !v.comments[0].body
         ) {
           let c = v.comments[0];
-
           let nComments = [...state.comments];
-          let comm;
-          for (let i = 0; i < nComments.length; i++) {
-            let found = findComment(nComments[i], c._id);
-            if (found) {
-              comm = found;
-              break;
-            }
-          }
+          let comm = findComment(nComments, c._id);
+
           comm.dislikeCount = c.dislikeCount;
           v.comments = nComments;
         } else v.comments = [...v.comments, ...state.comments];
@@ -156,7 +134,6 @@ const videoReducer = (state = initialState, action) => {
         [...state.comments],
         action.payload._id
       );
-
       return {
         ...state,
         commentCount: action.payload.commentCount,
@@ -172,52 +149,22 @@ const videoReducer = (state = initialState, action) => {
       };
     case ActionTypes.UPDATE_VIDEO_COMMENT:
       let nComments = [...state.comments];
-      let c;
-      for (let i = 0; i < nComments.length; i++) {
-        let found = findComment(nComments[i], action.payload._id);
-        if (found) {
-          c = found;
-          break;
-        }
-      }
+      let c = findComment(nComments, action.payload._id);
       c.body = action.payload.body;
       return { ...state, comments: nComments };
     case ActionTypes.GET_VIDEO_COMMENT_REPLIES_SUCCESS:
-      let parent;
       nComments = [...state.comments];
-      for (let i = 0; i < nComments.length; i++) {
-        let found = findComment(nComments[i], action.payload._id);
-        if (found) {
-          parent = found;
-          break;
-        }
-      }
+      let parent = findComment(nComments, action.payload._id);
       parent.replies = action.payload.replies;
-
       return { ...state, comments: nComments };
-
     case ActionTypes.LIKE_VIDEO_COMMENT_SUCCESS:
       nComments = [...state.comments];
-      c;
-      for (let i = 0; i < nComments.length; i++) {
-        let found = findComment(nComments[i], action.payload._id);
-        if (found) {
-          c = found;
-          break;
-        }
-      }
+      c = findComment(nComments, action.payload._id);
       c.liked = !c.liked;
       return { ...state, comments: nComments };
     case ActionTypes.DISLIKE_VIDEO_COMMENT_SUCCESS:
       nComments = [...state.comments];
-      c;
-      for (let i = 0; i < nComments.length; i++) {
-        let found = findComment(nComments[i], action.payload._id);
-        if (found) {
-          c = found;
-          break;
-        }
-      }
+      c = findComment(nComments, action.payload._id);
       c.disliked = !c.disliked;
       return { ...state, comments: nComments };
     default:

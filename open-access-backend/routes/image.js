@@ -5,6 +5,7 @@ import fs from "fs";
 import multer from "multer";
 import pubsub from "../PubSub";
 import { NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX } from "../constants";
+import { deleteReplies } from "../utils/helpers";
 
 const {
   Image,
@@ -95,42 +96,31 @@ router.put("/comments/:id", async (req, res) => {
   }
 });
 
-let deleteReplies = async (comm, img) => {
-  let replies = await ImageComment.find({ replyId: comm._id });
-  if (replies) {
-    await img.update({ $inc: { commentCount: -replies.length } });
-    replies.forEach(async (reply) => {
-      await deleteReplies(reply, img);
-      await reply.delete();
-    });
-  }
-};
-
 router.delete("/comments/:id", async (req, res) => {
   try {
     const iComment = await ImageComment.findOne({ _id: req.params.id });
+    let image = await Image.findOne({ _id: iComment.imageId });
+    let totalDecr = 1;
     if (iComment) {
-      await Image.updateOne(
-        { _id: iComment.imageId },
-        { $inc: { commentCount: -1 } }
-      );
       if (iComment.replyId) {
         const rComment = await ImageComment.findOne({ _id: iComment.replyId });
         rComment.replyCount--;
         await rComment.save();
       }
 
-      let image = await Image.findOne({ _id: iComment.imageId });
-      await deleteReplies(iComment, image);
+      totalDecr += await deleteReplies(ImageComment, iComment, image);
 
       await iComment.delete();
     }
-    let image = await Image.findOne({ _id: iComment.imageId });
+    image.update({ $inc: { commentCount: -totalDecr } });
     return res
       .status(200)
-      .send({ createdAt: image.createdAt, commentCount: image.commentCount });
+      .send({
+        createdAt: image.createdAt,
+        commentCount: image.commentCount - totalDecr,
+      });
   } catch (e) {
-    res.status(500).send({ error: "Something went wrong" + e });
+    res.status(500).send({ error: "Something went wrong" });
   }
 });
 

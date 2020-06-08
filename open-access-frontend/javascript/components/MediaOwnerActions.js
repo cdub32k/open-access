@@ -73,6 +73,7 @@ const OwnerActions = ({
       case "note":
         path = `/notes/${_id}`;
         redirect = true;
+        break;
       case "videoComment":
         path = `/videos/comments/${_id}`;
         break;
