@@ -249,6 +249,53 @@ const GET_NOTE_INFO_QUERY = `
   }
 `;
 
+const USER_COMMENTS_PAGE_QUERY = `
+  query UserCommentPage($username: String!, $page: Int!) {
+    commentsSearch(username: $username, page: $page) {
+      comments {
+        ... on VideoComment {
+          _id
+          video {
+            title
+            _id
+            user {
+              username
+            }
+          }
+          replyId
+          body
+          createdAt
+        }
+        ... on ImageComment {
+          _id
+          image {
+            title
+            _id
+            user {
+              username
+            }
+          }
+          body
+          replyId
+          createdAt
+        }
+        ... on NoteComment {
+          _id
+          note {
+            _id
+            user {
+              username
+            }
+          }
+          body
+          replyId
+          createdAt
+        }
+      }
+    }
+  }
+`;
+
 const USER_VIDEO_PAGE_QUERY = `
   query UserVideoPage($username: String!, $page: Int!){
     videoSearch(username: $username, page: $page) {
@@ -788,6 +835,45 @@ export default [
         })
         .catch((error) => {
           next(ActionCreators.loadUserVideoPageError(error));
+        });
+    } else if (action.type == ActionTypes.LOAD_USER_COMMENTS_PAGE_START) {
+      const { username, page } = action.payload;
+
+      const cachedQ = apolloCache.readQuery({
+        query: parse(USER_COMMENTS_PAGE_QUERY),
+        variables: { username, page },
+      });
+      if (cachedQ)
+        return next(
+          ActionCreators.loadUserCommentsPageSuccess(
+            cachedQ.commentsSearch.comments,
+            cachedQ.commentsSearch.hasMore
+          )
+        );
+
+      axios
+        .post("/api", {
+          query: USER_COMMENTS_PAGE_QUERY,
+          variables: { username, page },
+        })
+        .then((res) => {
+          const commentData = res.data.data;
+
+          apolloCache.writeQuery({
+            query: parse(USER_COMMENTS_PAGE_QUERY),
+            variables: { username, page },
+            data: { ...commentData },
+          });
+
+          next(
+            ActionCreators.loadUserCommentsPageSuccess(
+              commentData.commentsSearch.comments,
+              commentData.commentsSearch.hasMore
+            )
+          );
+        })
+        .catch((error) => {
+          next(ActionCreators.loadUserCommentsPageError(error));
         });
     } else if (action.type == ActionTypes.LOAD_USER_IMAGE_PAGE_START) {
       const { username, page } = action.payload;

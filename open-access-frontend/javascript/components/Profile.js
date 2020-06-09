@@ -56,6 +56,7 @@ class Profile extends Component {
       imageCount,
       loadUserNotePage,
       noteCount,
+      loadUserCommentsPage,
       comments,
       commentCount,
       mineUsername,
@@ -118,7 +119,7 @@ class Profile extends Component {
         <TabPanel selectedTab={selectedTab} index={3}>
           <UserCommentList
             hasMore={commentCount > comments.length}
-            loadMore={() => {}}
+            loadMore={(page) => loadUserCommentsPage(username, page)}
             comments={comments}
             loading={loading}
           />
@@ -154,6 +155,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreators.loadUserImagePageStart(username, page)),
   loadUserNotePage: (username, page) =>
     dispatch(ActionCreators.loadUserNotePageStart(username, page)),
+  loadUserCommentsPage: (username, page) =>
+    dispatch(ActionCreators.loadUserCommentsPageStart(username, page)),
 });
 
 const styles = {

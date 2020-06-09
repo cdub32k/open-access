@@ -25,6 +25,26 @@ const resolvers = {
       const video = await DB.Video.findOne({ _id: id });
       return video;
     },
+    commentsSearch: async (
+      parent,
+      { username, page },
+      { req: { authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+      if (!page) page = 0;
+
+      let vidComms = await DB.VideoComment.find({ username });
+      let imgComms = await DB.ImageComment.find({ username });
+      let noteComms = await DB.NoteComment.find({ username });
+
+      const comms = [...vidComms, ...imgComms, ...noteComms]
+        .sort((a, b) =>
+          new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1
+        )
+        .slice(page * 10, page * 10 + 10);
+      return { comments: comms };
+    },
     videoSearch: async (
       parent,
       { username, searchText, page },
@@ -1343,7 +1363,9 @@ const resolvers = {
       let noteComms = await DB.NoteComment.find({ username });
 
       const comms = [...vidComms, ...imgComms, ...noteComms]
-        .sort((a, b) => a.createdAt < b.createdAt)
+        .sort((a, b) =>
+          new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1
+        )
         .slice(commentPage * 10, commentPage * 10 + 10);
       return comms;
     },

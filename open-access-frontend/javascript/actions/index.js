@@ -32,6 +32,9 @@ export const ActionTypes = {
   LOAD_USER_VIDEO_PAGE_START: "LOAD_USER_VIDEO_PAGE_START",
   LOAD_USER_VIDEO_PAGE_SUCCESS: "LOAD_USER_VIDEO_PAGE_SUCCESS",
   LOAD_USER_VIDEO_PAGE_ERROR: "LOAD_USER_VIDEO_PAGE_ERROR",
+  LOAD_USER_COMMENTS_PAGE_START: "LOAD_USER_COMMENTS_PAGE_START",
+  LOAD_USER_COMMENTS_PAGE_SUCCESS: "LOAD_USER_COMMENTS_PAGE_SUCCESS",
+  LOAD_USER_COMMENTS_PAGE_ERROR: "LOAD_USER_COMMENTS_PAGE_ERROR",
   CLEAR_VIDEO_DATA: "CLEAR_VIDEO_DATA",
   IMAGE_LOADING: "IMAGE_LOADING",
   GET_IMAGE_INFO_START: "GET_IMAGE_INFO_START",
@@ -238,6 +241,21 @@ export const ActionCreators = {
   },
   postVideoCommentError: (error) => {
     return { type: ActionTypes.POST_VIDEO_COMMENT_ERROR, error };
+  },
+  loadUserCommentsPageStart: (username, page) => {
+    return {
+      type: ActionTypes.LOAD_USER_COMMENTS_PAGE_START,
+      payload: { username, page },
+    };
+  },
+  loadUserCommentsPageSuccess: (comments, hasMoreComments) => {
+    return {
+      type: ActionTypes.LOAD_USER_COMMENTS_PAGE_SUCCESS,
+      payload: { comments, hasMoreComments },
+    };
+  },
+  loadUserCommentsPageError: (error) => {
+    return { type: ActionTypes.LOAD_USER_COMMENTS_PAGE_ERROR, error };
   },
   loadUserVideoPageStart: (username, page) => {
     return {

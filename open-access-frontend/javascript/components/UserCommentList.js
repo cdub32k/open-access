@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import UserComment from "./UserComment";
+import CustomButton from "./CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -22,8 +23,13 @@ const UserCommentList = ({ loading, comments, hasMore, loadMore }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
+  const _loadMore = () => {
+    loadMore(page + 1);
+    setPage(page + 1);
+  };
+
   return (
-    <div>
+    <div className="user-comments-list">
       {comments.map((comment, i) => {
         return (
           <UserComment key={i} comment={comment}>
@@ -31,6 +37,11 @@ const UserCommentList = ({ loading, comments, hasMore, loadMore }) => {
           </UserComment>
         );
       })}
+      {hasMore && (
+        <div>
+          <CustomButton text="Load more" onClick={_loadMore} />
+        </div>
+      )}
     </div>
   );
 };

@@ -138,6 +138,10 @@ a:visited {
   max-width: 1020px;
 }
 
+.user-comments-list {
+  width: 600px;
+}
+
 @media (max-width: 1120px) {
   .advocate-slides {
     max-width: calc(1020px - 340px);
@@ -159,5 +163,8 @@ a:visited {
   }
   .advocate-slides {
     max-width: calc(1020px - 680px);
+  }
+  .user-comments-list {
+    width: 320px;
   }
 }

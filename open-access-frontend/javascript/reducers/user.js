@@ -308,6 +308,20 @@ const userReducer = (state = initialState, action) => {
         ...state,
         error: action.error,
       };
+    case ActionTypes.LOAD_USER_COMMENTS_PAGE_SUCCESS:
+      return {
+        ...state,
+        viewed: {
+          ...state.viewed,
+          comments: [...state.viewed.comments, ...action.payload.comments],
+          hasMoreComments: action.payload.hasMoreComments,
+        },
+      };
+    case ActionTypes.LOAD_USER_COMMENTS_PAGE_ERROR:
+      return {
+        ...state,
+        error: action.error,
+      };
     case ActionTypes.LOAD_USER_VIDEO_PAGE_SUCCESS:
       return {
         ...state,

@@ -10,6 +10,8 @@ const typeDefs = gql`
     imageSearch(username: String, searchText: String, page: Int): ImageSearchResponse
     #prettier-ignore
     noteSearch(username: String, searchText: String, page: Int): NoteSearchResponse
+    #prettier-ignore
+    commentsSearch(username: String, searchText: String, page: Int): CommentSearchResponse
     video(id: String!): Video
     image(id: String!): Image
     note(id: String!): Note
@@ -62,6 +64,11 @@ const typeDefs = gql`
   }
   type NoteSearchResponse {
     notes: [Note]
+    hasMore: Boolean
+  }
+
+  type CommentSearchResponse {
+    comments: [AnyComment]
     hasMore: Boolean
   }
 
