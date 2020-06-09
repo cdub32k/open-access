@@ -50,7 +50,7 @@ const NotePage = ({
       <Grid
         item
         xs={12}
-        md={8}
+        md={6}
         style={{ paddingRight: 32, position: "relative" }}
       >
         {loading ? (
@@ -78,7 +78,7 @@ const NotePage = ({
           </Fragment>
         )}
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={6}>
         <CommentsSection
           comments={comments}
           contentType="note"

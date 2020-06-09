@@ -14,17 +14,12 @@ import {
 
 const resolvers = {
   Query: {
-    user: async (
-      parent,
-      { username, vidPage, imgPage, notePage },
-      { req: { authorized } },
-      info
-    ) => {
-      //if (!authorized) return null;
+    user: async (parent, { username }, { req: { authorized } }, info) => {
+      if (!authorized) return null;
 
       const user = await DB.User.findOne({ username });
 
-      return { ...user._doc, vidPage, imgPage, notePage };
+      return { ...user._doc };
     },
     video: async (parent, { id }, { req: { username, authorized } }, info) => {
       const video = await DB.Video.findOne({ _id: id });
@@ -1164,6 +1159,9 @@ const resolvers = {
 
       return !!disliked;
     },
+    note: async ({ noteId }, args, context) => {
+      return await DB.Note.findOne({ _id: noteId });
+    },
   },
 
   Image: {
@@ -1229,6 +1227,9 @@ const resolvers = {
       });
 
       return !!disliked;
+    },
+    image: async ({ imageId }, args, context) => {
+      return await DB.Image.findOne({ _id: imageId });
     },
   },
 
@@ -1297,8 +1298,18 @@ const resolvers = {
 
       return !!disliked;
     },
+    video: async ({ videoId }, args, context) => {
+      let vid = await DB.Video.findOne({ _id: videoId });
+      return vid;
+    },
   },
-
+  AnyComment: {
+    __resolveType(obj, context, info) {
+      if (obj.videoId) return "VideoComment";
+      if (obj.imageId) return "ImageComment";
+      if (obj.noteId) return "NoteComment";
+    },
+  },
   UserResponse: {
     notifications: async (
       parent,
@@ -1316,6 +1327,49 @@ const resolvers = {
         })
         .limit(1000);
       return notifications;
+    },
+    comments: async (
+      { username, commentPage },
+      args,
+      { req: { authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+
+      if (!commentPage) commentPage = 0;
+
+      let vidComms = await DB.VideoComment.find({ username });
+      let imgComms = await DB.ImageComment.find({ username });
+      let noteComms = await DB.NoteComment.find({ username });
+
+      const comms = [...vidComms, ...imgComms, ...noteComms]
+        .sort((a, b) => a.createdAt < b.createdAt)
+        .slice(commentPage * 10, commentPage * 10 + 10);
+      return comms;
+    },
+    commentCount: async ({ username }, args, { req: { authorized } }, info) => {
+      if (!authorized) return null;
+      let totalCount = 0;
+      totalCount += await DB.VideoComment.find({ username }).countDocuments();
+      totalCount += await DB.ImageComment.find({ username }).countDocuments();
+      totalCount += await DB.NoteComment.find({ username }).countDocuments();
+
+      return totalCount;
+    },
+    videoCount: async ({ username }, args, { req: { authorized } }, info) => {
+      if (!authorized) return null;
+
+      return await DB.Video.find({ username }).countDocuments();
+    },
+    imageCount: async ({ username }, args, { req: { authorized } }, info) => {
+      if (!authorized) return null;
+
+      return await DB.Image.find({ username }).countDocuments();
+    },
+    noteCount: async ({ username }, args, { req: { authorized } }, info) => {
+      if (!authorized) return null;
+
+      return await DB.Note.find({ username }).countDocuments();
     },
     notes: async (
       { username, notePage },
@@ -1344,18 +1398,6 @@ const resolvers = {
         });
 
       return notes;
-    },
-    hasMoreNotes: async (
-      { username, notePage },
-      args,
-      { req: { authorized } }
-    ) => {
-      if (!authorized) return null;
-
-      if (!notePage) notePage = 0;
-      const numVids = await DB.Note.find({ username }).countDocuments();
-
-      return numVids > notePage * perPage + perPage;
     },
     images: async (
       { username, imgPage },
@@ -1386,18 +1428,6 @@ const resolvers = {
         });
 
       return images;
-    },
-    hasMoreImages: async (
-      { username, imgPage },
-      args,
-      { req: { authorized } }
-    ) => {
-      if (!authorized) return null;
-
-      if (!imgPage) imgPage = 0;
-      const numVids = await DB.Image.find({ username }).countDocuments();
-
-      return numVids > imgPage * perPage + perPage;
     },
     videos: async (
       { username, vidPage },
@@ -1430,18 +1460,6 @@ const resolvers = {
         });
 
       return videos;
-    },
-    hasMoreVideos: async (
-      { username, vidPage },
-      args,
-      { req: { authorized } }
-    ) => {
-      if (!authorized) return null;
-
-      if (!vidPage) vidPage = 0;
-      const numVids = await DB.Video.find({ username }).countDocuments();
-
-      return numVids > vidPage * perPage + perPage;
     },
     charges: async ({ username }, args, { req: { authorized } }) => {
       //if (!authorized) return null;

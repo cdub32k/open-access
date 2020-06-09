@@ -1,12 +1,12 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import ContentPreview from "./ContentPreview";
 import PreviewPlaceholder from "./PreviewPlaceholder";
 import CustomButton from "./CustomButton";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     textAlign: "center",
     margin: "32px 0",
@@ -18,56 +18,45 @@ const styles = (theme) => ({
     maxWidth: 1260,
     padding: 0,
   },
-});
+}));
 
-class NoteList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notePage: 0,
-    };
-    this.loadMore = this.loadMore.bind(this);
-  }
+const NoteList = ({ loading, notes, hasMore, loadMore }) => {
+  const classes = useStyles();
+  const [page, setPage] = useState(0);
 
-  loadMore = () => {
-    this.props.loadMore(this.state.notePage + 1);
-    this.setState({
-      notePage: this.state.notePage + 1,
-    });
+  const _loadMore = () => {
+    loadMore(page + 1);
+    setPage(page + 1);
   };
 
-  render() {
-    const { classes, loading, hasMore } = this.props;
+  const noteListHTML = loading
+    ? Array.from({ length: 8 }).map((preview, i) => {
+        return <PreviewPlaceholder key={i} />;
+      })
+    : notes.map((note, i) => {
+        return (
+          <ContentPreview
+            contentType="note"
+            id={note._id}
+            user={note.user}
+            body={note.body}
+            commentCount={note.commentCount}
+            uploadedAt={note.uploadedAt}
+            key={i}
+          />
+        );
+      });
 
-    const noteListHTML = loading
-      ? Array.from({ length: 8 }).map((preview, i) => {
-          return <PreviewPlaceholder key={i} />;
-        })
-      : this.props.notes.map((note, i) => {
-          return (
-            <ContentPreview
-              contentType="note"
-              id={note._id}
-              user={note.user}
-              body={note.body}
-              commentCount={note.commentCount}
-              uploadedAt={note.uploadedAt}
-              key={i}
-            />
-          );
-        });
+  return (
+    <div className={classes.container}>
+      <div className={classes.contentList}>{noteListHTML}</div>
+      {hasMore && (
+        <div>
+          <CustomButton text="Load more" onClick={_loadMore} />
+        </div>
+      )}
+    </div>
+  );
+};
 
-    return (
-      <div className={classes.container}>
-        <div className={classes.contentList}>{noteListHTML}</div>
-        {hasMore && (
-          <div>
-            <CustomButton text="Load more" onClick={this.loadMore} />
-          </div>
-        )}
-      </div>
-    );
-  }
-}
-
-export default withStyles(styles)(NoteList);
+export default NoteList;

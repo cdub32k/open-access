@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -7,11 +7,11 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import { withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { num2str, date2rel, truncateNotePreview } from "../utils/helpers";
 
-const styles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     height: 240,
     width: 300,
@@ -47,10 +47,9 @@ const styles = (theme) => ({
   link: {
     color: `${theme.palette.text.primary} !important`,
   },
-});
+}));
 
 const ContentPreview = ({
-  classes,
   contentType,
   id,
   user,
@@ -80,9 +79,18 @@ const ContentPreview = ({
     default:
       break;
   }
+  const classes = useStyles();
+  const [elevation, setElevation] = useState(4);
+  const onMouseOver = () => setElevation(12);
+  const onMouseOut = () => setElevation(4);
 
   return (
-    <Card className={classes.container}>
+    <Card
+      className={classes.container}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+      elevation={elevation}
+    >
       <Link to={`${linkPrefix}/${id}`} className={classes.link}>
         {contentType != "note" && (
           <CardMedia className={classes.thumb} image={thumbUrl} />
@@ -108,4 +116,4 @@ const ContentPreview = ({
   );
 };
 
-export default withStyles(styles)(ContentPreview);
+export default ContentPreview;

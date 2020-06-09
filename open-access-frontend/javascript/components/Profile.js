@@ -12,8 +12,11 @@ import ProfileHeader from "./ProfileHeader";
 import VideoList from "./VideoList";
 import ImageList from "./ImageList";
 import NoteList from "./NoteList";
+import UserCommentList from "./UserCommentList";
 import CustomButton from "./CustomButton";
 import TabPanel from "./TabPanel";
+
+import { num2str } from "../utils/helpers";
 
 class Profile extends Component {
   constructor(props) {
@@ -48,11 +51,13 @@ class Profile extends Component {
       images,
       notes,
       loadUserVideoPage,
-      hasMoreVideos,
+      videoCount,
       loadUserImagePage,
-      hasMoreImages,
+      imageCount,
       loadUserNotePage,
-      hasMoreNotes,
+      noteCount,
+      comments,
+      commentCount,
       mineUsername,
     } = this.props;
     const { selectedTab } = this.state;
@@ -66,9 +71,10 @@ class Profile extends Component {
           textColor="inherit"
           className={classes.tabHeaders}
         >
-          <Tab label="Videos" />
-          <Tab label="Images" />
-          <Tab label="Notes" />
+          <Tab label={`Videos (${num2str(videoCount)})`} />
+          <Tab label={`Images (${num2str(imageCount)})`} />
+          <Tab label={`Notes (${num2str(noteCount)})`} />
+          <Tab label={`Comments (${num2str(commentCount)})`} />
         </Tabs>
         <TabPanel selectedTab={selectedTab} index={0}>
           {mineUsername == username && (
@@ -77,7 +83,7 @@ class Profile extends Component {
             </Link>
           )}
           <VideoList
-            hasMore={hasMoreVideos}
+            hasMore={videoCount > videos.length}
             loadMore={(page) => loadUserVideoPage(username, page)}
             videos={videos}
             loading={loading}
@@ -90,7 +96,7 @@ class Profile extends Component {
             </Link>
           )}
           <ImageList
-            hasMore={hasMoreImages}
+            hasMore={imageCount > images.length}
             loadMore={(page) => loadUserImagePage(username, page)}
             images={images}
             loading={loading}
@@ -103,9 +109,17 @@ class Profile extends Component {
             </Link>
           )}
           <NoteList
-            hasMore={hasMoreNotes}
+            hasMore={noteCount > notes.length}
             loadMore={(page) => loadUserNotePage(username, page)}
             notes={notes}
+            loading={loading}
+          />
+        </TabPanel>
+        <TabPanel selectedTab={selectedTab} index={3}>
+          <UserCommentList
+            hasMore={commentCount > comments.length}
+            loadMore={() => {}}
+            comments={comments}
             loading={loading}
           />
         </TabPanel>
@@ -121,9 +135,11 @@ const mapStateToProps = (state) => ({
   videos: state.user.viewed.videos,
   images: state.user.viewed.images,
   notes: state.user.viewed.notes,
-  hasMoreVideos: state.user.viewed.hasMoreVideos,
-  hasMoreImages: state.user.viewed.hasMoreImages,
-  hasMoreNotes: state.user.viewed.hasMoreNotes,
+  videoCount: state.user.viewed.videoCount,
+  imageCount: state.user.viewed.imageCount,
+  noteCount: state.user.viewed.noteCount,
+  commentCount: state.user.viewed.commentCount,
+  comments: state.user.viewed.comments,
 });
 
 const mapDispatchToProps = (dispatch) => ({

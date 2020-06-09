@@ -26,6 +26,7 @@ const initialState = {
     videos: [],
     images: [],
     notes: [],
+    comments: [],
   },
   newsfeed: {
     notes: [],

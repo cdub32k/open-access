@@ -56,7 +56,6 @@ const GET_USER_INFO_QUERY = `
         liked
         disliked
       }
-      hasMoreVideos
       images {
         _id
         user {
@@ -70,7 +69,6 @@ const GET_USER_INFO_QUERY = `
         liked
         disliked
       }
-      hasMoreImages
       notes {
         _id
         user {
@@ -83,7 +81,50 @@ const GET_USER_INFO_QUERY = `
         liked
         disliked
       }
-      hasMoreNotes
+      comments {
+        ... on VideoComment {
+          _id
+          video {
+            title
+            _id
+            user {
+              username
+            }
+          }
+          replyId
+          body
+          createdAt
+        }
+        ... on ImageComment {
+          _id
+          image {
+            title
+            _id
+            user {
+              username
+            }
+          }
+          body
+          replyId
+          createdAt
+        }
+        ... on NoteComment {
+          _id
+          note {
+            _id
+            user {
+              username
+            }
+          }
+          body
+          replyId
+          createdAt
+        }
+      },
+      videoCount
+      imageCount
+      noteCount
+      commentCount
     }
   }
 `;

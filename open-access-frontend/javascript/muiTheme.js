@@ -59,7 +59,7 @@ const theme = createMuiTheme({
     h6: { color: dark },
     subtitle1: { color: dark, fontSize: 18, letterSpacing: 1.1 },
     subtitle2: { color: dark, fontSize: 12, fontWeight: 700 },
-    body1: { color: dark, fontSize: 12, lineHeight: 2 },
+    body1: { color: dark, fontSize: 13, lineHeight: 2 },
     body2: { color: dark, fontSize: 10 },
     button: { color: dark },
     caption: { color: dark, fontSize: 12 },

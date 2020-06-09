@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express";
 const typeDefs = gql`
   type Query {
     #prettier-ignore
-    user(username: String!, vidPage: Int, imgPage: Int, notePage: Int ): UserResponse
+    user(username: String!): UserResponse
     #prettier-ignore
     videoSearch(username: String, searchText: String, page: Int): VideoSearchResponse
     #prettier-ignore
@@ -41,15 +41,16 @@ const typeDefs = gql`
     notes: [Note]
     images: [Image]
     videos: [Video]
-    vidPage: Int
-    imgPage: Int
-    notePage: Int
-    hasMoreVideos: Boolean
-    hasMoreImages: Boolean
-    hasMoreNotes: Boolean
     charges: [Charge]
     subscriptions: [MoSub]
+    comments: [AnyComment]
+    videoCount: Int
+    imageCount: Int
+    noteCount: Int
+    commentCount: Int
   }
+
+  union AnyComment = VideoComment | ImageComment | NoteComment
 
   type VideoSearchResponse {
     videos: [Video]
@@ -123,28 +124,28 @@ const typeDefs = gql`
   type VideoLike {
     _id: String
     user: User
-    Video: Video
+    video: Video
     createdAt: Date
   }
 
   type VideoDislike {
     _id: String
     user: User
-    Video: Video
+    video: Video
     createdAt: Date
   }
 
   type VideoView {
     _id: String
     user: User
-    Video: Video
+    video: Video
     createdAt: Date
   }
 
   type VideoComment {
     _id: String
     user: User
-    Video: Video
+    video: Video
     body: String
     createdAt: Date
     replies: [VideoComment]
@@ -159,21 +160,21 @@ const typeDefs = gql`
   type ImageLike {
     _id: String
     user: User
-    Image: Image
+    image: Image
     createdAt: Date
   }
 
   type ImageDislike {
     _id: String
     user: User
-    Image: Image
+    image: Image
     createdAt: Date
   }
 
   type ImageComment {
     _id: String
     user: User
-    Image: Image
+    image: Image
     body: String
     createdAt: Date
     replies: [ImageComment]
@@ -188,21 +189,21 @@ const typeDefs = gql`
   type NoteLike {
     _id: String
     user: User
-    Note: Note
+    note: Note
     createdAt: Date
   }
 
   type NoteDislike {
     _id: String
     user: User
-    Note: Note
+    note: Note
     createdAt: Date
   }
 
   type NoteComment {
     _id: String
     user: User
-    Note: Note
+    note: Note
     body: String
     createdAt: Date
     replies: [NoteComment]
