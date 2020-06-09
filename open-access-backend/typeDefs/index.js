@@ -12,9 +12,9 @@ const typeDefs = gql`
     noteSearch(username: String, searchText: String, page: Int): NoteSearchResponse
     #prettier-ignore
     commentsSearch(username: String, searchText: String, page: Int): CommentSearchResponse
-    video(id: String!): Video
-    image(id: String!): Image
-    note(id: String!): Note
+    video(id: String!, cId: String): Video
+    image(id: String!, cId: String): Image
+    note(id: String!, cId: String): Note
 
     notifications: [Notification]
     newsfeedVideos(lastOldest: Date): [Video]
@@ -155,13 +155,14 @@ const typeDefs = gql`
     video: Video
     body: String
     createdAt: Date
-    replies: [VideoComment]
+    replies: String
     replyCount: Int
     replyId: String
     likeCount: Int
     dislikeCount: Int
     liked: Boolean
     disliked: Boolean
+    highlighted: Boolean
   }
 
   type ImageLike {
@@ -184,13 +185,14 @@ const typeDefs = gql`
     image: Image
     body: String
     createdAt: Date
-    replies: [ImageComment]
+    replies: String
     replyCount: Int
     replyId: String
     likeCount: Int
     dislikeCount: Int
     liked: Boolean
     disliked: Boolean
+    highlighted: Boolean
   }
 
   type NoteLike {
@@ -213,13 +215,14 @@ const typeDefs = gql`
     note: Note
     body: String
     createdAt: Date
-    replies: [NoteComment]
+    replies: String
     replyCount: Int
     replyId: String
     likeCount: Int
     dislikeCount: Int
     liked: Boolean
     disliked: Boolean
+    highlighted: Boolean
   }
 
   type Note {
@@ -284,6 +287,7 @@ const typeDefs = gql`
     body: String
     read: Boolean
     createdAt: Date
+    commentId: String
   }
 
   type Subscription {

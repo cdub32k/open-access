@@ -65,6 +65,17 @@ const videoReducer = (state = initialState, action) => {
       let hasMoreComments = true;
       if (action.payload.videoData.comments.length < 10)
         hasMoreComments = false;
+      if (
+        action.payload.videoData.comments[0] &&
+        action.payload.videoData.comments[0].replies
+      ) {
+        let comm = action.payload.videoData.comments[0];
+
+        while (comm.replies) {
+          comm.replies = JSON.parse(comm.replies);
+          comm = comm.replies[0];
+        }
+      }
       return {
         ...state,
         ...action.payload.videoData,

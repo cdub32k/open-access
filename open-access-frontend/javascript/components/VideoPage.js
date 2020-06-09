@@ -36,15 +36,18 @@ const VideoPage = ({
   disliked,
   comments,
   match,
+  location,
   mineUsername,
   getVideoInfo,
   clearVideoData,
   hasMoreComments,
 }) => {
   const { videoId } = match.params;
-
+  let c;
+  if (location.search.indexOf("c=") > -1)
+    c = location.search.substring(location.search.indexOf("c=") + 2);
   useEffect(() => {
-    getVideoInfo(videoId);
+    getVideoInfo(videoId, c);
     return () => clearVideoData();
   }, []);
 
@@ -119,8 +122,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getVideoInfo: (videoId) =>
-    dispatch(ActionCreators.getVideoInfoStart(videoId)),
+  getVideoInfo: (videoId, cId) =>
+    dispatch(ActionCreators.getVideoInfoStart(videoId, cId)),
 
   clearVideoData: () => dispatch(ActionCreators.clearVideoData()),
 });

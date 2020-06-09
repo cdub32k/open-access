@@ -173,22 +173,22 @@ const SiteNav = ({
             msg += "commented on your ";
             break;
           case "reply":
-            msg += "replied to your ";
+            msg += "replied to your comment on a ";
           default:
             break;
         }
         switch (notif.target) {
           case "note":
-          case "note comment":
             contentUrl = "/note/" + notif.targetId;
+            if (notif.commentId) contentUrl += "?c=" + notif.commentId;
             break;
           case "image":
-          case "image comment":
             contentUrl = "/image/" + notif.targetId;
+            if (notif.commentId) contentUrl += "?c=" + notif.commentId;
             break;
           case "video":
-          case "video comment":
             contentUrl = "/video-player/" + notif.targetId;
+            if (notif.commentId) contentUrl += "?c=" + notif.commentId;
             break;
           default:
             break;

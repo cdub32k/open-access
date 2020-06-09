@@ -21,8 +21,40 @@ const resolvers = {
 
       return { ...user._doc };
     },
-    video: async (parent, { id }, { req: { username, authorized } }, info) => {
+    video: async (
+      parent,
+      { id, cId },
+      { req: { username, authorized } },
+      info
+    ) => {
       const video = await DB.Video.findOne({ _id: id });
+
+      if (cId) {
+        let comm = await DB.VideoComment.findOne({ _id: cId });
+        comm = comm.toObject();
+        comm.highlighted = true;
+        while (comm.replyId) {
+          let user = await DB.User.findOne({ username: comm.username });
+          comm.user = {};
+          comm.user.username = user.username;
+          comm.user.profilePic = user.profilePic;
+          let c = await DB.VideoComment.findOne({ _id: comm.replyId });
+          c = c.toObject();
+          c.replies = JSON.stringify([comm]);
+          comm = c;
+        }
+
+        let comms = await DB.VideoComment.find({
+          videoId: id,
+          _id: { $ne: comm._id },
+          replyId: null,
+        })
+          .sort({
+            createdAt: -1,
+          })
+          .limit(9);
+        video.comments = [comm, ...comms];
+      }
       return video;
     },
     commentsSearch: async (
@@ -157,16 +189,82 @@ const resolvers = {
       };
     },
 
-    image: async (parent, { id }, { req: { username, authorized } }, info) => {
+    image: async (
+      parent,
+      { id, cId },
+      { req: { username, authorized } },
+      info
+    ) => {
       if (!authorized) return null;
 
       const image = await DB.Image.findOne({ _id: id });
+
+      if (cId) {
+        let comm = await DB.ImageComment.findOne({ _id: cId });
+        comm = comm.toObject();
+        comm.highlighted = true;
+        while (comm.replyId) {
+          let user = await DB.User.findOne({ username: comm.username });
+          comm.user = {};
+          comm.user.username = user.username;
+          comm.user.profilePic = user.profilePic;
+
+          let c = await DB.ImageComment.findOne({ _id: comm.replyId });
+          c = c.toObject();
+          c.replies = JSON.stringify([comm]);
+          comm = c;
+        }
+
+        let comms = await DB.ImageComment.find({
+          imageId: id,
+          _id: { $ne: comm._id },
+          replyId: null,
+        })
+          .sort({
+            createdAt: -1,
+          })
+          .limit(9);
+        image.comments = [comm, ...comms];
+      }
+
       return image;
     },
-    note: async (parent, { id }, { req: { username, authorized } }, info) => {
+    note: async (
+      parent,
+      { id, cId },
+      { req: { username, authorized } },
+      info
+    ) => {
       if (!authorized) return null;
 
       const note = await DB.Note.findOne({ _id: id });
+
+      if (cId) {
+        let comm = await DB.NoteComment.findOne({ _id: cId });
+        comm = comm.toObject();
+        comm.highlighted = true;
+        while (comm.replyId) {
+          let user = await DB.User.findOne({ username: comm.username });
+          comm.user = {};
+          comm.user.username = user.username;
+          comm.user.profilePic = user.profilePic;
+          let c = await DB.NoteComment.findOne({ _id: comm.replyId });
+          c = c.toObject();
+          c.replies = JSON.stringify([comm]);
+          comm = c;
+        }
+
+        let comms = await DB.NoteComment.find({
+          noteId: id,
+          _id: { $ne: comm._id },
+          replyId: null,
+        })
+          .sort({
+            createdAt: -1,
+          })
+          .limit(9);
+        note.comments = [comm, ...comms];
+      }
       return note;
     },
 
@@ -416,6 +514,7 @@ const resolvers = {
             type: "comment",
             target: "note",
             targetId: note._id,
+            commentId: comment._id,
             body,
           });
 
@@ -427,8 +526,9 @@ const resolvers = {
             sender: username,
             receiver: comm.username,
             type: "reply",
-            target: "note comment",
+            target: "note",
             targetId: note._id,
+            commentId: comment._id,
             body,
           });
         }
@@ -600,6 +700,7 @@ const resolvers = {
             type: "comment",
             target: "image",
             targetId: image._id,
+            commentId: comment._id,
             body,
           });
 
@@ -611,8 +712,9 @@ const resolvers = {
             sender: username,
             receiver: comm.username,
             type: "reply",
-            target: "image comment",
+            target: "image",
             targetId: image._id,
+            commentId: comment._id,
             body,
           });
         }
@@ -819,6 +921,7 @@ const resolvers = {
             type: "comment",
             target: "video",
             targetId: video._id,
+            commentId: comment._id,
             body,
           });
 
@@ -830,8 +933,9 @@ const resolvers = {
             sender: username,
             receiver: comm.username,
             type: "reply",
-            target: "video comment",
+            target: "video",
             targetId: video._id,
+            commentId: comment._id,
             body,
           });
         }

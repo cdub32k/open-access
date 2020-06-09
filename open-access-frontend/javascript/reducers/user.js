@@ -56,6 +56,7 @@ const subscribeToNotifications = (username) => {
               body
               sender
               read
+              commentId
               createdAt
             }
           }

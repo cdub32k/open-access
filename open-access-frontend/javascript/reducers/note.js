@@ -62,6 +62,17 @@ const noteReducer = (state = initialState, action) => {
     case ActionTypes.GET_NOTE_INFO_SUCCESS:
       let hasMoreComments = true;
       if (action.payload.noteData.comments.length < 10) hasMoreComments = false;
+      if (
+        action.payload.noteData.comments[0] &&
+        action.payload.noteData.comments[0].replies
+      ) {
+        let comm = action.payload.noteData.comments[0];
+
+        while (comm.replies) {
+          comm.replies = JSON.parse(comm.replies);
+          comm = comm.replies[0];
+        }
+      }
       return {
         ...state,
         ...action.payload.noteData,

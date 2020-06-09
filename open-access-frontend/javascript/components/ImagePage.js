@@ -44,8 +44,11 @@ const ImagePage = ({
   const [newCaption, setNewCaption] = useState(caption);
 
   const { imageId } = match.params;
+  let c;
+  if (location.search.indexOf("c=") > -1)
+    c = location.search.substring(location.search.indexOf("c=") + 2);
   useEffect(() => {
-    getImageInfo(imageId);
+    getImageInfo(imageId, c);
     return () => clearImageData();
   }, []);
   useEffect(() => {
@@ -148,8 +151,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getImageInfo: (imageId) =>
-    dispatch(ActionCreators.getImageInfoStart(imageId)),
+  getImageInfo: (imageId, cId) =>
+    dispatch(ActionCreators.getImageInfoStart(imageId, cId)),
   clearImageData: () => dispatch(ActionCreators.clearImageData()),
   updateImage: (title, caption) =>
     dispatch(ActionCreators.updateImage(title, caption)),

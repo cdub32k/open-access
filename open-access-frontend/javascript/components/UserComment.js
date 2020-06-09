@@ -18,25 +18,35 @@ const useStyles = makeStyles((theme) => ({
 const UserComment = ({ comment }) => {
   const classes = useStyles();
 
-  let mediaTitle;
+  let type, mediaTitle, mediaLink, link;
   if (comment.video) {
-    mediaTitle = comment.video.title;
+    type = "video";
+    mediaTitle = `image ${comment.video.title}`;
+    mediaLink = `/video-player/${comment.video._id}`;
+    link = `/video-player/${comment.video._id}?c=${comment._id}`;
   } else if (comment.image) {
-    mediaTitle = comment.image.title;
+    type = "image";
+    mediaTitle = `video ${comment.image.title}`;
+    mediaLink = `/image/${comment.image._id}`;
+    link = `/image/${comment.image._id}?c=${comment._id}`;
   } else if (comment.note) {
+    type = "note";
     mediaTitle = "a note";
+    mediaLink = `/note/${comment.note._id}`;
+    link = `/note/${comment.note._id}?c=${comment._id}`;
   }
 
   return (
     <div className={classes.container}>
       {comment.replyId ? (
         <Typography variant="body1">
-          <Link to={`/`}>replied</Link> to a <Link to={`/`}>comment</Link> on{" "}
-          <Link to={`/`}>{mediaTitle}</Link>
+          <Link to={link}>replied</Link> to a comment on{" "}
+          <Link to={mediaLink}>{mediaTitle}</Link>
         </Typography>
       ) : (
         <Typography variant="body1">
-          <Link to={`/`}>commented</Link> on <Link to={`/`}>{mediaTitle}</Link>
+          <Link to={link}>commented</Link> on{" "}
+          <Link to={mediaLink}>{mediaTitle}</Link>
         </Typography>
       )}
       <Typography className={classes.body} variant="body1">

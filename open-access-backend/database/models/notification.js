@@ -16,6 +16,7 @@ let notificationSchema = new mongoose.Schema(
       default: false,
     },
     readAt: Date,
+    commentId: mongoose.Types.ObjectId,
   },
   { timestamps: true }
 );
@@ -33,6 +34,7 @@ notificationSchema.pre("save", function (done) {
       read: this.read,
       _id: this._id,
       createdAt: this.createdAt,
+      commentId: this.commentId,
     },
   });
   done();

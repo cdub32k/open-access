@@ -67,6 +67,13 @@ const useStyles = makeStyles((theme) => ({
     "& svg": { fontSize: 12 },
     "& span": { fontSize: 11, marginLeft: -5 },
   },
+  highlighted: {
+    fontSize: 11,
+    color: theme.palette.light.main,
+    textAlign: "center",
+    margin: "6px 0",
+    backgroundColor: theme.palette.secondary.main,
+  },
 }));
 
 let Comment = ({
@@ -88,11 +95,15 @@ let Comment = ({
   disliked,
   like,
   dislike,
+  highlighted,
 }) => {
   const classes = useStyles();
   const [newBody, setNewBody] = useState(body);
   const [replyFormOpen, setReplyFormOpen] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
+  useEffect(() => {
+    if (replies) setShowReplies(true);
+  }, []);
 
   useEffect(() => {
     if (replies && replyFormOpen) {
@@ -134,6 +145,9 @@ let Comment = ({
 
   return (
     <div className={classes.container} style={replyStyle.container}>
+      {highlighted && (
+        <div className={classes.highlighted}>highlighted comment</div>
+      )}
       <article className={classes.comment}>
         <Link to={`/profile/${user.username}`}>
           <Avatar
@@ -234,6 +248,7 @@ let Comment = ({
                       dislikeCount={reply.dislikeCount}
                       liked={reply.liked}
                       disliked={reply.disliked}
+                      highlighted={reply.highlighted}
                     />
                   </CSSTransition>
                 );

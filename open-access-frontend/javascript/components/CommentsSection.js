@@ -58,6 +58,7 @@ const CommentsSection = ({
               dislikeCount={comment.dislikeCount}
               liked={comment.liked}
               disliked={comment.disliked}
+              highlighted={comment.highlighted}
             />
           </CSSTransition>
         ))}

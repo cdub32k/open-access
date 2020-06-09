@@ -39,8 +39,11 @@ const NotePage = ({
   hasMoreComments,
 }) => {
   const { noteId } = match.params;
+  let c;
+  if (location.search.indexOf("c=") > -1)
+    c = location.search.substring(location.search.indexOf("c=") + 2);
   useEffect(() => {
-    getNoteInfo(noteId);
+    getNoteInfo(noteId, c);
     return () => clearNoteData();
   }, []);
 
@@ -106,7 +109,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getNoteInfo: (noteId) => dispatch(ActionCreators.getNoteInfoStart(noteId)),
+  getNoteInfo: (noteId, cId) =>
+    dispatch(ActionCreators.getNoteInfoStart(noteId, cId)),
   clearNoteData: () => dispatch(ActionCreators.clearNoteData()),
 });
 

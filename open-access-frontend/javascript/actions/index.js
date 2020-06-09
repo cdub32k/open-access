@@ -191,8 +191,11 @@ export const ActionCreators = {
   videoLoading: () => {
     return { type: ActionTypes.VIDEO_LOADING };
   },
-  getVideoInfoStart: (videoId) => {
-    return { type: ActionTypes.GET_VIDEO_INFO_START, payload: { videoId } };
+  getVideoInfoStart: (videoId, cId) => {
+    return {
+      type: ActionTypes.GET_VIDEO_INFO_START,
+      payload: { videoId, cId },
+    };
   },
   getVideoInfoSuccess: (videoData) => {
     return { type: ActionTypes.GET_VIDEO_INFO_SUCCESS, payload: { videoData } };
@@ -278,8 +281,11 @@ export const ActionCreators = {
   imageLoading: () => {
     return { type: ActionTypes.IMAGE_LOADING };
   },
-  getImageInfoStart: (imageId) => {
-    return { type: ActionTypes.GET_IMAGE_INFO_START, payload: { imageId } };
+  getImageInfoStart: (imageId, cId) => {
+    return {
+      type: ActionTypes.GET_IMAGE_INFO_START,
+      payload: { imageId, cId },
+    };
   },
   getImageInfoSuccess: (imageData) => {
     return { type: ActionTypes.GET_IMAGE_INFO_SUCCESS, payload: { imageData } };
@@ -374,8 +380,8 @@ export const ActionCreators = {
   postNoteCommentError: (error) => {
     return { type: ActionTypes.POST_NOTE_COMMENT_ERROR, error };
   },
-  getNoteInfoStart: (noteId) => {
-    return { type: ActionTypes.GET_NOTE_INFO_START, payload: { noteId } };
+  getNoteInfoStart: (noteId, cId) => {
+    return { type: ActionTypes.GET_NOTE_INFO_START, payload: { noteId, cId } };
   },
   getNoteInfoSuccess: (noteData) => {
     return { type: ActionTypes.GET_NOTE_INFO_SUCCESS, payload: { noteData } };

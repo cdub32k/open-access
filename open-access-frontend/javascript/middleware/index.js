@@ -148,8 +148,8 @@ const GET_USER_PAYMENT_INFO_QUERY = `
 `;
 
 const GET_VIDEO_INFO_QUERY = `
-  query VideoInfo($videoId: String!) {
-    video(id: $videoId) {
+  query VideoInfo($videoId: String!, $cId: String) {
+    video(id: $videoId, cId: $cId) {
       user {
         profilePic
         username
@@ -167,6 +167,8 @@ const GET_VIDEO_INFO_QUERY = `
         dislikeCount
         liked
         disliked
+        highlighted
+        replies
       }
       title
       caption
@@ -184,8 +186,8 @@ const GET_VIDEO_INFO_QUERY = `
 `;
 
 const GET_IMAGE_INFO_QUERY = `
-  query ImageInfo($imageId: String!){
-    image(id: $imageId) {
+  query ImageInfo($imageId: String!, $cId: String){
+    image(id: $imageId, cId: $cId) {
       user {
         profilePic
         username
@@ -203,6 +205,8 @@ const GET_IMAGE_INFO_QUERY = `
         dislikeCount
         liked
         disliked
+        highlighted
+        replies
       }
       title
       caption
@@ -218,8 +222,8 @@ const GET_IMAGE_INFO_QUERY = `
 `;
 
 const GET_NOTE_INFO_QUERY = `
-  query NoteInfo($noteId: String!) {
-    note(id: $noteId) {
+  query NoteInfo($noteId: String!, $cId: String) {
+    note(id: $noteId, cId: $cId) {
       user {
         profilePic
         username
@@ -237,6 +241,8 @@ const GET_NOTE_INFO_QUERY = `
         dislikeCount
         liked
         disliked
+        highlighted
+        replies
       }
       body      
       likeCount
@@ -603,14 +609,6 @@ export default [
 
       const { username } = action.payload;
 
-      const cachedQ = apolloCache.readQuery({
-        query: parse(GET_USER_INFO_QUERY),
-        variables: { username },
-      });
-
-      if (cachedQ)
-        return next(ActionCreators.getUserInfoSuccess({ ...cachedQ.user }));
-
       axios
         .post("api", {
           query: GET_USER_INFO_QUERY,
@@ -621,11 +619,6 @@ export default [
         .then((res) => {
           const userData = res.data.data;
 
-          apolloCache.writeQuery({
-            query: parse(GET_USER_INFO_QUERY),
-            variables: { username },
-            data: { ...userData },
-          });
           next(ActionCreators.getUserInfoSuccess(userData.user));
         })
         .catch((err) => next(ActionCreators.getUserInfoError(err)));
@@ -715,30 +708,19 @@ export default [
         });
     } else if (action.type == ActionTypes.GET_VIDEO_INFO_START) {
       next(ActionCreators.videoLoading());
-      const { videoId } = action.payload;
-
-      const cachedQ = apolloCache.readQuery({
-        query: parse(GET_VIDEO_INFO_QUERY),
-        variables: { videoId },
-      });
-      if (cachedQ)
-        return next(ActionCreators.getVideoInfoSuccess({ ...cachedQ.video }));
+      const { videoId, cId } = action.payload;
 
       axios
         .post("api", {
           query: GET_VIDEO_INFO_QUERY,
           variables: {
             videoId,
+            cId,
           },
         })
         .then((res) => {
           const videoData = res.data.data;
 
-          apolloCache.writeQuery({
-            query: parse(GET_VIDEO_INFO_QUERY),
-            variables: { videoId },
-            data: { ...videoData },
-          });
           next(ActionCreators.getVideoInfoSuccess(videoData.video));
         });
     } else if (action.type == ActionTypes.RECORD_VIDEO_VIEW_START) {
@@ -956,29 +938,15 @@ export default [
     } else if (action.type == ActionTypes.GET_IMAGE_INFO_START) {
       next(ActionCreators.imageLoading());
 
-      const { imageId } = action.payload;
-
-      const cachedQ = apolloCache.readQuery({
-        query: parse(GET_IMAGE_INFO_QUERY),
-        variables: { imageId },
-      });
-
-      if (cachedQ)
-        return next(ActionCreators.getImageInfoSuccess({ ...cachedQ.image }));
+      const { imageId, cId } = action.payload;
 
       axios
         .post("api", {
           query: GET_IMAGE_INFO_QUERY,
-          variables: { imageId },
+          variables: { imageId, cId },
         })
         .then((res) => {
           const imageData = res.data.data;
-
-          apolloCache.writeQuery({
-            query: parse(GET_IMAGE_INFO_QUERY),
-            variables: { imageId },
-            data: { ...imageData },
-          });
 
           next(ActionCreators.getImageInfoSuccess(imageData.image));
         });
@@ -1000,29 +968,15 @@ export default [
     } else if (action.type == ActionTypes.GET_NOTE_INFO_START) {
       next(ActionCreators.noteLoading());
 
-      const { noteId } = action.payload;
-
-      const cachedQ = apolloCache.readQuery({
-        query: parse(GET_NOTE_INFO_QUERY),
-        variables: { noteId },
-      });
-
-      if (cachedQ)
-        return next(ActionCreators.getNoteInfoSuccess({ ...cachedQ.note }));
+      const { noteId, cId } = action.payload;
 
       axios
         .post("api", {
           query: GET_NOTE_INFO_QUERY,
-          variables: { noteId },
+          variables: { noteId, cId },
         })
         .then((res) => {
           const noteData = res.data.data;
-
-          apolloCache.writeQuery({
-            query: parse(GET_NOTE_INFO_QUERY),
-            variables: { noteId },
-            data: { ...noteData },
-          });
 
           next(ActionCreators.getNoteInfoSuccess(noteData.note));
         });
