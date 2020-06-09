@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 
@@ -14,19 +14,18 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
-import { num2str, date2rel } from "../utils/helpers";
+import { num2str, date2rel, truncateNotePreview } from "../utils/helpers";
 
 const useStyles = makeStyles({
   root: {
-    width: 345,
+    width: "96%",
     margin: "12px 0",
   },
   media: {
-    height: 194,
+    width: "100%",
+    paddingBottom: "56.25%",
   },
-  content: {
-    maxHeight: 112,
-  },
+  content: {},
   stats: {
     display: "flex",
   },
@@ -91,8 +90,17 @@ const NewsFeedItem = ({
       break;
   }
 
+  const [elevation, setElevation] = useState(4);
+  const onMouseOver = () => setElevation(12);
+  const onMouseOut = () => setElevation(4);
+
   return (
-    <Card className={classes.root}>
+    <Card
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+      className={classes.root}
+      elevation={elevation}
+    >
       <CardContent className={classes.actions}>
         <Link to={`/profile/${username}`} target="_blank">
           <Avatar src={profilePic} className={classes.avatar} />
@@ -121,7 +129,7 @@ const NewsFeedItem = ({
         {type != "note" && (
           <CardMedia
             className={classes.media}
-            style={{ height: type == "image" ? 354 : 194 }}
+            style={{ paddingBottom: type == "image" ? "100%" : "56.25%" }}
             image={thumbUrl}
             title={title}
           />
@@ -131,7 +139,6 @@ const NewsFeedItem = ({
             className={classes.content}
             style={{
               background: `linear-gradient(45deg, ${bgL} 68%, ${bgR})`,
-              maxHeight: type == "note" ? 345 : 112,
             }}
           >
             <Typography
@@ -140,7 +147,7 @@ const NewsFeedItem = ({
               variant="h5"
               component="h2"
             >
-              {title || body}
+              {title || truncateNotePreview(body)}
             </Typography>
             <Typography
               style={{ color: f }}

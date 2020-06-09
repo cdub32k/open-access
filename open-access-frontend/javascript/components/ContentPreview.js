@@ -9,7 +9,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import { withStyles } from "@material-ui/core/styles";
 
-import { num2str, date2rel } from "../utils/helpers";
+import { num2str, date2rel, truncateNotePreview } from "../utils/helpers";
 
 const styles = (theme) => ({
   container: {
@@ -22,6 +22,9 @@ const styles = (theme) => ({
   thumb: {
     height: 169,
     width: 300,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   previewDetailsContainer: {
     position: "absolute",
@@ -85,7 +88,9 @@ const ContentPreview = ({
           <CardMedia className={classes.thumb} image={thumbUrl} />
         )}
         {contentType == "note" && (
-          <CardContent className={classes.thumb}>{body}</CardContent>
+          <CardContent className={classes.thumb}>
+            <div style={{ fontSize: 14 }}>{truncateNotePreview(body)}</div>
+          </CardContent>
         )}
       </Link>
       <CardHeader

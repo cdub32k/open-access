@@ -14,7 +14,7 @@ import CustomButton from "./CustomButton";
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    width: 500,
+    maxWidth: 820,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",

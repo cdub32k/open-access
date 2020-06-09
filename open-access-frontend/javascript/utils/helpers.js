@@ -93,3 +93,9 @@ export function findAndDeleteComment(comms, id) {
   }
   return false;
 }
+
+export function truncateNotePreview(body) {
+  // if (body.length > 222) return body.substring(222) + "...";
+  // else return body;
+  return body;
+}
