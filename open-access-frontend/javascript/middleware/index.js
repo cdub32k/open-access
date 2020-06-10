@@ -125,6 +125,56 @@ const GET_USER_INFO_QUERY = `
       imageCount
       noteCount
       commentCount
+      likeCount
+      dislikeCount
+      likes {
+        ... on VideoLike {
+          _id
+          video {
+            _id
+            title
+            thumbUrl
+          }
+        }
+        ... on ImageLike {
+          _id
+          image {
+            _id
+            title
+            thumbUrl
+          }
+        }
+        ... on NoteLike {
+          _id
+          note {
+            _id
+          }
+        }
+      }
+      dislikes {
+        ... on VideoDislike {
+          _id
+          video {
+            _id
+            title
+            thumbUrl
+          }
+        }
+        ... on ImageDislike {
+          _id
+          image {
+            _id
+            title
+            thumbUrl
+          }
+        }
+        ... on NoteDislike {
+          _id
+          note {
+            _id
+          }
+        }
+      }
     }
   }
 `;
@@ -251,6 +301,67 @@ const GET_NOTE_INFO_QUERY = `
       uploadedAt
       liked
       disliked
+    }
+  }
+`;
+
+const USER_LIKES_PAGE_QUERY = `
+  query UserLikesPage($username: String!, $page: Int!) {
+    likesSearch(username: $username, page: $page) {
+      likes {
+        ... on VideoLike {
+          _id
+          video {
+            _id
+            title
+            thumbUrl
+          }
+        }
+        ... on ImageLike {
+          _id
+          image {
+            _id
+            title
+            thumbUrl
+          }
+        }
+        ... on NoteLike {
+          _id
+          note {
+            _id
+          }
+        }
+      }
+    }
+  }
+`;
+const USER_DISLIKES_PAGE_QUERY = `
+  query UserDislikesPage($username: String!, $page: Int!) {
+    dislikesSearch(username: $username, page: $page) {
+      dislikes {
+        ... on VideoDislike {
+          _id
+          video {
+            _id
+            title
+            thumbUrl
+          }
+        }
+        ... on ImageDislike {
+          _id
+          image {
+            _id
+            title
+            thumbUrl
+          }
+        }
+        ... on NoteDislike {
+          _id
+          note {
+            _id
+          }
+        }
+      }
     }
   }
 `;
@@ -856,6 +967,84 @@ export default [
         })
         .catch((error) => {
           next(ActionCreators.loadUserCommentsPageError(error));
+        });
+    } else if (action.type == ActionTypes.LOAD_USER_LIKES_PAGE_START) {
+      const { username, page } = action.payload;
+
+      const cachedQ = apolloCache.readQuery({
+        query: parse(USER_LIKES_PAGE_QUERY),
+        variables: { username, page },
+      });
+      if (cachedQ)
+        return next(
+          ActionCreators.loadUserLikesPageSuccess(
+            cachedQ.likesSearch.likes,
+            cachedQ.likesSearch.hasMore
+          )
+        );
+
+      axios
+        .post("/api", {
+          query: USER_LIKES_PAGE_QUERY,
+          variables: { username, page },
+        })
+        .then((res) => {
+          const likeData = res.data.data;
+          console.log("DDDDDDDDD", likeData);
+          apolloCache.writeQuery({
+            query: parse(USER_LIKES_PAGE_QUERY),
+            variables: { username, page },
+            data: { ...likeData },
+          });
+
+          next(
+            ActionCreators.loadUserLikesPageSuccess(
+              likeData.likesSearch.likes,
+              likeData.likesSearch.hasMore
+            )
+          );
+        })
+        .catch((error) => {
+          next(ActionCreators.loadUserLikesPageError(error));
+        });
+    } else if (action.type == ActionTypes.LOAD_USER_DISLIKES_PAGE_START) {
+      const { username, page } = action.payload;
+
+      const cachedQ = apolloCache.readQuery({
+        query: parse(USER_DISLIKES_PAGE_QUERY),
+        variables: { username, page },
+      });
+      if (cachedQ)
+        return next(
+          ActionCreators.loadUserDislikesPageSuccess(
+            cachedQ.dislikesSearch.dislikes,
+            cachedQ.dislikesSearch.hasMore
+          )
+        );
+
+      axios
+        .post("/api", {
+          query: USER_DISLIKES_PAGE_QUERY,
+          variables: { username, page },
+        })
+        .then((res) => {
+          const dislikeData = res.data.data;
+
+          apolloCache.writeQuery({
+            query: parse(USER_DISLIKES_PAGE_QUERY),
+            variables: { username, page },
+            data: { ...dislikeData },
+          });
+
+          next(
+            ActionCreators.loadUserDislikesPageSuccess(
+              dislikeData.dislikesSearch.dislikes,
+              dislikeData.dislikesSearch.hasMore
+            )
+          );
+        })
+        .catch((error) => {
+          next(ActionCreators.loadUserDislikesPageError(error));
         });
     } else if (action.type == ActionTypes.LOAD_USER_IMAGE_PAGE_START) {
       const { username, page } = action.payload;

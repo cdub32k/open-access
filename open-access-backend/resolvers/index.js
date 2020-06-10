@@ -78,6 +78,50 @@ const resolvers = {
         .slice(page * 10, page * 10 + 10);
       return { comments: comms };
     },
+    likesSearch: async (
+      parent,
+      { username, page },
+      { req: { authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+      if (!page) page = 0;
+
+      let [vidLikes, imgLikes, noteLikes] = await Promise.all([
+        DB.VideoLike.find({ username }).lean(),
+        DB.ImageLike.find({ username }).lean(),
+        DB.NoteLike.find({ username }).lean(),
+      ]);
+
+      const likes = [...vidLikes, ...imgLikes, ...noteLikes]
+        .sort((a, b) =>
+          new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1
+        )
+        .slice(page * 10, page * 10 + 10);
+      return { likes };
+    },
+    dislikesSearch: async (
+      parent,
+      { username, page },
+      { req: { authorized } },
+      info
+    ) => {
+      if (!authorized) return null;
+      if (!page) page = 0;
+
+      let [vidDislikes, imgDislikes, noteDislikes] = await Promise.all([
+        DB.VideoDislike.find({ username }).lean(),
+        DB.ImageDislike.find({ username }).lean(),
+        DB.NoteDislike.find({ username }).lean(),
+      ]);
+
+      const dislikes = [...vidDislikes, ...imgDislikes, ...noteDislikes]
+        .sort((a, b) =>
+          new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1
+        )
+        .slice(page * 10, page * 10 + 10);
+      return { dislikes };
+    },
     videoSearch: async (
       parent,
       { username, searchText, page },
@@ -351,6 +395,42 @@ const resolvers = {
         })
         .lean();
       return replies;
+    },
+  },
+
+  VideoLike: {
+    video: async ({ videoId }) => {
+      return await DB.Video.findOne({ _id: videoId }).lean();
+    },
+  },
+
+  ImageLike: {
+    image: async ({ imageId }) => {
+      return await DB.Image.findOne({ _id: imageId }).lean();
+    },
+  },
+
+  NoteLike: {
+    note: async ({ noteId }) => {
+      return await DB.Note.findOne({ _id: noteId }).lean();
+    },
+  },
+
+  VideoDislike: {
+    video: async ({ videoId }) => {
+      return await DB.Video.findOne({ _id: videoId }).lean();
+    },
+  },
+
+  ImageDislike: {
+    image: async ({ imageId }) => {
+      return await DB.Image.findOne({ _id: imageId }).lean();
+    },
+  },
+
+  NoteDislike: {
+    note: async ({ noteId }) => {
+      return await DB.Note.findOne({ _id: noteId }).lean();
     },
   },
 
@@ -1418,7 +1498,87 @@ const resolvers = {
       if (obj.noteId) return "NoteComment";
     },
   },
+  AnyLike: {
+    __resolveType(obj, context, info) {
+      if (obj.videoId) return "VideoLike";
+      if (obj.imageId) return "ImageLike";
+      if (obj.noteId) return "NoteLike";
+    },
+  },
+  AnyDislike: {
+    __resolveType(obj, context, info) {
+      if (obj.videoId) return "VideoDislike";
+      if (obj.imageId) return "ImageDislike";
+      if (obj.noteId) return "NoteDislike";
+    },
+  },
   UserResponse: {
+    likeCount: async ({ username }, args, { req: { authorized }, pubsub }) => {
+      if (!authorized) return null;
+
+      let [vCount, iCount, nCount] = await Promise.all([
+        DB.VideoLike.find({ username }).countDocuments(),
+        DB.ImageLike.find({ username }).countDocuments(),
+        DB.NoteLike.find({ username }).countDocuments(),
+      ]);
+      return vCount + iCount + nCount;
+    },
+    dislikeCount: async (
+      { username },
+      args,
+      { req: { authorized }, pubsub }
+    ) => {
+      if (!authorized) return null;
+
+      let [vCount, iCount, nCount] = await Promise.all([
+        DB.VideoDislike.find({ username }).countDocuments(),
+        DB.ImageDislike.find({ username }).countDocuments(),
+        DB.NoteDislike.find({ username }).countDocuments(),
+      ]);
+      return vCount + iCount + nCount;
+    },
+    likes: async (
+      { username, likePage },
+      args,
+      { req: { authorized }, pubsub }
+    ) => {
+      if (!authorized) return null;
+
+      if (!likePage) likePage = 0;
+      let [vidLikes, imgLikes, noteLikes] = await Promise.all([
+        DB.VideoLike.find({ username }).lean(),
+        DB.ImageLike.find({ username }).lean(),
+        DB.NoteLike.find({ username }).lean(),
+      ]);
+
+      const likes = [...vidLikes, ...imgLikes, ...noteLikes]
+        .sort((a, b) =>
+          new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1
+        )
+        .slice(likePage * 10, likePage * 10 + 10);
+      return likes;
+    },
+    dislikes: async (
+      { username, dislikePage },
+      args,
+      { req: { authorized }, pubsub }
+    ) => {
+      if (!authorized) return null;
+
+      if (!dislikePage) dislikePage = 0;
+      let [vidDislikes, imgDislikes, noteDislikes] = await Promise.all([
+        DB.VideoDislike.find({ username }).lean(),
+        DB.ImageDislike.find({ username }).lean(),
+        DB.NoteDislike.find({ username }).lean(),
+      ]);
+
+      const dislikes = [...vidDislikes, ...imgDislikes, ...noteDislikes]
+        .sort((a, b) =>
+          new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1
+        )
+        .slice(dislikePage * 10, dislikePage * 10 + 10);
+      return dislikes;
+    },
     notifications: async (
       parent,
       args,

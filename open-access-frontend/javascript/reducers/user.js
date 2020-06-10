@@ -27,6 +27,8 @@ const initialState = {
     images: [],
     notes: [],
     comments: [],
+    likes: [],
+    dislikes: [],
   },
   newsfeed: {
     notes: [],
@@ -319,6 +321,34 @@ const userReducer = (state = initialState, action) => {
         },
       };
     case ActionTypes.LOAD_USER_COMMENTS_PAGE_ERROR:
+      return {
+        ...state,
+        error: action.error,
+      };
+    case ActionTypes.LOAD_USER_LIKES_PAGE_SUCCESS:
+      return {
+        ...state,
+        viewed: {
+          ...state.viewed,
+          likes: [...state.viewed.likes, ...action.payload.likes],
+          hasMoreLikes: action.payload.hasMoreLikes,
+        },
+      };
+    case ActionTypes.LOAD_USER_LIKES_PAGE_ERROR:
+      return {
+        ...state,
+        error: action.error,
+      };
+    case ActionTypes.LOAD_USER_DISLIKES_PAGE_SUCCESS:
+      return {
+        ...state,
+        viewed: {
+          ...state.viewed,
+          dislikes: [...state.viewed.dislikes, ...action.payload.dislikes],
+          hasMoreDislikes: action.payload.hasMoreDislikes,
+        },
+      };
+    case ActionTypes.LOAD_USER_DISLIKES_PAGE_ERROR:
       return {
         ...state,
         error: action.error,

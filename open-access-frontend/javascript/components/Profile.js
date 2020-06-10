@@ -13,6 +13,7 @@ import VideoList from "./VideoList";
 import ImageList from "./ImageList";
 import NoteList from "./NoteList";
 import UserCommentList from "./UserCommentList";
+import UserLikeList from "./UserLikeList";
 import CustomButton from "./CustomButton";
 import TabPanel from "./TabPanel";
 
@@ -59,6 +60,12 @@ class Profile extends Component {
       loadUserCommentsPage,
       comments,
       commentCount,
+      loadUserLikesPage,
+      likes,
+      likeCount,
+      loadUserDislikesPage,
+      dislikes,
+      dislikeCount,
       mineUsername,
     } = this.props;
     const { selectedTab } = this.state;
@@ -76,6 +83,8 @@ class Profile extends Component {
           <Tab label={`Images (${num2str(imageCount)})`} />
           <Tab label={`Notes (${num2str(noteCount)})`} />
           <Tab label={`Comments (${num2str(commentCount)})`} />
+          <Tab label={`Likes (${num2str(likeCount)})`} />
+          <Tab label={`Dislikes (${num2str(dislikeCount)})`} />
         </Tabs>
         <TabPanel selectedTab={selectedTab} index={0}>
           {mineUsername == username && (
@@ -124,6 +133,22 @@ class Profile extends Component {
             loading={loading}
           />
         </TabPanel>
+        <TabPanel selectedTab={selectedTab} index={4}>
+          <UserLikeList
+            hasMore={likeCount > likes.length}
+            loadMore={(page) => loadUserLikesPage(username, page)}
+            likes={likes}
+            loading={loading}
+          />
+        </TabPanel>
+        <TabPanel selectedTab={selectedTab} index={5}>
+          <UserLikeList
+            hasMore={dislikeCount > dislikes.length}
+            loadMore={(page) => loadUserDislikesPage(username, page)}
+            likes={dislikes}
+            loading={loading}
+          />
+        </TabPanel>
       </div>
     );
   }
@@ -141,6 +166,10 @@ const mapStateToProps = (state) => ({
   noteCount: state.user.viewed.noteCount,
   commentCount: state.user.viewed.commentCount,
   comments: state.user.viewed.comments,
+  likeCount: state.user.viewed.likeCount,
+  likes: state.user.viewed.likes,
+  dislikeCount: state.user.viewed.dislikeCount,
+  dislikes: state.user.viewed.dislikes,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -157,6 +186,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreators.loadUserNotePageStart(username, page)),
   loadUserCommentsPage: (username, page) =>
     dispatch(ActionCreators.loadUserCommentsPageStart(username, page)),
+  loadUserLikesPage: (username, page) =>
+    dispatch(ActionCreators.loadUserLikesPageStart(username, page)),
+  loadUserDislikesPage: (username, page) =>
+    dispatch(ActionCreators.loadUserDislikesPageStart(username, page)),
 });
 
 const styles = {

@@ -35,6 +35,12 @@ export const ActionTypes = {
   LOAD_USER_COMMENTS_PAGE_START: "LOAD_USER_COMMENTS_PAGE_START",
   LOAD_USER_COMMENTS_PAGE_SUCCESS: "LOAD_USER_COMMENTS_PAGE_SUCCESS",
   LOAD_USER_COMMENTS_PAGE_ERROR: "LOAD_USER_COMMENTS_PAGE_ERROR",
+  LOAD_USER_LIKES_PAGE_START: "LOAD_USER_LIKES_PAGE_START",
+  LOAD_USER_LIKES_PAGE_SUCCESS: "LOAD_USER_LIKES_PAGE_SUCCESS",
+  LOAD_USER_LIKES_PAGE_ERROR: "LOAD_USER_LIKES_PAGE_ERROR",
+  LOAD_USER_DISLIKES_PAGE_START: "LOAD_USER_DISLIKES_PAGE_START",
+  LOAD_USER_DISLIKES_PAGE_SUCCESS: "LOAD_USER_DISLIKES_PAGE_SUCCESS",
+  LOAD_USER_DISLIKES_PAGE_ERROR: "LOAD_USER_DISLIKES_PAGE_ERROR",
   CLEAR_VIDEO_DATA: "CLEAR_VIDEO_DATA",
   IMAGE_LOADING: "IMAGE_LOADING",
   GET_IMAGE_INFO_START: "GET_IMAGE_INFO_START",
@@ -259,6 +265,36 @@ export const ActionCreators = {
   },
   loadUserCommentsPageError: (error) => {
     return { type: ActionTypes.LOAD_USER_COMMENTS_PAGE_ERROR, error };
+  },
+  loadUserLikesPageStart: (username, page) => {
+    return {
+      type: ActionTypes.LOAD_USER_LIKES_PAGE_START,
+      payload: { username, page },
+    };
+  },
+  loadUserLikesPageSuccess: (likes, hasMoreLikes) => {
+    return {
+      type: ActionTypes.LOAD_USER_LIKES_PAGE_SUCCESS,
+      payload: { likes, hasMoreLikes },
+    };
+  },
+  loadUserLikesPageError: (error) => {
+    return { type: ActionTypes.LOAD_USER_LIKES_PAGE_ERROR, error };
+  },
+  loadUserDislikesPageStart: (username, page) => {
+    return {
+      type: ActionTypes.LOAD_USER_DISLIKES_PAGE_START,
+      payload: { username, page },
+    };
+  },
+  loadUserDislikesPageSuccess: (dislikes, hasMoreDislikes) => {
+    return {
+      type: ActionTypes.LOAD_USER_DISLIKES_PAGE_SUCCESS,
+      payload: { dislikes, hasMoreDislikes },
+    };
+  },
+  loadUserDislikesPageError: (error) => {
+    return { type: ActionTypes.LOAD_USER_DISLIKES_PAGE_ERROR, error };
   },
   loadUserVideoPageStart: (username, page) => {
     return {

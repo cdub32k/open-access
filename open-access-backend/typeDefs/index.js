@@ -12,6 +12,11 @@ const typeDefs = gql`
     noteSearch(username: String, searchText: String, page: Int): NoteSearchResponse
     #prettier-ignore
     commentsSearch(username: String, searchText: String, page: Int): CommentSearchResponse
+    #prettier-ignore
+    likesSearch(username: String, searchText: String, page: Int): AnyLikeSearchResponse
+    #prettier-ignore
+    dislikesSearch(username: String, searchText: String, page: Int): AnyDislikeSearchResponse
+
     video(id: String!, cId: String): Video
     image(id: String!, cId: String): Image
     note(id: String!, cId: String): Note
@@ -50,9 +55,15 @@ const typeDefs = gql`
     imageCount: Int
     noteCount: Int
     commentCount: Int
+    likeCount: Int
+    dislikeCount: Int
+    likes: [AnyLike]
+    dislikes: [AnyDislike]
   }
 
   union AnyComment = VideoComment | ImageComment | NoteComment
+  union AnyLike = VideoLike | ImageLike | NoteLike
+  union AnyDislike = VideoDislike | ImageDislike | NoteDislike
 
   type VideoSearchResponse {
     videos: [Video]
@@ -69,6 +80,15 @@ const typeDefs = gql`
 
   type CommentSearchResponse {
     comments: [AnyComment]
+    hasMore: Boolean
+  }
+
+  type AnyLikeSearchResponse {
+    likes: [AnyLike]
+    hasMore: Boolean
+  }
+  type AnyDislikeSearchResponse {
+    dislikes: [AnyDislike]
     hasMore: Boolean
   }
 
