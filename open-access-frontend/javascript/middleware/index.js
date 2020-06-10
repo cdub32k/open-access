@@ -56,125 +56,13 @@ const GET_USER_INFO_QUERY = `
         liked
         disliked
       }
-      images {
-        _id
-        user {
-          username
-          profilePic
-        }
-        title
-        likeCount
-        url
-        uploadedAt
-        liked
-        disliked
-      }
-      notes {
-        _id
-        user {
-          username
-          profilePic
-        }
-        commentCount
-        body
-        uploadedAt
-        liked
-        disliked
-      }
-      comments {
-        ... on VideoComment {
-          _id
-          video {
-            title
-            _id
-            user {
-              username
-            }
-          }
-          replyId
-          body
-          createdAt
-        }
-        ... on ImageComment {
-          _id
-          image {
-            title
-            _id
-            user {
-              username
-            }
-          }
-          body
-          replyId
-          createdAt
-        }
-        ... on NoteComment {
-          _id
-          note {
-            _id
-            user {
-              username
-            }
-          }
-          body
-          replyId
-          createdAt
-        }
-      },
       videoCount
       imageCount
       noteCount
       commentCount
       likeCount
       dislikeCount
-      likes {
-        ... on VideoLike {
-          _id
-          video {
-            _id
-            title
-            thumbUrl
-          }
-        }
-        ... on ImageLike {
-          _id
-          image {
-            _id
-            title
-            thumbUrl
-          }
-        }
-        ... on NoteLike {
-          _id
-          note {
-            _id
-          }
-        }
-      }
-      dislikes {
-        ... on VideoDislike {
-          _id
-          video {
-            _id
-            title
-            thumbUrl
-          }
-        }
-        ... on ImageDislike {
-          _id
-          image {
-            _id
-            title
-            thumbUrl
-          }
-        }
-        ... on NoteDislike {
-          _id
-          note {
-            _id
-          }
-        }
-      }
+      
     }
   }
 `;
@@ -932,18 +820,6 @@ export default [
     } else if (action.type == ActionTypes.LOAD_USER_COMMENTS_PAGE_START) {
       const { username, page } = action.payload;
 
-      const cachedQ = apolloCache.readQuery({
-        query: parse(USER_COMMENTS_PAGE_QUERY),
-        variables: { username, page },
-      });
-      if (cachedQ)
-        return next(
-          ActionCreators.loadUserCommentsPageSuccess(
-            cachedQ.commentsSearch.comments,
-            cachedQ.commentsSearch.hasMore
-          )
-        );
-
       axios
         .post("/api", {
           query: USER_COMMENTS_PAGE_QUERY,
@@ -951,12 +827,6 @@ export default [
         })
         .then((res) => {
           const commentData = res.data.data;
-
-          apolloCache.writeQuery({
-            query: parse(USER_COMMENTS_PAGE_QUERY),
-            variables: { username, page },
-            data: { ...commentData },
-          });
 
           next(
             ActionCreators.loadUserCommentsPageSuccess(

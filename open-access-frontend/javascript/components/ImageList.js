@@ -30,6 +30,10 @@ class ImageList extends Component {
     this.loadMore = this.loadMore.bind(this);
   }
 
+  componentDidMount() {
+    this.loadMore(0);
+  }
+
   loadMore = () => {
     this.props.loadMore(this.state.imagePage + 1);
     this.setState({

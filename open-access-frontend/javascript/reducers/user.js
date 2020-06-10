@@ -284,7 +284,7 @@ const userReducer = (state = initialState, action) => {
     case ActionTypes.GET_USER_INFO_SUCCESS:
       return {
         ...state,
-        viewed: action.payload.userInfo,
+        viewed: { ...state.viewed, ...action.payload.userInfo, loading: false },
       };
     case ActionTypes.GET_USER_INFO_ERROR:
       return {

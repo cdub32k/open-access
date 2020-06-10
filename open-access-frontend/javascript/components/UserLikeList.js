@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -26,6 +26,9 @@ const UserLikeList = ({ loading, likes, hasMore, loadMore }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
+  useEffect(() => {
+    loadMore(0);
+  }, []);
   const _loadMore = () => {
     loadMore(page + 1);
     setPage(page + 1);

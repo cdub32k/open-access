@@ -19,7 +19,7 @@ const TabPanel = withStyles((theme) => ({
         index != selectedTab ? classes.hide : ""
       }`}
     >
-      {children}
+      {selectedTab == index && children}
     </Box>
   );
 });

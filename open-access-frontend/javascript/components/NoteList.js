@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
 const NoteList = ({ loading, notes, hasMore, loadMore }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    loadMore(0);
+  }, []);
 
   const _loadMore = () => {
     loadMore(page + 1);
