@@ -11,4 +11,6 @@ let noteSchema = new mongoose.Schema(
   { timestamps: { createdAt: "uploadedAt" } }
 );
 
+noteSchema.index({ username: 1 });
+
 export default mongoose.model("note", noteSchema);

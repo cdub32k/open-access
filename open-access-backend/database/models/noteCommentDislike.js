@@ -9,4 +9,6 @@ let noteCommentDislikeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+noteCommentDislikeSchema.index({ commentId: 1 });
+
 export default mongoose.model("note_comment_dislike", noteCommentDislikeSchema);

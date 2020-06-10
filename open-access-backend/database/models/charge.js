@@ -12,4 +12,6 @@ let chargeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+chargeSchema.index({ username: 1 });
+
 export default mongoose.model("charge", chargeSchema);

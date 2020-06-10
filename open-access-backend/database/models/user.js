@@ -26,4 +26,6 @@ let userSchema = new mongoose.Schema(
   { timestamps: { createdAt: "joinedAt" } }
 );
 
+userSchema.index({ username: 1 });
+
 export default mongoose.model("user", userSchema);

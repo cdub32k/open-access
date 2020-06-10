@@ -8,4 +8,7 @@ let imageLikeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+imageLikeSchema.index({ username: 1 });
+imageLikeSchema.index({ imageId: 1 });
+
 export default mongoose.model("image_like", imageLikeSchema);

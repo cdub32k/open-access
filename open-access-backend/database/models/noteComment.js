@@ -13,4 +13,7 @@ let noteCommentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+noteCommentSchema.index({ noteId: 1 });
+noteCommentSchema.index({ username: 1 });
+
 export default mongoose.model("note_comment", noteCommentSchema);

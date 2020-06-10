@@ -14,7 +14,7 @@ const { User, Charge, Subscription } = require("../database");
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username }).lean();
     if (!user) return res.status(404).send({ error: "User not found." });
     const passwordIsValid = bcrypt.compareSync(password, user.passwordHash);
     if (!passwordIsValid)
@@ -45,9 +45,9 @@ router.post("/login", async (req, res) => {
 router.post("/check-email", async (req, res) => {
   try {
     let email = req.body.email;
-    let user = await User.findOne({ email });
+    let user = await User.exists({ email });
 
-    res.state(200).send(!!user);
+    res.state(200).send(user);
   } catch (e) {
     return res.status(500).send({ error: "Something went wrong" });
   }
@@ -56,9 +56,9 @@ router.post("/check-email", async (req, res) => {
 router.post("/check-username", async (req, res) => {
   try {
     let username = req.body.username;
-    let user = await User.findOne({ username });
+    let user = await User.exists({ username });
 
-    res.status(200).send(!!user);
+    res.status(200).send(user);
   } catch (e) {
     return res.status(500).send({ error: "Something went wrong" });
   }

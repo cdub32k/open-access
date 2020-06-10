@@ -13,4 +13,7 @@ let videoCommentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+videoCommentSchema.index({ username: 1 });
+videoCommentSchema.index({ videoId: 1 });
+
 export default mongoose.model("video_comment", videoCommentSchema);

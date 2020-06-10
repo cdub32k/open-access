@@ -9,6 +9,8 @@ let imageCommentDislikeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+imageCommentDislikeSchema.index({ commentId: 1 });
+
 export default mongoose.model(
   "image_comment_dislike",
   imageCommentDislikeSchema

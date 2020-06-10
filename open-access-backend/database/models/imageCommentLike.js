@@ -9,4 +9,6 @@ let imageCommentLikeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+imageCommentLikeSchema.index({ commentId: 1 });
+
 export default mongoose.model("image_comment_like", imageCommentLikeSchema);

@@ -21,6 +21,8 @@ let notificationSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+notificationSchema.index({ receiver: 1 });
+
 notificationSchema.pre("save", function (done) {
   if (!this.isNew) return done();
 

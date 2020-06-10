@@ -13,4 +13,7 @@ let imageCommentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+imageCommentSchema.index({ username: 1 });
+imageCommentSchema.index({ imageId: 1 });
+
 export default mongoose.model("image_comment", imageCommentSchema);

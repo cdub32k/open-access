@@ -15,4 +15,6 @@ let videoSchema = new mongoose.Schema(
   { timestamps: { createdAt: "uploadedAt" } }
 );
 
+videoSchema.index({ username: 1 });
+
 export default mongoose.model("video", videoSchema);

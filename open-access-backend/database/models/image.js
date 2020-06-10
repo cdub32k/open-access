@@ -13,4 +13,6 @@ let imageSchema = new mongoose.Schema(
   { timestamps: { createdAt: "uploadedAt" } }
 );
 
+imageSchema.index({ username: 1 });
+
 export default mongoose.model("image", imageSchema);

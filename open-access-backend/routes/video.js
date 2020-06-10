@@ -46,7 +46,9 @@ router.post("/upload", upload, async (req, res) => {
       caption: req.body.caption,
     });
 
-    let profilePic = await User.findOne({ username }).profilePic;
+    let profilePic = await User.findOne({ username })
+      .select({ profilePic: 1 })
+      .lean().profilePic;
 
     let user = { username, profilePic };
     video.user = user;
@@ -108,7 +110,7 @@ router.put("/:id", upload, async (req, res) => {
       ] = `http://localhost:5000/vid/${req.username}/${req.files["thumb"][0].filename}`;
       fs.unlink(`public/${video.thumbUrl.split("5000/")[1]}`);
     }
-    await Video.updateOne({ _id: req.params.id }, criteria);
+    await video.update(criteria);
 
     return res.status(200).send(true);
   } catch (e) {

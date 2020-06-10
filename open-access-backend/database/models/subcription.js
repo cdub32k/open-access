@@ -14,4 +14,6 @@ let subscriptionSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+subscriptionSchema.index({ username: 1 });
+
 export default mongoose.model("subscription", subscriptionSchema);

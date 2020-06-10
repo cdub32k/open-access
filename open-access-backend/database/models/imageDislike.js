@@ -8,4 +8,7 @@ let imageDislikeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+imageDislikeSchema.index({ username: 1 });
+imageDislikeSchema.index({ imageId: 1 });
+
 export default mongoose.model("image_dislike", imageDislikeSchema);

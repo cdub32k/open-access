@@ -17,9 +17,9 @@ const resolvers = {
     user: async (parent, { username }, { req: { authorized } }, info) => {
       if (!authorized) return null;
 
-      const user = await DB.User.findOne({ username });
+      const user = await DB.User.findOne({ username }).lean();
 
-      return { ...user._doc };
+      return user;
     },
     video: async (
       parent,
@@ -27,19 +27,17 @@ const resolvers = {
       { req: { username, authorized } },
       info
     ) => {
-      const video = await DB.Video.findOne({ _id: id });
+      const video = await DB.Video.findOne({ _id: id }).lean();
 
       if (cId) {
-        let comm = await DB.VideoComment.findOne({ _id: cId });
-        comm = comm.toObject();
+        let comm = await DB.VideoComment.findOne({ _id: cId }).lean();
         comm.highlighted = true;
         while (comm.replyId) {
-          let user = await DB.User.findOne({ username: comm.username });
+          let user = await DB.User.findOne({ username: comm.username }).lean();
           comm.user = {};
           comm.user.username = user.username;
           comm.user.profilePic = user.profilePic;
-          let c = await DB.VideoComment.findOne({ _id: comm.replyId });
-          c = c.toObject();
+          let c = await DB.VideoComment.findOne({ _id: comm.replyId }).lean();
           c.replies = JSON.stringify([comm]);
           comm = c;
         }
@@ -52,7 +50,8 @@ const resolvers = {
           .sort({
             createdAt: -1,
           })
-          .limit(9);
+          .limit(9)
+          .lean();
         video.comments = [comm, ...comms];
       }
       return video;
@@ -66,9 +65,11 @@ const resolvers = {
       if (!authorized) return null;
       if (!page) page = 0;
 
-      let vidComms = await DB.VideoComment.find({ username });
-      let imgComms = await DB.ImageComment.find({ username });
-      let noteComms = await DB.NoteComment.find({ username });
+      let [vidComms, imgComms, noteComms] = await Promise.all([
+        DB.VideoComment.find({ username }).lean(),
+        DB.ImageComment.find({ username }).lean(),
+        DB.NoteComment.find({ username }).lean(),
+      ]);
 
       const comms = [...vidComms, ...imgComms, ...noteComms]
         .sort((a, b) =>
@@ -109,7 +110,8 @@ const resolvers = {
           viewCount: 1,
           uploadedAt: 1,
           _id: 1,
-        });
+        })
+        .lean();
 
       return {
         videos,
@@ -146,7 +148,8 @@ const resolvers = {
           caption: 1,
           uploadedAt: 1,
           _id: 1,
-        });
+        })
+        .lean();
 
       return {
         images,
@@ -181,7 +184,8 @@ const resolvers = {
           body: 1,
           uploadedAt: 1,
           _id: 1,
-        });
+        })
+        .lean();
 
       return {
         notes,
@@ -200,8 +204,7 @@ const resolvers = {
       const image = await DB.Image.findOne({ _id: id });
 
       if (cId) {
-        let comm = await DB.ImageComment.findOne({ _id: cId });
-        comm = comm.toObject();
+        let comm = await DB.ImageComment.findOne({ _id: cId }).lean();
         comm.highlighted = true;
         while (comm.replyId) {
           let user = await DB.User.findOne({ username: comm.username });
@@ -209,8 +212,7 @@ const resolvers = {
           comm.user.username = user.username;
           comm.user.profilePic = user.profilePic;
 
-          let c = await DB.ImageComment.findOne({ _id: comm.replyId });
-          c = c.toObject();
+          let c = await DB.ImageComment.findOne({ _id: comm.replyId }).lean();
           c.replies = JSON.stringify([comm]);
           comm = c;
         }
@@ -223,7 +225,8 @@ const resolvers = {
           .sort({
             createdAt: -1,
           })
-          .limit(9);
+          .limit(9)
+          .lean();
         image.comments = [comm, ...comms];
       }
 
@@ -237,19 +240,17 @@ const resolvers = {
     ) => {
       if (!authorized) return null;
 
-      const note = await DB.Note.findOne({ _id: id });
+      const note = await DB.Note.findOne({ _id: id }).lean();
 
       if (cId) {
-        let comm = await DB.NoteComment.findOne({ _id: cId });
-        comm = comm.toObject();
+        let comm = await DB.NoteComment.findOne({ _id: cId }).lean();
         comm.highlighted = true;
         while (comm.replyId) {
-          let user = await DB.User.findOne({ username: comm.username });
+          let user = await DB.User.findOne({ username: comm.username }).lean();
           comm.user = {};
           comm.user.username = user.username;
           comm.user.profilePic = user.profilePic;
-          let c = await DB.NoteComment.findOne({ _id: comm.replyId });
-          c = c.toObject();
+          let c = await DB.NoteComment.findOne({ _id: comm.replyId }).lean();
           c.replies = JSON.stringify([comm]);
           comm = c;
         }
@@ -262,7 +263,8 @@ const resolvers = {
           .sort({
             createdAt: -1,
           })
-          .limit(9);
+          .limit(9)
+          .lean();
         note.comments = [comm, ...comms];
       }
       return note;
@@ -282,7 +284,8 @@ const resolvers = {
         .sort({
           uploadedAt: -1,
         })
-        .limit(10);
+        .limit(10)
+        .lean();
 
       return videos;
     },
@@ -300,7 +303,8 @@ const resolvers = {
         .sort({
           uploadedAt: -1,
         })
-        .limit(10);
+        .limit(10)
+        .lean();
 
       return images;
     },
@@ -318,27 +322,34 @@ const resolvers = {
         .sort({
           uploadedAt: -1,
         })
-        .limit(10);
+        .limit(10)
+        .lean();
 
       return notes;
     },
 
     videoCommentReplies: async (parent, { commentId }) => {
-      const replies = await DB.VideoComment.find({ replyId: commentId }).sort({
-        createdAt: -1,
-      });
+      const replies = await DB.VideoComment.find({ replyId: commentId })
+        .sort({
+          createdAt: -1,
+        })
+        .lean();
       return replies;
     },
     imageCommentReplies: async (parent, { commentId }) => {
-      const replies = await DB.ImageComment.find({ replyId: commentId }).sort({
-        createdAt: -1,
-      });
+      const replies = await DB.ImageComment.find({ replyId: commentId })
+        .sort({
+          createdAt: -1,
+        })
+        .lean();
       return replies;
     },
     noteCommentReplies: async (parent, { commentId }) => {
-      const replies = await DB.NoteComment.find({ replyId: commentId }).sort({
-        createdAt: -1,
-      });
+      const replies = await DB.NoteComment.find({ replyId: commentId })
+        .sort({
+          createdAt: -1,
+        })
+        .lean();
       return replies;
     },
   },
@@ -357,7 +368,7 @@ const resolvers = {
         username,
       });
 
-      let profilePic = await DB.User.findOne({ username }).profilePic;
+      let profilePic = await DB.User.findOne({ username }).lean().profilePic;
 
       note.user = { username, profilePic };
       pubsub.publish(NEWSFEED_NOTE_SUBSCRIPTION_PREFIX, {
@@ -376,7 +387,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const liked = await DB.NoteLike.findOne({ username, noteId: id });
+        const liked = await DB.NoteLike.exists({ username, noteId: id });
         const note = await DB.Note.findOne({ _id: id });
         if (!liked) {
           await DB.NoteLike.create({
@@ -386,7 +397,7 @@ const resolvers = {
           note.likeCount++;
           await note.save();
 
-          const notified = await DB.Notification.findOne({
+          const notified = await DB.Notification.exists({
             sender: username,
             targetId: note._id,
             type: "like",
@@ -434,7 +445,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const disliked = await DB.NoteDislike.findOne({
+        const disliked = await DB.NoteDislike.exists({
           username,
           noteId: id,
         });
@@ -448,7 +459,7 @@ const resolvers = {
           note.dislikeCount++;
           await note.save();
 
-          const notified = await DB.Notification.findOne({
+          const notified = await DB.Notification.exists({
             sender: username,
             targetId: note._id,
             type: "dislike",
@@ -562,7 +573,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const liked = await DB.ImageLike.findOne({ username, imageId: id });
+        const liked = await DB.ImageLike.exists({ username, imageId: id });
         const image = await DB.Image.findOne({ _id: id });
         if (!liked) {
           await DB.ImageLike.create({
@@ -572,7 +583,7 @@ const resolvers = {
           image.likeCount++;
           await image.save();
 
-          const notified = await DB.Notification.findOne({
+          const notified = await DB.Notification.exists({
             sender: username,
             targetId: image._id,
             type: "like",
@@ -620,7 +631,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const disliked = await DB.ImageDislike.findOne({
+        const disliked = await DB.ImageDislike.exists({
           username,
           imageId: id,
         });
@@ -634,7 +645,7 @@ const resolvers = {
           image.dislikeCount++;
           await image.save();
 
-          const notified = await DB.Notification.findOne({
+          const notified = await DB.Notification.exists({
             sender: username,
             targetId: image._id,
             type: "dislike",
@@ -748,7 +759,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const liked = await DB.VideoLike.findOne({ username, videoId: id });
+        const liked = await DB.VideoLike.exists({ username, videoId: id });
         const video = await DB.Video.findOne({ _id: id });
         if (!liked) {
           await DB.VideoLike.create({
@@ -758,7 +769,7 @@ const resolvers = {
           video.likeCount++;
           await video.save();
 
-          const notified = await DB.Notification.findOne({
+          const notified = await DB.Notification.exists({
             sender: username,
             targetId: video._id,
             type: "like",
@@ -806,7 +817,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const disliked = await DB.VideoDislike.findOne({
+        const disliked = await DB.VideoDislike.exists({
           username,
           videoId: id,
         });
@@ -820,7 +831,7 @@ const resolvers = {
           video.dislikeCount++;
           await video.save();
 
-          const notified = await DB.Notification.findOne({
+          const notified = await DB.Notification.exists({
             sender: username,
             targetId: video._id,
             type: "dislike",
@@ -868,7 +879,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const viewed = await DB.VideoView.findOne({ username, videoId: id });
+        const viewed = await DB.VideoView.exists({ username, videoId: id });
 
         if (viewed) return true;
 
@@ -969,7 +980,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const liked = await DB.VideoCommentLike.findOne({
+        const liked = await DB.VideoCommentLike.exists({
           username,
           commentId,
         });
@@ -1009,7 +1020,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const disliked = await DB.VideoCommentDislike.findOne({
+        const disliked = await DB.VideoCommentDislike.exists({
           username,
           commentId,
         });
@@ -1051,7 +1062,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const liked = await DB.NoteCommentLike.findOne({
+        const liked = await DB.NoteCommentLike.exists({
           username,
           commentId,
         });
@@ -1091,7 +1102,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const disliked = await DB.NoteCommentDislike.findOne({
+        const disliked = await DB.NoteCommentDislike.exists({
           username,
           commentId,
         });
@@ -1133,7 +1144,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const liked = await DB.ImageCommentLike.findOne({
+        const liked = await DB.ImageCommentLike.exists({
           username,
           commentId,
         });
@@ -1173,7 +1184,7 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const disliked = await DB.ImageCommentDislike.findOne({
+        const disliked = await DB.ImageCommentDislike.exists({
           username,
           commentId,
         });
@@ -1228,24 +1239,19 @@ const resolvers = {
 
   Note: {
     user: async ({ username }, args, context, info) => {
-      const user = await DB.User.findOne({ username });
-      return user;
+      return await DB.User.findOne({ username }).lean();
     },
     liked: async ({ _id, username }, args, context, info) => {
-      const liked = await DB.NoteLike.findOne({ username, noteId: _id });
-      return !!liked;
+      return await DB.NoteLike.exists({ username, noteId: _id });
     },
     disliked: async ({ _id, username }, args, context, info) => {
-      const disliked = await DB.NoteDislike.findOne({ username, noteId: _id });
-      return !!disliked;
+      return await DB.NoteDislike.exists({ username, noteId: _id });
     },
     likes: async ({ _id }, args, context, info) => {
-      const likes = await DB.NoteLike.find({ noteId: _id });
-      return likes;
+      return await DB.NoteLike.exists({ noteId: _id }).lean();
     },
     dislikes: async ({ _id }, args, context, info) => {
-      const dislikes = await DB.NoteDislike.find({ noteId: _id });
-      return dislikes;
+      return await DB.NoteDislike.find({ noteId: _id }).lean();
     },
     comments: async ({ _id, comments }, { lastOldest }, context, info) => {
       if (comments) return comments;
@@ -1258,59 +1264,51 @@ const resolvers = {
         .sort({
           createdAt: -1,
         })
-        .limit(10);
+        .limit(10)
+        .lean();
       return c;
     },
   },
 
   NoteComment: {
     user: async ({ username }, args, context) => {
-      const user = await DB.User.findOne({ username });
-      return user;
+      return await DB.User.findOne({ username }).lean();
     },
     liked: async ({ _id, username }, args, context, info) => {
-      const liked = await DB.NoteCommentLike.findOne({
+      return await DB.NoteCommentLike.exists({
         username,
         commentId: _id,
       });
-      return !!liked;
     },
     disliked: async ({ _id, username }, args, context, info) => {
-      const disliked = await DB.NoteCommentDislike.findOne({
+      return await DB.NoteCommentDislike.exists({
         username,
         commentId: _id,
       });
-
-      return !!disliked;
     },
     note: async ({ noteId }, args, context) => {
-      return await DB.Note.findOne({ _id: noteId });
+      return await DB.Note.findOne({ _id: noteId }).lean();
     },
   },
 
   Image: {
     user: async ({ username }, args, context, info) => {
-      const user = await DB.User.findOne({ username });
-      return user;
+      return await DB.User.findOne({ username }).lean();
     },
     liked: async ({ _id, username }, args, context, info) => {
-      const liked = await DB.ImageLike.findOne({ username, imageId: _id });
-      return !!liked;
+      return await DB.ImageLike.exists({ username, imageId: _id });
     },
     disliked: async ({ _id, username }, args, context, info) => {
-      const disliked = await DB.ImageDislike.findOne({
+      return await DB.ImageDislike.exists({
         username,
         imageId: _id,
       });
-      return !!disliked;
     },
     likes: async ({ _id }, args, context, info) => {
-      const likes = await DB.ImageLike.find({ imageId: _id });
-      return likes;
+      return await DB.ImageLike.find({ imageId: _id }).lean();
     },
     dislikes: async ({ _id }, args, context, info) => {
-      const dislikes = await DB.ImageDislike.find({ imageId: _id });
-      return dislikes;
+      return await DB.ImageDislike.find({ imageId: _id }).lean();
     },
     comments: async ({ _id, comments }, { lastOldest }, context, info) => {
       if (comments) return comments;
@@ -1323,7 +1321,8 @@ const resolvers = {
         .sort({
           createdAt: -1,
         })
-        .limit(10);
+        .limit(10)
+        .lean();
       return c;
     },
 
@@ -1334,57 +1333,46 @@ const resolvers = {
 
   ImageComment: {
     user: async ({ username }, args, context) => {
-      const user = await DB.User.findOne({ username });
-      return user;
+      return await DB.User.findOne({ username }).lean();
     },
     liked: async ({ _id, username }, args, context, info) => {
-      const liked = await DB.ImageCommentLike.findOne({
+      return await DB.ImageCommentLike.exists({
         username,
         commentId: _id,
       });
-      return !!liked;
     },
     disliked: async ({ _id, username }, args, context, info) => {
-      const disliked = await DB.ImageCommentDislike.findOne({
+      return await DB.ImageCommentDislike.exists({
         username,
         commentId: _id,
       });
-
-      return !!disliked;
     },
     image: async ({ imageId }, args, context) => {
-      return await DB.Image.findOne({ _id: imageId });
+      return await DB.Image.findOne({ _id: imageId }).lean();
     },
   },
 
   Video: {
     user: async ({ username }, args, context, info) => {
-      const user = await DB.User.findOne({ username });
-      return user;
+      return await DB.User.findOne({ username }).lean();
     },
     liked: async ({ _id, username }, args, context, info) => {
-      const liked = await DB.VideoLike.findOne({ username, videoId: _id });
-      return !!liked;
+      return await DB.VideoLike.exists({ username, videoId: _id });
     },
     disliked: async ({ _id, username }, args, context, info) => {
-      const disliked = await DB.VideoDislike.findOne({
+      return await DB.VideoDislike.exists({
         username,
         videoId: _id,
       });
-
-      return !!disliked;
     },
     likes: async ({ _id }, args, context, info) => {
-      const likes = await DB.VideoLike.find({ videoId: _id });
-      return likes;
+      return await DB.VideoLike.find({ videoId: _id }).lean();
     },
     dislikes: async ({ _id }, args, context, info) => {
-      const dislikes = await DB.VideoDislike.find({ videoId: _id });
-      return dislikes;
+      return await DB.VideoDislike.find({ videoId: _id }).lean();
     },
     views: async ({ _id }, args, context, info) => {
-      const views = await DB.VideoView.find({ videoId: _id });
-      return views;
+      return await DB.VideoView.find({ videoId: _id }).lean();
     },
     comments: async ({ _id, comments }, { lastOldest }, context, info) => {
       if (comments) return comments;
@@ -1397,34 +1385,30 @@ const resolvers = {
         .sort({
           createdAt: -1,
         })
-        .limit(10);
+        .limit(10)
+        .lean();
       return c;
     },
   },
 
   VideoComment: {
     user: async ({ username }, args, context) => {
-      const user = await DB.User.findOne({ username });
-      return user;
+      return await DB.User.findOne({ username }).lean();
     },
     liked: async ({ _id, username }, args, context, info) => {
-      const liked = await DB.VideoCommentLike.findOne({
+      return await DB.VideoCommentLike.exists({
         username,
         commentId: _id,
       });
-      return !!liked;
     },
     disliked: async ({ _id, username }, args, context, info) => {
-      const disliked = await DB.VideoCommentDislike.findOne({
+      return await DB.VideoCommentDislike.exists({
         username,
         commentId: _id,
       });
-
-      return !!disliked;
     },
     video: async ({ videoId }, args, context) => {
-      let vid = await DB.Video.findOne({ _id: videoId });
-      return vid;
+      return await DB.Video.findOne({ _id: videoId }).lean();
     },
   },
   AnyComment: {
@@ -1449,7 +1433,8 @@ const resolvers = {
         .sort({
           createdAt: -1,
         })
-        .limit(1000);
+        .limit(1000)
+        .lean();
       return notifications;
     },
     comments: async (
@@ -1462,9 +1447,11 @@ const resolvers = {
 
       if (!commentPage) commentPage = 0;
 
-      let vidComms = await DB.VideoComment.find({ username });
-      let imgComms = await DB.ImageComment.find({ username });
-      let noteComms = await DB.NoteComment.find({ username });
+      let [vidComms, imgComms, noteComms] = await Promise.all([
+        DB.VideoComment.find({ username }).lean(),
+        DB.ImageComment.find({ username }).lean(),
+        DB.NoteComment.find({ username }).lean(),
+      ]);
 
       const comms = [...vidComms, ...imgComms, ...noteComms]
         .sort((a, b) =>
@@ -1476,9 +1463,12 @@ const resolvers = {
     commentCount: async ({ username }, args, { req: { authorized } }, info) => {
       if (!authorized) return null;
       let totalCount = 0;
-      totalCount += await DB.VideoComment.find({ username }).countDocuments();
-      totalCount += await DB.ImageComment.find({ username }).countDocuments();
-      totalCount += await DB.NoteComment.find({ username }).countDocuments();
+      let [vCount, iCount, nCount] = await Promise.all([
+        DB.VideoComment.find({ username }).countDocuments(),
+        DB.ImageComment.find({ username }).countDocuments(),
+        DB.NoteComment.find({ username }).countDocuments(),
+      ]);
+      totalCount += vCount + iCount + nCount;
 
       return totalCount;
     },
@@ -1521,7 +1511,8 @@ const resolvers = {
           body: 1,
           uploadedAt: 1,
           _id: 1,
-        });
+        })
+        .lean();
 
       return notes;
     },
@@ -1551,7 +1542,8 @@ const resolvers = {
           caption: 1,
           uploadedAt: 1,
           _id: 1,
-        });
+        })
+        .lean();
 
       return images;
     },
@@ -1583,20 +1575,21 @@ const resolvers = {
           viewCount: 1,
           uploadedAt: 1,
           _id: 1,
-        });
+        })
+        .lean();
 
       return videos;
     },
     charges: async ({ username }, args, { req: { authorized } }) => {
       //if (!authorized) return null;
 
-      const charges = await DB.Charge.find({ username });
+      const charges = await DB.Charge.find({ username }).lean();
       return charges;
     },
     subscriptions: async ({ username }, args, { req: { authorized } }) => {
       //if (!authorized) return null;
 
-      const subs = await DB.Subscription.find({ username });
+      const subs = await DB.Subscription.find({ username }).lean();
       return subs;
     },
   },

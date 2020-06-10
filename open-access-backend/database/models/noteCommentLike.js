@@ -9,4 +9,6 @@ let noteCommentLikeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+noteCommentLikeSchema.index({ commentId: 1 });
+
 export default mongoose.model("note_comment_like", noteCommentLikeSchema);
