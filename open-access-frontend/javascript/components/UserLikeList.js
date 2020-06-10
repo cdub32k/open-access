@@ -27,8 +27,9 @@ const UserLikeList = ({ loading, likes, hasMore, loadMore }) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    loadMore(0);
+    if (hasMore && likes.length == 0) loadMore(0);
   }, []);
+
   const _loadMore = () => {
     loadMore(page + 1);
     setPage(page + 1);

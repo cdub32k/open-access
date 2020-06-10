@@ -24,7 +24,7 @@ const UserCommentList = ({ loading, comments, hasMore, loadMore }) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    loadMore(0);
+    if (hasMore && comments.length == 0) loadMore(0);
   }, []);
 
   const _loadMore = () => {

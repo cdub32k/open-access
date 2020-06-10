@@ -31,7 +31,8 @@ class ImageList extends Component {
   }
 
   componentDidMount() {
-    this.loadMore(0);
+    let { hasMore, images } = this.props;
+    if (hasMore && images.length == 0) this.loadMore(0);
   }
 
   loadMore = () => {
