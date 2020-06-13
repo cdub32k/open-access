@@ -182,7 +182,7 @@ const GET_NOTE_INFO_QUERY = `
         highlighted
         replies
       }
-      body      
+      caption      
       likeCount
       dislikeCount
       commentCount            
@@ -353,7 +353,7 @@ const USER_NOTE_PAGE_QUERY = `
           profilePic
         }
         commentCount
-        body
+        caption
         uploadedAt
         liked
         disliked
@@ -434,7 +434,7 @@ const GET_NEWSFEED_NOTES_QUERY = `
       likeCount
       dislikeCount
       commentCount
-      body
+      caption
     }
   }
 `;
@@ -841,18 +841,6 @@ export default [
     } else if (action.type == ActionTypes.LOAD_USER_LIKES_PAGE_START) {
       const { username, page } = action.payload;
 
-      const cachedQ = apolloCache.readQuery({
-        query: parse(USER_LIKES_PAGE_QUERY),
-        variables: { username, page },
-      });
-      if (cachedQ)
-        return next(
-          ActionCreators.loadUserLikesPageSuccess(
-            cachedQ.likesSearch.likes,
-            cachedQ.likesSearch.hasMore
-          )
-        );
-
       axios
         .post("/api", {
           query: USER_LIKES_PAGE_QUERY,
@@ -860,12 +848,6 @@ export default [
         })
         .then((res) => {
           const likeData = res.data.data;
-          console.log("DDDDDDDDD", likeData);
-          apolloCache.writeQuery({
-            query: parse(USER_LIKES_PAGE_QUERY),
-            variables: { username, page },
-            data: { ...likeData },
-          });
 
           next(
             ActionCreators.loadUserLikesPageSuccess(
@@ -880,18 +862,6 @@ export default [
     } else if (action.type == ActionTypes.LOAD_USER_DISLIKES_PAGE_START) {
       const { username, page } = action.payload;
 
-      const cachedQ = apolloCache.readQuery({
-        query: parse(USER_DISLIKES_PAGE_QUERY),
-        variables: { username, page },
-      });
-      if (cachedQ)
-        return next(
-          ActionCreators.loadUserDislikesPageSuccess(
-            cachedQ.dislikesSearch.dislikes,
-            cachedQ.dislikesSearch.hasMore
-          )
-        );
-
       axios
         .post("/api", {
           query: USER_DISLIKES_PAGE_QUERY,
@@ -899,12 +869,6 @@ export default [
         })
         .then((res) => {
           const dislikeData = res.data.data;
-
-          apolloCache.writeQuery({
-            query: parse(USER_DISLIKES_PAGE_QUERY),
-            variables: { username, page },
-            data: { ...dislikeData },
-          });
 
           next(
             ActionCreators.loadUserDislikesPageSuccess(

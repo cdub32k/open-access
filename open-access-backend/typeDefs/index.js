@@ -93,7 +93,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    postNote(body: String!): Note
+    postNote(caption: String!): Note
     likeVideo(id: String!): Boolean
     dislikeVideo(id: String!): Boolean
     viewVideo(id: String!): Boolean
@@ -248,7 +248,7 @@ const typeDefs = gql`
   type Note {
     user: User
     _id: String
-    body: String
+    caption: String
     likeCount: Int
     dislikeCount: Int
     commentCount: Int

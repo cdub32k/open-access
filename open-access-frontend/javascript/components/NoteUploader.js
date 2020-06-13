@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
 
 const NoteUploader = ({ username }) => {
   const classes = useStyles();
-  const [body, setBody] = useState("");
+  const [caption, setCaption] = useState("");
   const [goToProfile, setGoToProfile] = useState(false);
 
-  const updateBody = (event) => {
-    setBody(event.target.value);
+  const updateCaption = (event) => {
+    setCaption(event.target.value);
   };
 
   const onSubmitHandler = () => {
@@ -42,8 +42,8 @@ const NoteUploader = ({ username }) => {
       .post("/api", {
         query: `
       mutation {
-        postNote(body:"${body}") {
-          body
+        postNote(caption:"${caption}") {
+          caption
         }
       }
     `,
@@ -61,13 +61,13 @@ const NoteUploader = ({ username }) => {
         Post Note
       </Typography>
       <Typography className={classes.counter} variant="caption">
-        {body.length} / 420 chars
+        {caption.length} / 420 chars
       </Typography>
       <form onSubmit={onSubmitHandler}>
         <CustomInput
           className={classes.input}
-          value={body}
-          onChange={updateBody}
+          value={caption}
+          onChange={updateCaption}
           multiline={true}
           rows={3}
           inputProps={{ maxLength: 420 }}

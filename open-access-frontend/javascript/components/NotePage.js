@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 const NotePage = ({
   loading,
   user,
-  body,
+  caption,
   likeCount,
   dislikeCount,
   commentCount,
@@ -63,7 +63,7 @@ const NotePage = ({
             <Note
               _id={noteId}
               user={user}
-              body={body}
+              caption={caption}
               uploadedAt={uploadedAt}
               likeCount={likeCount}
               dislikeCount={dislikeCount}
@@ -96,7 +96,7 @@ const NotePage = ({
 const mapStateToProps = (state) => ({
   loading: state.note.loading,
   user: state.note.user,
-  body: state.note.body,
+  caption: state.note.caption,
   likeCount: state.note.likeCount,
   dislikeCount: state.note.dislikeCount,
   commentCount: state.note.commentCount,

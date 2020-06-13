@@ -43,7 +43,7 @@ const NoteList = ({ loading, notes, hasMore, loadMore }) => {
             contentType="note"
             id={note._id}
             user={note.user}
-            body={note.body}
+            caption={note.caption}
             commentCount={note.commentCount}
             uploadedAt={note.uploadedAt}
             key={i}

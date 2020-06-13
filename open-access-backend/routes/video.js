@@ -4,17 +4,13 @@ dotenv.config();
 import fs from "fs";
 import multer from "multer";
 import pubsub from "../PubSub";
-import { NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX } from "../constants";
+import {
+  VIDEO_MEDIA_TYPE_ID,
+  NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX,
+} from "../constants";
 import { deleteReplies } from "../utils/helpers";
 
-const {
-  Video,
-  VideoView,
-  VideoLike,
-  VideoDislike,
-  VideoComment,
-  User,
-} = require("../database");
+const { Media, View, Like, Dislike, Comment, User } = require("../database");
 
 const router = require("express").Router();
 
@@ -38,7 +34,8 @@ router.post("/upload", upload, async (req, res) => {
   try {
     const username = req.username;
 
-    const video = await Video.create({
+    const video = await Media.create({
+      mediaType: VIDEO_MEDIA_TYPE_ID,
       username,
       url: `http://localhost:5000/vid/${req.username}/${req.files["video"][0].filename}`,
       thumbUrl: `http://localhost:5000/vid/${req.username}/${req.files["thumb"][0].filename}`,
@@ -64,8 +61,8 @@ router.post("/upload", upload, async (req, res) => {
 
 router.put("/comments/:id", async (req, res) => {
   try {
-    await VideoComment.updateOne(
-      { _id: req.params.id },
+    await Comment.updateOne(
+      { _id: req.params.id, mediaType: VIDEO_MEDIA_TYPE_ID },
       { body: req.body.body }
     );
 
@@ -77,17 +74,26 @@ router.put("/comments/:id", async (req, res) => {
 
 router.delete("/comments/:id", async (req, res) => {
   try {
-    const vComment = await VideoComment.findOne({ _id: req.params.id });
-    let video = await Video.findOne({ _id: vComment.videoId });
+    const vComment = await VideoComment.findOne({
+      _id: req.params.id,
+      mediaType: VIDEO_MEDIA_TYPE_ID,
+    });
+    let video = await Video.findOne({
+      _id: vComment.videoId,
+      mediaType: VIDEO_MEDIA_TYPE_ID,
+    });
     let totalDecr = 1;
     if (vComment) {
       if (vComment.replyId) {
-        const rComment = await VideoComment.findOne({ _id: vComment.replyId });
+        const rComment = await Comment.findOne({
+          _id: vComment.replyId,
+          mediaType: VIDEO_MEDIA_TYPE_ID,
+        });
         rComment.replyCount--;
         await rComment.save();
       }
 
-      totalDecr += await deleteReplies(VideoComment, vComment, video);
+      totalDecr += await deleteReplies(Comment, vComment, video);
 
       await vComment.delete();
     }
@@ -102,7 +108,10 @@ router.delete("/comments/:id", async (req, res) => {
 });
 router.put("/:id", upload, async (req, res) => {
   try {
-    let video = await Video.findOne({ _id: req.params.id });
+    let video = await Media.findOne({
+      _id: req.params.id,
+      mediaType: VIDEO_MEDIA_TYPE_ID,
+    });
     let criteria = { title: req.body.title, caption: req.body.caption };
     if (req.files && req.files["thumb"]) {
       criteria[
@@ -119,15 +128,30 @@ router.put("/:id", upload, async (req, res) => {
 });
 router.delete("/:id", async (req, res) => {
   try {
-    const video = await Video.findOne({ _id: req.params.id });
+    const video = await Media.findOne({
+      _id: req.params.id,
+      mediaType: VIDEO_MEDIA_TYPE_ID,
+    });
 
     fs.unlink(`public/${video.url.split("5000/")[1]}`);
     fs.unlink(`public/${video.thumbUrl.split("5000/")[1]}`);
 
-    await VideoLike.deleteMany({ videoId: video._id });
-    await VideoDislike.deleteMany({ videoId: video._id });
-    await VideoComment.deleteMany({ videoId: video._id });
-    await VideoView.deleteMany({ videoId: video._id });
+    await Like.deleteMany({
+      mediaId: video._id,
+      mediaType: VIDEO_MEDIA_TYPE_ID,
+    });
+    await Dislike.deleteMany({
+      mediaId: video._id,
+      mediaType: VIDEO_MEDIA_TYPE_ID,
+    });
+    await Comment.deleteMany({
+      mediaId: video._id,
+      mediaType: VIDEO_MEDIA_TYPE_ID,
+    });
+    await View.deleteMany({
+      mediaId: video._id,
+      mediaType: VIDEO_MEDIA_TYPE_ID,
+    });
     await video.delete();
 
     return res.status(200).send(true);

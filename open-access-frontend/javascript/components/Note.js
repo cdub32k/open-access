@@ -64,7 +64,7 @@ class Note extends Component {
       classes,
       _id,
       user,
-      body,
+      caption,
       likeCount,
       dislikeCount,
       commentCount,
@@ -79,7 +79,9 @@ class Note extends Component {
       <Card className={classes.container}>
         <CardContent className={classes.noteContainer}>
           <div className={classes.note}>
-            <div style={{ whiteSpace: "pre-wrap", width: "90%" }}>{body}</div>
+            <div style={{ whiteSpace: "pre-wrap", width: "90%" }}>
+              {caption}
+            </div>
           </div>
         </CardContent>
         <CardHeader

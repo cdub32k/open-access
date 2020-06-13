@@ -55,7 +55,6 @@ const NewsFeedItem = ({
     dislikeCount,
     commentCount,
     thumbUrl,
-    body,
   },
   subscribeToUpdates,
 }) => {
@@ -147,7 +146,7 @@ const NewsFeedItem = ({
               variant="h5"
               component="h2"
             >
-              {title || truncateNotePreview(body)}
+              {title || truncateNotePreview(caption)}
             </Typography>
             <Typography
               style={{ color: f }}

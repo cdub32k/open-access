@@ -58,7 +58,6 @@ const ContentPreview = ({
   viewCount,
   likeCount,
   commentCount,
-  body,
   caption,
   uploadedAt,
 }) => {
@@ -97,7 +96,7 @@ const ContentPreview = ({
         )}
         {contentType == "note" && (
           <CardContent className={classes.thumb}>
-            <div style={{ fontSize: 14 }}>{truncateNotePreview(body)}</div>
+            <div style={{ fontSize: 14 }}>{truncateNotePreview(caption)}</div>
           </CardContent>
         )}
       </Link>
