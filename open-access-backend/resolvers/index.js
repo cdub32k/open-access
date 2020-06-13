@@ -1426,7 +1426,8 @@ const resolvers = {
       if (!authorized) return null;
 
       try {
-        const liked = await DB.ImageCommentLike.exists({
+        const liked = await DB.CommentLike.exists({
+          mediaType: IMAGE_MEDIA_TYPE_ID,
           username,
           commentId,
         });
