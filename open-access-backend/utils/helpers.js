@@ -16,3 +16,9 @@ export async function deleteReplies(Type, comm, vid) {
   }
   return totalDecr;
 }
+
+export function parseHashtags(str) {
+  let tags = str.match(/(#[a-z\d-]+)/g);
+  if (tags) return tags.map((tag) => tag.slice(1).toLowerCase());
+  else return [];
+}

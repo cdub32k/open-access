@@ -99,3 +99,28 @@ export function truncateNotePreview(body) {
   // else return body;
   return body;
 }
+
+export function getCommentId(search) {
+  if (search.indexOf("c=") > -1)
+    return search.substring(location.search.indexOf("c=") + 2);
+  return null;
+}
+
+export function getSearchQuery(search) {
+  if (search.indexOf("s=") > -1)
+    return search.substring(location.search.indexOf("s=") + 2);
+  return null;
+}
+
+export function getHashtag(search) {
+  if (search.indexOf("h=") > -1)
+    return search.substring(location.search.indexOf("h=") + 2);
+  return null;
+}
+
+export function convertHashtagsToLinks(str) {
+  return str.replace(
+    /(#[a-z\d-]+)/g,
+    (match) => `<a href='/search?h=${match.slice(1)}'>${match}</a>`
+  );
+}

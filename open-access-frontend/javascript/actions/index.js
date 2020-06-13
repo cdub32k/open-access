@@ -112,9 +112,18 @@ export const ActionTypes = {
   LOAD_NEWSFEED_NOTES_START: "LOAD_NEWSFEED_NOTES_START",
   LOAD_NEWSFEED_NOTES_SUCCESS: "LOAD_NEWSFEED_NOTES_SUCCESS",
   LOAD_NEWSFEED_NOTES_ERROR: "LOAD_NEWSFEED_NOTES_START",
-  LOAD_MORE_NEWSFEED_VIDEO: "LOAD_MORE_NEWSFEED_VIDEO",
-  LOAD_MORE_NEWSFEED_IMAGES: "LOAD_MORE_NEWSFEED_IMAGES",
-  LOAD_MORE_NEWSFEED_NOTES: "LOAD_MORE_NEWSFEED_NOTES",
+  LOAD_VIDEO_SEARCH_RESULTS_START: "LOAD_VIDEO_SEARCH_RESULTS_START",
+  LOAD_VIDEO_SEARCH_RESULTS_SUCCESS: "LOAD_VIDEO_SEARCH_RESULTS_SUCCESS",
+  LOAD_VIDEO_SEARCH_RESULTS_ERROR: "LOAD_VIDEO_SEARCH_RESULTS_START",
+  LOAD_IMAGE_SEARCH_RESULTS_START: "LOAD_IMAGE_SEARCH_RESULTS_START",
+  LOAD_IMAGE_SEARCH_RESULTS_SUCCESS: "LOAD_IMAGE_SEARCH_RESULTS_SUCCESS",
+  LOAD_IMAGE_SEARCH_RESULTS_ERROR: "LOAD_IMAGE_SEARCH_RESULTS_START",
+  LOAD_NOTE_SEARCH_RESULTS_START: "LOAD_NOTE_SEARCH_RESULTS_START",
+  LOAD_NOTE_SEARCH_RESULTS_SUCCESS: "LOAD_NOTE_SEARCH_RESULTS_SUCCESS",
+  LOAD_NOTE_SEARCH_RESULTS_ERROR: "LOAD_NOTE_SEARCH_RESULTS_START",
+  LOAD_MORE_VIDEO_SEARCH_RESULTS: "LOAD_MORE_VIDEO_SEARCH_RESULTS",
+  LOAD_MORE_IMAGES_SEARCH_RESULTS: "LOAD_MORE_IMAGES_SEARCH_RESULTS",
+  LOAD_MORE_NOTES_SEARCH_RESULTS: "LOAD_MORE_NOTES_SEARCH_RESULTS",
   LOAD_USER_PAYMENT_INFO_START: "LOAD_USER_PAYMENT_INFO_START",
   LOAD_USER_PAYMENT_INFO_SUCCESS: "LOAD_USER_PAYMENT_INFO_SUCCESS",
   LOAD_USER_PAYMENT_INFO_ERROR: "LOAD_USER_PAYMENT_INFO_ERROR",
@@ -522,6 +531,51 @@ export const ActionCreators = {
   newsfeedNoteItemUpdate: (note) => {
     return { type: ActionTypes.NEWSFEED_NOTE_ITEM_UPDATE, payload: { note } };
   },
+  loadVideoSearchResultsStart: (query, hashtag) => {
+    return {
+      type: ActionTypes.LOAD_VIDEO_SEARCH_RESULTS_START,
+      payload: { query, hashtag },
+    };
+  },
+  loadVideoSearchResultsSuccess: (videos) => {
+    return {
+      type: ActionTypes.LOAD_VIDEO_SEARCH_RESULTS_SUCCESS,
+      payload: { videos },
+    };
+  },
+  loadVideoSearchResultsError: (error) => {
+    return { type: ActionTypes.LOAD_VIDEO_SEARCH_RESULTS_ERROR, error };
+  },
+  loadImageSearchResultsStart: (query, hashtag) => {
+    return {
+      type: ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_START,
+      payload: { query, hashtag },
+    };
+  },
+  loadImageSearchResultsSuccess: (images) => {
+    return {
+      type: ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_SUCCESS,
+      payload: { images },
+    };
+  },
+  loadImageSearchResultsError: (error) => {
+    return { type: ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_ERROR, error };
+  },
+  loadNoteSearchResultsStart: (query, hashtag) => {
+    return {
+      type: ActionTypes.LOAD_NOTE_SEARCH_RESULTS_START,
+      payload: { query, hashtag },
+    };
+  },
+  loadNoteSearchResultsSuccess: (notes) => {
+    return {
+      type: ActionTypes.LOAD_NOTE_SEARCH_RESULTS_SUCCESS,
+      payload: { notes },
+    };
+  },
+  loadNoteSearchResultsError: (error) => {
+    return { type: ActionTypes.LOAD_NOTE_SEARCH_RESULTS_ERROR, error };
+  },
   loadNewsfeedVideoStart: () => {
     return { type: ActionTypes.LOAD_NEWSFEED_VIDEO_START };
   },
@@ -557,15 +611,6 @@ export const ActionCreators = {
   },
   loadNewsfeedVideoError: (error) => {
     return { type: ActionTypes.LOAD_NEWSFEED_NOTES_ERROR, error };
-  },
-  loadMoreNewsfeedVideo: () => {
-    return { type: ActionTypes.LOAD_MORE_NEWSFEED_VIDEO };
-  },
-  loadMoreNewsfeedImages: () => {
-    return { type: ActionTypes.LOAD_MORE_NEWSFEED_IMAGES };
-  },
-  loadMoreNewsfeedNotes: () => {
-    return { type: ActionTypes.LOAD_MORE_NEWSFEED_NOTES };
   },
   loadUserPaymentInfoStart: () => {
     return { type: ActionTypes.LOAD_USER_PAYMENT_INFO_START };

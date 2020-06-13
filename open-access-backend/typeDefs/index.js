@@ -5,17 +5,17 @@ const typeDefs = gql`
     #prettier-ignore
     user(username: String!): UserResponse
     #prettier-ignore
-    videoSearch(username: String, searchText: String, page: Int): VideoSearchResponse
+    videoSearch(username: String, query: String, hashtag: String, page: Int, lastOldest: Date): VideoSearchResponse
     #prettier-ignore
-    imageSearch(username: String, searchText: String, page: Int): ImageSearchResponse
+    imageSearch(username: String, query: String, hashtag: String, page: Int, lastOldest: Date): ImageSearchResponse
     #prettier-ignore
-    noteSearch(username: String, searchText: String, page: Int): NoteSearchResponse
+    noteSearch(username: String, query: String, hashtag: String, page: Int, lastOldest: Date): NoteSearchResponse
     #prettier-ignore
-    commentsSearch(username: String, searchText: String, page: Int): CommentSearchResponse
+    commentsSearch(username: String, query: String, page: Int): CommentSearchResponse
     #prettier-ignore
-    likesSearch(username: String, searchText: String, page: Int): AnyLikeSearchResponse
+    likesSearch(username: String, query: String, page: Int): AnyLikeSearchResponse
     #prettier-ignore
-    dislikesSearch(username: String, searchText: String, page: Int): AnyDislikeSearchResponse
+    dislikesSearch(username: String, query: String, page: Int): AnyDislikeSearchResponse
 
     video(id: String!, cId: String): Video
     image(id: String!, cId: String): Image

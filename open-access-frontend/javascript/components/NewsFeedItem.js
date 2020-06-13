@@ -148,14 +148,16 @@ const NewsFeedItem = ({
             >
               {title || truncateNotePreview(caption)}
             </Typography>
-            <Typography
-              style={{ color: f }}
-              variant="body2"
-              color="textSecondary"
-              component="p"
-            >
-              {caption}
-            </Typography>
+            {type != "note" && (
+              <Typography
+                style={{ color: f }}
+                variant="body2"
+                color="textSecondary"
+                component="p"
+              >
+                {caption}
+              </Typography>
+            )}
           </CardContent>
         )}
       </Link>

@@ -11,6 +11,7 @@ import PreviewImage from "./PreviewImage";
 import CommentsSection from "./CommentsSection";
 import MediaOwnerActions from "./MediaOwnerActions";
 import CustomInput from "./CustomInput";
+import { getCommentId } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   ownerActions: {
@@ -44,9 +45,7 @@ const ImagePage = ({
   const [newCaption, setNewCaption] = useState(caption);
 
   const { imageId } = match.params;
-  let c;
-  if (location.search.indexOf("c=") > -1)
-    c = location.search.substring(location.search.indexOf("c=") + 2);
+  let c = getCommentId(location.search);
   useEffect(() => {
     getImageInfo(imageId, c);
     return () => clearImageData();

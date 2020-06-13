@@ -14,7 +14,7 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ThumbDownOutline from "@material-ui/icons/ThumbDownOutlined";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { date2rel, num2str } from "../utils/helpers";
+import { date2rel, num2str, convertHashtagsToLinks } from "../utils/helpers";
 
 import CustomInput from "./CustomInput";
 import MediaOwnerActions from "./MediaOwnerActions";
@@ -163,9 +163,13 @@ let Comment = ({
             </Link>
             &nbsp;&#8226;&nbsp;{date2rel(createdAt)}
           </Typography>
-          <Typography style={{ whiteSpace: "pre-wrap" }} variant="body1">
-            {body}
-          </Typography>
+          <Typography
+            style={{ whiteSpace: "pre-wrap" }}
+            variant="body1"
+            dangerouslySetInnerHTML={{
+              __html: convertHashtagsToLinks(body),
+            }}
+          ></Typography>
         </div>
         {user.username == mineUsername && (
           <MediaOwnerActions

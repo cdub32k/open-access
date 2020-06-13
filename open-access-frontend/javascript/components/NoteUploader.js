@@ -32,6 +32,7 @@ const NoteUploader = ({ username }) => {
   const classes = useStyles();
   const [caption, setCaption] = useState("");
   const [goToProfile, setGoToProfile] = useState(false);
+  const [noteId, setNoteId] = useState(null);
 
   const updateCaption = (event) => {
     setCaption(event.target.value);
@@ -43,17 +44,20 @@ const NoteUploader = ({ username }) => {
         query: `
       mutation {
         postNote(caption:"${caption}") {
-          caption
+          _id
         }
       }
     `,
       })
       .then((res) => {
-        if (res.data.data.postNote) setGoToProfile(true);
+        if (res.data.data.postNote) {
+          setNoteId(res.data.data.postNote._id);
+          setGoToProfile(true);
+        }
       });
   };
 
-  if (goToProfile) return <Redirect to={`/profile/${username}`} />;
+  if (goToProfile) return <Redirect to={`/note/${noteId}`} />;
 
   return (
     <div className={classes.container}>

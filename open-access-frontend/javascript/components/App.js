@@ -172,6 +172,15 @@ const NewsFeed = (props) => (
   </DynamicImport>
 );
 
+//import NewsFeed from "./SearchResultsPage";
+const SearchResultsPage = (props) => (
+  <DynamicImport load={() => import("./SearchResultsPage")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
+
 //import Home from "./Home";
 const Home = (props) => (
   <DynamicImport load={() => import("./Home")}>
@@ -289,6 +298,12 @@ class App extends Component {
                 path="/feed"
                 render={(props) => (
                   <UnAuthRedirect {...props} component={NewsFeed} />
+                )}
+              />
+              <Route
+                path="/search"
+                render={(props) => (
+                  <UnAuthRedirect {...props} component={SearchResultsPage} />
                 )}
               />
               <Route

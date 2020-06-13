@@ -301,6 +301,73 @@ const USER_COMMENTS_PAGE_QUERY = `
   }
 `;
 
+const VIDEO_SEARCH_RESULTS_PAGE_QUERY = `
+  query VideoSearchResultsPage($page: Int, $query: String, $hashtag: String, $lastOldest: Date){
+    videoSearch(query: $query, hashtag: $hashtag, page: $page, lastOldest: $lastOldest) {
+      videos {
+        _id
+        user {
+          username
+          profilePic
+        }
+        title
+        viewCount
+        likeCount
+        dislikeCount
+        commentCount
+        thumbUrl
+        uploadedAt
+        liked
+        disliked
+      }
+      hasMore
+    }
+  }
+`;
+const IMAGE_SEARCH_RESULTS_PAGE_QUERY = `
+  query ImageSearchResultsPage($page: Int, $query: String, $hashtag: String, $lastOldest: Date){
+    imageSearch(query: $query, hashtag: $hashtag, page: $page, lastOldest: $lastOldest) {
+      images {
+        _id
+        user {
+          username
+          profilePic
+        }
+        title
+        likeCount
+        dislikeCount
+        commentCount
+        thumbUrl
+        uploadedAt
+        liked
+        disliked
+      }
+      hasMore
+    }
+  }
+`;
+const NOTE_SEARCH_RESULTS_PAGE_QUERY = `
+  query NoteSearchResultsPage($page: Int, $query: String, $hashtag: String, $lastOldest: Date){
+    noteSearch(query: $query, hashtag: $hashtag, page: $page, lastOldest: $lastOldest) {
+      notes {
+        _id
+        user {
+          username
+          profilePic
+        }
+        caption
+        likeCount
+        dislikeCount
+        commentCount
+        uploadedAt
+        liked
+        disliked
+      }
+      hasMore
+    }
+  }
+`;
+
 const USER_VIDEO_PAGE_QUERY = `
   query UserVideoPage($username: String!, $page: Int!){
     videoSearch(username: $username, page: $page) {
@@ -1019,9 +1086,14 @@ export default [
         })
         .then((res) => {});
     } else if (action.type == ActionTypes.LOAD_NEWSFEED_VIDEO_START) {
+      let lastOldest =
+        store.getState().feed.videos.length > 0
+          ? store.getState().feed.videos.slice(-1)[0].uploadedAt
+          : null;
       axios
         .post("/api", {
           query: GET_NEWSFEED_VIDEOS_QUERY,
+          variables: { lastOldest },
         })
         .then((res) => {
           const videoData = res.data.data;
@@ -1035,9 +1107,14 @@ export default [
         })
         .catch((error) => next(ActionCreators.loadNewsfeedVideoError(error)));
     } else if (action.type == ActionTypes.LOAD_NEWSFEED_IMAGES_START) {
+      let lastOldest =
+        store.getState().feed.images.length > 0
+          ? store.getState().feed.images.slice(-1)[0].uploadedAt
+          : null;
       axios
         .post("/api", {
           query: GET_NEWSFEED_IMAGES_QUERY,
+          variables: { lastOldest },
         })
         .then((res) => {
           const imageData = res.data.data;
@@ -1051,69 +1128,14 @@ export default [
         })
         .catch((error) => next(ActionCreators.loadNewsfeedVideoError(error)));
     } else if (action.type == ActionTypes.LOAD_NEWSFEED_NOTES_START) {
+      let lastOldest =
+        store.getState().feed.notes.length > 0
+          ? store.getState().feed.notes.slice(-1)[0].uploadedAt
+          : null;
       axios
         .post("/api", {
           query: GET_NEWSFEED_NOTES_QUERY,
-        })
-        .then((res) => {
-          const noteData = res.data.data;
-
-          if (noteData.newsfeedNotes) {
-            next(action);
-            next(
-              ActionCreators.loadNewsfeedNotesSuccess(noteData.newsfeedNotes)
-            );
-          }
-        })
-        .catch((error) => next(ActionCreators.loadNewsfeedNotesError(error)));
-    } else if (action.type == ActionTypes.LOAD_MORE_NEWSFEED_VIDEO) {
-      axios
-        .post("/api", {
-          query: GET_NEWSFEED_VIDEOS_QUERY,
-          variables: {
-            lastOldest: store.getState().user.newsfeed.videos.slice(-1)[0]
-              .uploadedAt,
-          },
-        })
-        .then((res) => {
-          const videoData = res.data.data;
-
-          if (videoData.newsfeedVideos) {
-            next(action);
-            next(
-              ActionCreators.loadNewsfeedVideoSuccess(videoData.newsfeedVideos)
-            );
-          }
-        })
-        .catch((error) => next(ActionCreators.loadNewsfeedVideoError(error)));
-    } else if (action.type == ActionTypes.LOAD_MORE_NEWSFEED_IMAGES) {
-      axios
-        .post("/api", {
-          query: GET_NEWSFEED_IMAGES_QUERY,
-          variables: {
-            lastOldest: store.getState().user.newsfeed.images.slice(-1)[0]
-              .uploadedAt,
-          },
-        })
-        .then((res) => {
-          const imageData = res.data.data;
-
-          if (imageData.newsfeedImages) {
-            next(action);
-            next(
-              ActionCreators.loadNewsfeedImagesSuccess(imageData.newsfeedImages)
-            );
-          }
-        })
-        .catch((error) => next(ActionCreators.loadNewsfeedImagesError(error)));
-    } else if (action.type == ActionTypes.LOAD_MORE_NEWSFEED_NOTES) {
-      axios
-        .post("/api", {
-          query: GET_NEWSFEED_NOTES_QUERY,
-          variables: {
-            lastOldest: store.getState().user.newsfeed.notes.slice(-1)[0]
-              .uploadedAt,
-          },
+          variables: { lastOldest },
         })
         .then((res) => {
           const noteData = res.data.data;
@@ -1362,6 +1384,72 @@ export default [
               )
             );
         });
+    } else if (action.type == ActionTypes.LOAD_VIDEO_SEARCH_RESULTS_START) {
+      const { page, query, hashtag } = action.payload;
+      let lastOldest =
+        store.getState().feed.videos.length > 0
+          ? store.getState().feed.videos.slice(-1)[0].uploadedAt
+          : null;
+      axios
+        .post("/api", {
+          query: VIDEO_SEARCH_RESULTS_PAGE_QUERY,
+          variables: { page, query, hashtag, lastOldest },
+        })
+        .then((res) => {
+          const videoData = res.data.data;
+
+          next(
+            ActionCreators.loadVideoSearchResultsSuccess(
+              videoData.videoSearch.videos,
+              videoData.videoSearch.hasMore
+            )
+          );
+        })
+        .catch((error) => ActionCreators.loadVideoSearchResultsError(error));
+    } else if (action.type == ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_START) {
+      const { page, query, hashtag } = action.payload;
+      let lastOldest =
+        store.getState().feed.images.length > 0
+          ? store.getState().feed.images.slice(-1)[0].uploadedAt
+          : null;
+      axios
+        .post("/api", {
+          query: IMAGE_SEARCH_RESULTS_PAGE_QUERY,
+          variables: { page, query, hashtag, lastOldest },
+        })
+        .then((res) => {
+          const imageData = res.data.data;
+
+          next(
+            ActionCreators.loadImageSearchResultsSuccess(
+              imageData.imageSearch.images,
+              imageData.imageSearch.hasMore
+            )
+          );
+        })
+        .catch((error) => ActionCreators.loadImageSearchResultsError(error));
+    } else if (action.type == ActionTypes.LOAD_NOTE_SEARCH_RESULTS_START) {
+      const { page, query, hashtag } = action.payload;
+      let lastOldest =
+        store.getState().feed.notes.length > 0
+          ? store.getState().feed.notes.slice(-1)[0].uploadedAt
+          : null;
+      axios
+        .post("/api", {
+          query: NOTE_SEARCH_RESULTS_PAGE_QUERY,
+          variables: { page, query, hashtag, lastOldest },
+        })
+        .then((res) => {
+          const noteData = res.data.data;
+
+          next(
+            ActionCreators.loadNoteSearchResultsSuccess(
+              noteData.noteSearch.notes,
+              noteData.noteSearch.hasMore
+            )
+          );
+        })
+        .catch((error) => ActionCreators.loadNoteSearchResultsError(error));
     } else next(action);
   },
 ];

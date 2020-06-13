@@ -12,7 +12,11 @@ import CardMedia from "@material-ui/core/CardMedia";
 import { makeStyles } from "@material-ui/core/styles";
 import ContentActions from "./ContentActions";
 
-import { date2rel, thousandsSeparators } from "../utils/helpers";
+import {
+  date2rel,
+  thousandsSeparators,
+  convertHashtagsToLinks,
+} from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -92,7 +96,7 @@ const VideoPlayer = ({
         />
       </CardMedia>
       <CardHeader
-        avatar={<Avatar src={user.profilePic}>R</Avatar>}
+        avatar={<Avatar src={user.profilePic}></Avatar>}
         title={
           <span style={{ fontSize: 12 }}>
             <span style={{ fontSize: 18 }}>{title}</span>
@@ -107,9 +111,12 @@ const VideoPlayer = ({
         <div style={{ fontWeight: 400 }}>
           {thousandsSeparators(viewCount)} views
         </div>
-        <br />
-        {caption}
       </CardContent>
+      <CardContent
+        dangerouslySetInnerHTML={{
+          __html: convertHashtagsToLinks(caption),
+        }}
+      ></CardContent>
       <ContentActions
         contentType="video"
         liked={liked}

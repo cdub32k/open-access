@@ -11,6 +11,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import NewsFeedItems from "./NewsFeedItems";
 import TabPanel from "./TabPanel";
 import CustomButton from "./CustomButton";
+import { getSearchQuery, getHashtag } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -28,28 +29,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NewsFeed = ({
-  loadNewsfeedVideos,
-  loadNewsfeedImages,
-  loadNewsfeedNotes,
+const SearchResultsPage = ({
+  loadVideoSearchResults,
+  loadImageSearchResults,
+  loadNoteSearchResults,
   newsfeedVideoSubscriptions,
   newsfeedImageSubscriptions,
   newsfeedNoteSubscriptions,
   videos,
   images,
   notes,
+  location,
 }) => {
+  let s = getSearchQuery(location.search);
+  let h = getHashtag(location.search);
+
   const [tab, setTab] = useState(0);
   const changeTab = (e, newValue) => {
-    if (newValue == 1 && images.length == 0) loadNewsfeedImages();
-    if (newValue == 2 && notes.length == 0) loadNewsfeedNotes();
+    if (newValue == 1 && images.length == 0) loadImageSearchResults(s, h);
+    if (newValue == 2 && notes.length == 0) loadNoteSearchResults(s, h);
 
     setTab(newValue);
   };
 
   const classes = useStyles();
   useEffect(() => {
-    if (videos.length == 0) loadNewsfeedVideos();
+    if (videos.length == 0) loadVideoSearchResults(s, h);
     return () => {
       newsfeedVideoSubscriptions.forEach((sub) => sub.unsubscribe());
       newsfeedImageSubscriptions.forEach((sub) => sub.unsubscribe());
@@ -61,7 +66,7 @@ const NewsFeed = ({
     <Grid container className={classes.container}>
       <Grid item xs={12}>
         <Typography className={classes.header} variant="h4">
-          NewsFeed
+          Search Results {s || "#" + h}
         </Typography>
         <Tabs
           value={tab}
@@ -77,15 +82,24 @@ const NewsFeed = ({
         </Tabs>
         <TabPanel selectedTab={tab} index={0}>
           <NewsFeedItems items={videos} type="video" />
-          <CustomButton text="Load more" onClick={() => loadNewsfeedVideos()} />
+          <CustomButton
+            text="Load more"
+            onClick={() => loadVideoSearchResults(s, h)}
+          />
         </TabPanel>
         <TabPanel selectedTab={tab} index={1}>
           <NewsFeedItems items={images} type="image" />
-          <CustomButton text="Load more" onClick={() => loadNewsfeedImages()} />
+          <CustomButton
+            text="Load more"
+            onClick={() => loadImageSearchResults(s, h)}
+          />
         </TabPanel>
         <TabPanel selectedTab={tab} index={2}>
           <NewsFeedItems items={notes} type="note" />
-          <CustomButton text="Load more" onClick={() => loadNewsfeedNotes()} />
+          <CustomButton
+            text="Load more"
+            onClick={() => loadNoteSearchResults(s, h)}
+          />
         </TabPanel>
       </Grid>
     </Grid>
@@ -102,9 +116,12 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadNewsfeedVideos: () => dispatch(ActionCreators.loadNewsfeedVideoStart()),
-  loadNewsfeedImages: () => dispatch(ActionCreators.loadNewsfeedImagesStart()),
-  loadNewsfeedNotes: () => dispatch(ActionCreators.loadNewsfeedNotesStart()),
+  loadVideoSearchResults: (query, hashtag) =>
+    dispatch(ActionCreators.loadVideoSearchResultsStart(query, hashtag)),
+  loadImageSearchResults: (query, hashtag) =>
+    dispatch(ActionCreators.loadImageSearchResultsStart(query, hashtag)),
+  loadNoteSearchResults: (query, hashtag) =>
+    dispatch(ActionCreators.loadNoteSearchResultsStart(query, hashtag)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewsFeed);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchResultsPage);

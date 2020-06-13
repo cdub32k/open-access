@@ -11,6 +11,7 @@ import VideoPlayer from "./VideoPlayer";
 import PreviewVideoPlayer from "./PreviewVideoPlayer";
 import CommentsSection from "./CommentsSection";
 import MediaOwnerActions from "./MediaOwnerActions";
+import { getCommentId } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   ownerActions: {
@@ -43,9 +44,7 @@ const VideoPage = ({
   hasMoreComments,
 }) => {
   const { videoId } = match.params;
-  let c;
-  if (location.search.indexOf("c=") > -1)
-    c = location.search.substring(location.search.indexOf("c=") + 2);
+  let c = getCommentId(location.search);
   useEffect(() => {
     getVideoInfo(videoId, c);
     return () => clearVideoData();

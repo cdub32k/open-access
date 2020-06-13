@@ -15,7 +15,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 import ContentActions from "./ContentActions";
 
-import { num2str, date2rel } from "../utils/helpers";
+import { num2str, date2rel, convertHashtagsToLinks } from "../utils/helpers";
 
 const styles = (theme) => ({
   container: {
@@ -79,9 +79,12 @@ class Note extends Component {
       <Card className={classes.container}>
         <CardContent className={classes.noteContainer}>
           <div className={classes.note}>
-            <div style={{ whiteSpace: "pre-wrap", width: "90%" }}>
-              {caption}
-            </div>
+            <div
+              style={{ whiteSpace: "pre-wrap", width: "90%" }}
+              dangerouslySetInnerHTML={{
+                __html: convertHashtagsToLinks(caption),
+              }}
+            ></div>
           </div>
         </CardContent>
         <CardHeader

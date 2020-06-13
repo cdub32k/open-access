@@ -132,7 +132,7 @@ class VideoUploader extends Component {
       if (res.data)
         this.setState({
           goToProfile: true,
-          _id: res.data._id,
+          _id: res.data.video._id,
         });
     });
   };
@@ -146,7 +146,8 @@ class VideoUploader extends Component {
   };
 
   render() {
-    if (this.state.goToProfile) return <Redirect to={`/video/${_id}`} />;
+    if (this.state.goToProfile)
+      return <Redirect to={`/video-player/${this.state._id}`} />;
 
     const { classes } = this.props;
     const { _id, crop, thumbSrc, videoSrc, title, caption } = this.state;

@@ -12,6 +12,7 @@ import PreviewNote from "./PreviewNote";
 import CommentForm from "./CommentForm";
 import CommentsSection from "./CommentsSection";
 import MediaOwnerActions from "./MediaOwnerActions";
+import { getCommentId } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   ownerActions: {
@@ -39,9 +40,7 @@ const NotePage = ({
   hasMoreComments,
 }) => {
   const { noteId } = match.params;
-  let c;
-  if (location.search.indexOf("c=") > -1)
-    c = location.search.substring(location.search.indexOf("c=") + 2);
+  let c = getCommentId(location.search);
   useEffect(() => {
     getNoteInfo(noteId, c);
     return () => clearNoteData();

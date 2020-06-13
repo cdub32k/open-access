@@ -12,11 +12,13 @@ let mediaSchema = new mongoose.Schema(
     dislikeCount: { type: Number, default: 0 },
     commentCount: { type: Number, default: 0 },
     username: String,
+    hashtags: [String],
   },
   { timestamps: { createdAt: "uploadedAt" } }
 );
 
 mediaSchema.index({ mediaType: 1 });
 mediaSchema.index({ username: 1 });
+mediaSchema.index({ hashtags: 1 });
 
 export default mongoose.model("media", mediaSchema);

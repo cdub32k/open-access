@@ -1,6 +1,6 @@
 import DB from "../database";
 
-const perPage = 10;
+const perPage = 2;
 
 import {
   VIDEO_MEDIA_TYPE_ID,
@@ -14,6 +14,7 @@ import {
   IMAGE_SUBSCRIPTION_PREFIX,
   NOTE_SUBSCRIPTION_PREFIX,
 } from "../constants";
+import { parseHashtags } from "../utils/helpers";
 
 const resolvers = {
   Query: {
@@ -128,7 +129,7 @@ const resolvers = {
     },
     videoSearch: async (
       parent,
-      { username, searchText, page },
+      { username, query, hashtag, page, lastOldest },
       { req: { authorized } },
       info
     ) => {
@@ -137,7 +138,13 @@ const resolvers = {
       const criteria = { mediaType: VIDEO_MEDIA_TYPE_ID };
       if (!page) page = 0;
       if (username) criteria.username = username;
-      if (searchText) criteria.title = { $regex: searchText, $options: "i" };
+      if (query)
+        criteria.$or = [
+          { title: { $regex: query, $options: "i" } },
+          //{ caption: { $regex: query, $options: "i" } },
+        ];
+      if (hashtag) criteria.hashtags = hashtag.toLowerCase();
+      if (lastOldest) criteria.uploadedAt = { $lt: lastOldest };
 
       const totalCount = await DB.Media.find(criteria).countDocuments();
       const videos = await DB.Media.find(criteria)
@@ -168,7 +175,7 @@ const resolvers = {
     },
     imageSearch: async (
       parent,
-      { username, searchText, page },
+      { username, query, hashtag, page, lastOldest },
       { req: { authorized } },
       info
     ) => {
@@ -177,7 +184,13 @@ const resolvers = {
       const criteria = { mediaType: IMAGE_MEDIA_TYPE_ID };
       if (!page) page = 0;
       if (username) criteria.username = username;
-      if (searchText) criteria.title = { $regex: searchText, $options: "i" };
+      if (query)
+        criteria.$or = [
+          { title: { $regex: query, $options: "i" } },
+          //{ caption: { $regex: query, $options: "i" } },
+        ];
+      if (hashtag) criteria.hashtags = hashtag.toLowerCase();
+      if (lastOldest) criteria.uploadedAt = { $lt: lastOldest };
 
       const totalCount = await DB.Media.find(criteria).countDocuments();
       const images = await DB.Media.find(criteria)
@@ -206,7 +219,7 @@ const resolvers = {
     },
     noteSearch: async (
       parent,
-      { username, searchText, page },
+      { username, query, hashtag, page, lastOldest },
       { req: { authorized } },
       info
     ) => {
@@ -215,7 +228,13 @@ const resolvers = {
       const criteria = { mediaType: NOTE_MEDIA_TYPE_ID };
       if (!page) page = 0;
       if (username) criteria.username = username;
-      if (searchText) criteria.body = { $regex: searchText, $options: "i" };
+      if (query)
+        criteria.$or = [
+          //{ title: { $regex: query, $options: "i" } },
+          { caption: { $regex: query, $options: "i" } },
+        ];
+      if (hashtag) criteria.hashtags = hashtag.toLowerCase();
+      if (lastOldest) criteria.uploadedAt = { $lt: lastOldest };
 
       const totalCount = await DB.Media.find(criteria).countDocuments();
       const notes = await DB.Media.find(criteria)
@@ -520,10 +539,13 @@ const resolvers = {
     ) => {
       if (!authorized) return null;
 
+      let hashtags = parseHashtags(caption);
+
       const note = await DB.Media.create({
         mediaType: NOTE_MEDIA_TYPE_ID,
         caption,
         username,
+        hashtags,
       });
 
       let profilePic = await DB.User.findOne({ username }).lean().profilePic;
@@ -1649,7 +1671,7 @@ const resolvers = {
         .sort({
           createdAt: -1,
         })
-        .limit(10)
+        .limit(perPage)
         .lean();
       return c;
     },

@@ -121,6 +121,7 @@ class ImageUploader extends Component {
       if (res.data)
         this.setState({
           goToProfile: true,
+          _id: res.data.image._id,
         });
     });
   };
@@ -131,7 +132,7 @@ class ImageUploader extends Component {
 
   render() {
     if (this.state.goToProfile)
-      return <Redirect to={`/profile/${this.props.username}`} />;
+      return <Redirect to={`/image/${this.state._id}`} />;
 
     const { classes } = this.props;
     const { crop, imageSrc, title, caption } = this.state;

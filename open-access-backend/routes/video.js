@@ -8,7 +8,7 @@ import {
   VIDEO_MEDIA_TYPE_ID,
   NEWSFEED_VIDEO_SUBSCRIPTION_PREFIX,
 } from "../constants";
-import { deleteReplies } from "../utils/helpers";
+import { deleteReplies, parseHashtags } from "../utils/helpers";
 
 const { Media, View, Like, Dislike, Comment, User } = require("../database");
 
@@ -34,6 +34,10 @@ router.post("/upload", upload, async (req, res) => {
   try {
     const username = req.username;
 
+    let hashtags = parseHashtags(req.body.title).concat(
+      parseHashtags(req.body.caption)
+    );
+
     const video = await Media.create({
       mediaType: VIDEO_MEDIA_TYPE_ID,
       username,
@@ -41,6 +45,7 @@ router.post("/upload", upload, async (req, res) => {
       thumbUrl: `http://localhost:5000/vid/${req.username}/${req.files["thumb"][0].filename}`,
       title: req.body.title,
       caption: req.body.caption,
+      hashtags,
     });
 
     let profilePic = await User.findOne({ username })
@@ -53,7 +58,7 @@ router.post("/upload", upload, async (req, res) => {
       newsfeedVideos: video,
     });
 
-    return res.send({ video });
+    return res.send({ video: { _id: video._id } });
   } catch (error) {
     return res.status(500).send({ error: "Something went wrong" });
   }
@@ -112,7 +117,16 @@ router.put("/:id", upload, async (req, res) => {
       _id: req.params.id,
       mediaType: VIDEO_MEDIA_TYPE_ID,
     });
-    let criteria = { title: req.body.title, caption: req.body.caption };
+
+    let hashtags = parseHashtags(req.body.title).concat(
+      parseHashtags(req.body.caption)
+    );
+
+    let criteria = {
+      title: req.body.title,
+      caption: req.body.caption,
+      hashtags,
+    };
     if (req.files && req.files["thumb"]) {
       criteria[
         "thumbUrl"

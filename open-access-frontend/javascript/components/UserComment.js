@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { date2rel } from "../utils/helpers";
+import { date2rel, convertHashtagsToLinks } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -49,9 +49,13 @@ const UserComment = ({ comment }) => {
           <Link to={mediaLink}>{mediaTitle}</Link>
         </Typography>
       )}
-      <Typography className={classes.body} variant="body1">
-        {comment.body}
-      </Typography>
+      <Typography
+        className={classes.body}
+        variant="body1"
+        dangerouslySetInnerHTML={{
+          __html: convertHashtagsToLinks(comment.body),
+        }}
+      ></Typography>
       <Typography variant="body2">{date2rel(comment.createdAt)}</Typography>
     </div>
   );

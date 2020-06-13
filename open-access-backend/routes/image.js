@@ -8,7 +8,7 @@ import {
   IMAGE_MEDIA_TYPE_ID,
   NEWSFEED_IMAGE_SUBSCRIPTION_PREFIX,
 } from "../constants";
-import { deleteReplies } from "../utils/helpers";
+import { deleteReplies, parseHashtags } from "../utils/helpers";
 
 const { Media, Like, Dislike, Comment, User } = require("../database");
 
@@ -31,12 +31,18 @@ const upload = multer({ storage }).fields([{ name: "image", maxCount: 1 }]);
 router.post("/upload", upload, async (req, res) => {
   try {
     const username = req.username;
+
+    let hashtags = parseHashtags(req.body.title).concat(
+      parseHashtags(req.body.caption)
+    );
+
     const image = await Media.create({
       mediaType: IMAGE_MEDIA_TYPE_ID,
       username,
       url: `http://localhost:5000/img/${req.username}/${req.files["image"][0].filename}`,
       title: req.body.title,
       caption: req.body.caption,
+      hashtags,
     });
 
     let profilePic = await User.findOne({ username }).profilePic;
@@ -47,7 +53,7 @@ router.post("/upload", upload, async (req, res) => {
       newsfeedImages: image,
     });
 
-    return res.send({ image });
+    return res.send({ image: { _id: image._id } });
   } catch (error) {
     return res.status(500).send({ error: "Something went wrong" + error });
   }
@@ -131,9 +137,12 @@ router.delete("/comments/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
+    let hashtags = parseHashtags(req.body.title).concat(
+      parseHashtags(req.body.caption)
+    );
     await Media.updateOne(
       { _id: req.params.id, mediaType: IMAGE_MEDIA_TYPE_ID },
-      { title: req.body.title, caption: req.body.caption }
+      { title: req.body.title, caption: req.body.caption, hashtags }
     );
 
     return res.status(200).send(true);
