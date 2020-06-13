@@ -20,6 +20,7 @@ import { ActionCreators } from "../actions";
 import { date2rel } from "../utils/helpers";
 
 import MainLogo from "./MainLogo";
+import SearchBar from "./SearchBar";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -229,6 +230,7 @@ const SiteNav = ({
         )}
         {loggedIn && (
           <Fragment>
+            <SearchBar />
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton onClick={handleNotifsMenuOpen} color="inherit">

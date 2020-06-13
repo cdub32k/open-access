@@ -22,3 +22,14 @@ export function parseHashtags(str) {
   if (tags) return tags.map((tag) => tag.slice(1).toLowerCase());
   else return [];
 }
+
+export function convertQueryToRegex(str) {
+  return new RegExp(
+    str
+      .split(",")
+      .map((term) => term.trim())
+      .filter((term) => term)
+      .join("|"),
+    "gi"
+  );
+}

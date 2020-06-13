@@ -14,7 +14,7 @@ import {
   IMAGE_SUBSCRIPTION_PREFIX,
   NOTE_SUBSCRIPTION_PREFIX,
 } from "../constants";
-import { parseHashtags } from "../utils/helpers";
+import { parseHashtags, convertQueryToRegex } from "../utils/helpers";
 
 const resolvers = {
   Query: {
@@ -138,12 +138,16 @@ const resolvers = {
       const criteria = { mediaType: VIDEO_MEDIA_TYPE_ID };
       if (!page) page = 0;
       if (username) criteria.username = username;
+      if (query || hashtag) criteria.$or = [];
+
       if (query)
-        criteria.$or = [
-          { title: { $regex: query, $options: "i" } },
-          //{ caption: { $regex: query, $options: "i" } },
-        ];
-      if (hashtag) criteria.hashtags = hashtag.toLowerCase();
+        criteria.$or.push({
+          title: convertQueryToRegex(query),
+        });
+      if (hashtag)
+        criteria.$or.push({
+          hashtags: { $in: hashtag.toLowerCase().split(",") },
+        });
       if (lastOldest) criteria.uploadedAt = { $lt: lastOldest };
 
       const totalCount = await DB.Media.find(criteria).countDocuments();
@@ -184,12 +188,15 @@ const resolvers = {
       const criteria = { mediaType: IMAGE_MEDIA_TYPE_ID };
       if (!page) page = 0;
       if (username) criteria.username = username;
+      if (query || hashtag) criteria.$or = [];
       if (query)
-        criteria.$or = [
-          { title: { $regex: query, $options: "i" } },
-          //{ caption: { $regex: query, $options: "i" } },
-        ];
-      if (hashtag) criteria.hashtags = hashtag.toLowerCase();
+        criteria.$or.push({
+          title: convertQueryToRegex(query),
+        });
+      if (hashtag)
+        criteria.$or.push({
+          hashtags: { $in: hashtag.toLowerCase().split(",") },
+        });
       if (lastOldest) criteria.uploadedAt = { $lt: lastOldest };
 
       const totalCount = await DB.Media.find(criteria).countDocuments();
@@ -225,15 +232,18 @@ const resolvers = {
     ) => {
       if (!authorized) return null;
 
-      const criteria = { mediaType: NOTE_MEDIA_TYPE_ID };
+      const criteria = { mediaType: NOTE_MEDIA_TYPE_ID, $or: [] };
       if (!page) page = 0;
       if (username) criteria.username = username;
+      if (query || hashtag) criteria.$or = [];
       if (query)
-        criteria.$or = [
-          //{ title: { $regex: query, $options: "i" } },
-          { caption: { $regex: query, $options: "i" } },
-        ];
-      if (hashtag) criteria.hashtags = hashtag.toLowerCase();
+        criteria.$or.push({
+          caption: convertQueryToRegex(query),
+        });
+      if (hashtag)
+        criteria.$or.push({
+          hashtags: { $in: hashtag.toLowerCase().split(",") },
+        });
       if (lastOldest) criteria.uploadedAt = { $lt: lastOldest };
 
       const totalCount = await DB.Media.find(criteria).countDocuments();
@@ -1289,7 +1299,6 @@ const resolvers = {
 
         return true;
       } catch (error) {
-        console.log("VIDEO COMM:", error);
         return false;
       }
     },

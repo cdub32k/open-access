@@ -43,7 +43,6 @@ const SearchResultsPage = ({
 }) => {
   let s = getSearchQuery(location.search);
   let h = getHashtag(location.search);
-
   const [tab, setTab] = useState(0);
   const changeTab = (e, newValue) => {
     if (newValue == 1 && images.length == 0) loadImageSearchResults(s, h);
@@ -66,7 +65,8 @@ const SearchResultsPage = ({
     <Grid container className={classes.container}>
       <Grid item xs={12}>
         <Typography className={classes.header} variant="h4">
-          Search Results {s || "#" + h}
+          Search Results {s ? s : null}{" "}
+          {h ? h.split(",").map((tag) => "#" + tag + " ") : null}
         </Typography>
         <Tabs
           value={tab}

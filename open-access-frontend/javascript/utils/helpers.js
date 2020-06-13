@@ -101,20 +101,53 @@ export function truncateNotePreview(body) {
 }
 
 export function getCommentId(search) {
-  if (search.indexOf("c=") > -1)
-    return search.substring(location.search.indexOf("c=") + 2);
+  search = decodeURI(search.slice(1));
+  if (search.indexOf("c=") > -1) {
+    let c = null;
+    search.split("&").forEach((kv) => {
+      if (kv.split("=")[0] == "c") c = kv.split("=")[1];
+    });
+    return c;
+  }
   return null;
 }
 
 export function getSearchQuery(search) {
-  if (search.indexOf("s=") > -1)
-    return search.substring(location.search.indexOf("s=") + 2);
+  search = decodeURI(search.slice(1));
+  if (search.indexOf("s=") > -1) {
+    let s = null;
+    search.split("&").forEach((kv) => {
+      if (kv.split("=")[0] == "s") s = kv.split("=")[1];
+    });
+    return s;
+  }
   return null;
 }
 
+export function parseHashtags(str) {
+  let tags = str.match(/(#[a-z\d-]+)/g);
+  if (tags) return tags.map((tag) => tag.slice(1).toLowerCase());
+  else return [];
+}
+export function removeHashtags(str) {
+  let tags = str
+    .replace(/(#[a-z\d-]+)/g, "__removed_981_hashtag__")
+    .split("__removed_981_hashtag__")
+    .map((term) => term.trim())
+    .filter((term) => term);
+  if (tags.length) return tags;
+  else return [];
+}
+
 export function getHashtag(search) {
-  if (search.indexOf("h=") > -1)
-    return search.substring(location.search.indexOf("h=") + 2);
+  search = decodeURI(search.slice(1));
+  if (search.indexOf("h=") > -1) {
+    let h = null;
+    search.split("&").forEach((kv) => {
+      if (kv.split("=")[0] == "h") h = kv.split("=")[1];
+    });
+    return h;
+  }
   return null;
 }
 
