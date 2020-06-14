@@ -20,8 +20,9 @@ const initialState = {
   notifications: [],
   notificationsSubscription: null,
   loggedIn: false,
+  loading: true,
   viewed: {
-    loading: false,
+    loading: true,
     username: "",
     videos: [],
     images: [],

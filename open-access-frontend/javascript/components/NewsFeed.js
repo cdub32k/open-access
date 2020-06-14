@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NewsFeed = ({
+  loading,
   loadNewsfeedVideos,
   loadNewsfeedImages,
   loadNewsfeedNotes,
@@ -51,9 +52,15 @@ const NewsFeed = ({
   useEffect(() => {
     if (videos.length == 0) loadNewsfeedVideos();
     return () => {
-      newsfeedVideoSubscriptions.forEach((sub) => sub.unsubscribe());
-      newsfeedImageSubscriptions.forEach((sub) => sub.unsubscribe());
-      newsfeedNoteSubscriptions.forEach((sub) => sub.unsubscribe());
+      Object.values(newsfeedVideoSubscriptions).forEach((sub) =>
+        sub.unsubscribe()
+      );
+      Object.values(newsfeedImageSubscriptions).forEach((sub) =>
+        sub.unsubscribe()
+      );
+      Object.values(newsfeedNoteSubscriptions).forEach((sub) =>
+        sub.unsubscribe()
+      );
     };
   }, []);
 
@@ -76,15 +83,15 @@ const NewsFeed = ({
           <Tab label="Notes" />
         </Tabs>
         <TabPanel selectedTab={tab} index={0}>
-          <NewsFeedItems items={videos} type="video" />
+          <NewsFeedItems items={videos} type="video" loading={loading} />
           <CustomButton text="Load more" onClick={() => loadNewsfeedVideos()} />
         </TabPanel>
         <TabPanel selectedTab={tab} index={1}>
-          <NewsFeedItems items={images} type="image" />
+          <NewsFeedItems items={images} type="image" loading={loading} />
           <CustomButton text="Load more" onClick={() => loadNewsfeedImages()} />
         </TabPanel>
         <TabPanel selectedTab={tab} index={2}>
-          <NewsFeedItems items={notes} type="note" />
+          <NewsFeedItems items={notes} type="note" loading={loading} />
           <CustomButton text="Load more" onClick={() => loadNewsfeedNotes()} />
         </TabPanel>
       </Grid>
@@ -93,6 +100,7 @@ const NewsFeed = ({
 };
 
 const mapStateToProps = (state) => ({
+  loading: state.feed.loading,
   videos: state.feed.videos,
   images: state.feed.images,
   notes: state.feed.notes,

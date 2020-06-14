@@ -11,13 +11,15 @@ import { parse } from "graphql";
 import { removeNull } from "../utils/helpers";
 
 const initialState = {
+  loading: true,
+
   notes: [],
   images: [],
   videos: [],
 
-  videoSubscriptions: [],
-  imageSubscriptions: [],
-  noteSubscriptions: [],
+  videoSubscriptions: {},
+  imageSubscriptions: {},
+  noteSubscriptions: {},
 
   searchQuery: "",
 };
@@ -185,26 +187,30 @@ const feedReducer = (state = initialState, action) => {
         videos: [action.payload.video, ...state.videos],
       };
     case ActionTypes.SUBSCRIBE_NEWSFEED_VIDEO_ITEM_UPDATES:
-      const vidSub = subscribeToNewsfeedVideoItemUpdates(
-        action.payload.videoId
-      );
+      let videoId = action.payload.videoId;
+      if (state.videoSubscriptions[videoId]) return state;
+
+      const vidSub = subscribeToNewsfeedVideoItemUpdates(videoId);
       return {
         ...state,
-        videoSubscriptions: [...state.videoSubscriptions, vidSub],
+        videoSubscriptions: { ...state.videoSubscriptions, [videoId]: vidSub },
       };
     case ActionTypes.SUBSCRIBE_NEWSFEED_IMAGE_ITEM_UPDATES:
-      const imgSub = subscribeToNewsfeedImageItemUpdates(
-        action.payload.imageId
-      );
+      let imageId = action.payload.imageId;
+      if (state.imageSubscriptions[imageId]) return state;
+
+      const imgSub = subscribeToNewsfeedImageItemUpdates(imageId);
       return {
         ...state,
-        imageSubscriptions: [...state.imageSubscriptions, imgSub],
+        imageSubscriptions: { ...state.imageSubscriptions, [imageId]: imgSub },
       };
     case ActionTypes.SUBSCRIBE_NEWSFEED_NOTE_ITEM_UPDATES:
-      const noteSub = subscribeToNewsfeedNoteItemUpdates(action.payload.noteId);
+      let noteId = action.payload.noteId;
+      if (state.noteSubscriptions[noteId]) return state;
+      const noteSub = subscribeToNewsfeedNoteItemUpdates(noteId);
       return {
         ...state,
-        noteSubscriptions: [...state.noteSubscriptions, noteSub],
+        noteSubscriptions: { ...state.noteSubscriptions, [noteId]: noteSub },
       };
     case ActionTypes.NEWSFEED_VIDEO_ITEM_UPDATE:
       let existing = state.videos.findIndex(
@@ -261,17 +267,20 @@ const feedReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        videoSubscriptions: [...state.videoSubscriptions, vidSub2],
+        loading: true,
+        videoSubscriptions: { ...state.videoSubscriptions, main: vidSub2 },
       };
     case ActionTypes.LOAD_VIDEO_SEARCH_RESULTS_SUCCESS:
     case ActionTypes.LOAD_NEWSFEED_VIDEO_SUCCESS:
       return {
         ...state,
+        loading: false,
         videos: [...state.videos, ...action.payload.videos],
       };
     case ActionTypes.LOAD_NEWSFEED_VIDEO_ERROR:
       return {
         ...state,
+        error: action.error,
       };
     case ActionTypes.LOAD_NEWSFEED_IMAGES_START:
       /// will remove this (only runs in middleware eventually)
@@ -279,18 +288,21 @@ const feedReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        imageSubscriptions: [...state.imageSubscriptions, imgSub2],
+        loading: true,
+        imageSubscriptions: { ...state.imageSubscriptions, main: imgSub2 },
       };
     case ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_SUCCESS:
     case ActionTypes.LOAD_NEWSFEED_IMAGES_SUCCESS:
       return {
         ...state,
+        loading: false,
         images: [...state.images, ...action.payload.images],
       };
     case ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_ERROR:
     case ActionTypes.LOAD_NEWSFEED_IMAGES_ERROR:
       return {
         ...state,
+        error: action.error,
       };
     case ActionTypes.LOAD_NEWSFEED_NOTES_START:
       /// will remove this (only runs in middleware eventually)
@@ -298,18 +310,21 @@ const feedReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        noteSubscriptions: [...state.noteSubscriptions, noteSub2],
+        loading: true,
+        noteSubscriptions: { ...state.noteSubscriptions, main: noteSub2 },
       };
     case ActionTypes.LOAD_NOTE_SEARCH_RESULTS_SUCCESS:
     case ActionTypes.LOAD_NEWSFEED_NOTES_SUCCESS:
       return {
         ...state,
+        loading: false,
         notes: [...state.notes, ...action.payload.notes],
       };
     case ActionTypes.LOAD_NOTE_SEARCH_RESULTS_ERROR:
     case ActionTypes.LOAD_NEWSFEED_NOTES_ERROR:
       return {
         ...state,
+        error: action.error,
       };
     default:
       return { ...state };

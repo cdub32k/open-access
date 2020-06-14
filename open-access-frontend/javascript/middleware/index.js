@@ -1062,6 +1062,7 @@ export default [
         })
         .then((res) => {});
     } else if (action.type == ActionTypes.LOAD_NEWSFEED_VIDEO_START) {
+      next(action);
       let lastOldest =
         store.getState().feed.videos.length > 0
           ? store.getState().feed.videos.slice(-1)[0].uploadedAt
@@ -1075,7 +1076,6 @@ export default [
           const videoData = res.data.data;
 
           if (videoData.newsfeedVideos) {
-            next(action);
             next(
               ActionCreators.loadNewsfeedVideoSuccess(videoData.newsfeedVideos)
             );
@@ -1083,6 +1083,7 @@ export default [
         })
         .catch((error) => next(ActionCreators.loadNewsfeedVideoError(error)));
     } else if (action.type == ActionTypes.LOAD_NEWSFEED_IMAGES_START) {
+      next(action);
       let lastOldest =
         store.getState().feed.images.length > 0
           ? store.getState().feed.images.slice(-1)[0].uploadedAt
@@ -1096,7 +1097,6 @@ export default [
           const imageData = res.data.data;
 
           if (imageData.newsfeedImages) {
-            next(action);
             next(
               ActionCreators.loadNewsfeedImagesSuccess(imageData.newsfeedImages)
             );
@@ -1104,6 +1104,7 @@ export default [
         })
         .catch((error) => next(ActionCreators.loadNewsfeedVideoError(error)));
     } else if (action.type == ActionTypes.LOAD_NEWSFEED_NOTES_START) {
+      next(action);
       let lastOldest =
         store.getState().feed.notes.length > 0
           ? store.getState().feed.notes.slice(-1)[0].uploadedAt
@@ -1117,7 +1118,6 @@ export default [
           const noteData = res.data.data;
 
           if (noteData.newsfeedNotes) {
-            next(action);
             next(
               ActionCreators.loadNewsfeedNotesSuccess(noteData.newsfeedNotes)
             );
