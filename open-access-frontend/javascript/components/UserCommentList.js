@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     flexWrap: "wrap",
-    maxWidth: 1260,
+    maxWidth: 1248,
     padding: 0,
   },
 }));
@@ -33,7 +33,7 @@ const UserCommentList = ({ loading, comments, hasMore, loadMore }) => {
   };
 
   return (
-    <div className="user-comments-list">
+    <div className="user-comments-list content-list">
       {comments.map((comment, i) => {
         return (
           <UserComment key={i} comment={comment}>

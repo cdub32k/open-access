@@ -143,16 +143,25 @@ a:visited {
   width: 600px;
 }
 
+@media (max-width: 1280px) {
+  .content-list {
+    width: 948px !important;
+  }
+}
+
 @media (max-width: 1120px) {
   .advocate-slides {
     max-width: calc(1020px - 340px);
   }
 }
 
-@media (max-width: 960px) {
+@media (max-width: 980px) {
   .comments-section {
     max-height: unset !important;
     overflow-y: visible !important;
+  }
+  .content-list {
+    width: 628px !important;
   }
 }
 
@@ -167,5 +176,32 @@ a:visited {
   }
   .user-comments-list {
     width: 320px;
+  }
+  .content-list {
+  }
+}
+
+@media (max-width: 680px) {
+  .content-container,
+  .profile-container {
+    width: 100% !important;
+  }
+  .content-list {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 12px !important;
+  }
+  .content-preview {
+    width: 100% !important;
+    padding-bottom: 15.25% !important;
+
+    height: auto !important;
+  }
+  .content-thumb {
+    width: 100% !important;
+    padding-bottom: 56.25%;
+  }
+  .image-thumb {
+    padding-bottom: 100% !important;
   }
 }

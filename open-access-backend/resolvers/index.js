@@ -232,7 +232,7 @@ const resolvers = {
     ) => {
       if (!authorized) return null;
 
-      const criteria = { mediaType: NOTE_MEDIA_TYPE_ID, $or: [] };
+      const criteria = { mediaType: NOTE_MEDIA_TYPE_ID };
       if (!page) page = 0;
       if (username) criteria.username = username;
       if (query || hashtag) criteria.$or = [];

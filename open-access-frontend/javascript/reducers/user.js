@@ -118,11 +118,12 @@ const userReducer = (state = initialState, action) => {
         state.notificationsSubscription.unsubscribe();
       return { ...initialState };
     case ActionTypes.USER_INFO_LOADING:
-      return { ...state, viewed: { ...state.viewed, loading: true } };
+      return { ...state, loading: true };
     case ActionTypes.GET_USER_INFO_SUCCESS:
       return {
         ...state,
-        viewed: { ...state.viewed, ...action.payload.userInfo, loading: false },
+        viewed: { ...state.viewed, ...action.payload.userInfo },
+        loading: false,
       };
     case ActionTypes.GET_USER_INFO_ERROR:
       return {
@@ -191,6 +192,8 @@ const userReducer = (state = initialState, action) => {
         ...state,
         error: action.error,
       };
+    case ActionTypes.LOAD_USER_VIDEO_PAGE_START:
+      return { ...state, viewed: { ...state.viewed, loading: true } };
     case ActionTypes.LOAD_USER_VIDEO_PAGE_SUCCESS:
       return {
         ...state,
@@ -198,13 +201,16 @@ const userReducer = (state = initialState, action) => {
           ...state.viewed,
           videos: [...state.viewed.videos, ...action.payload.videos],
           hasMoreVideos: action.payload.hasMoreVideos,
+          loading: false,
         },
       };
     case ActionTypes.LOAD_USER_VIDEO_PAGE_ERROR:
       return {
         ...state,
-        error: action.error,
+        viewed: { ...state.viewed, error: action.error },
       };
+    case ActionTypes.LOAD_USER_IMAGE_PAGE_START:
+      return { ...state, viewed: { ...state.viewed, loading: true } };
     case ActionTypes.LOAD_USER_IMAGE_PAGE_SUCCESS:
       return {
         ...state,
@@ -212,13 +218,16 @@ const userReducer = (state = initialState, action) => {
           ...state.viewed,
           images: [...state.viewed.images, ...action.payload.images],
           hasMoreImages: action.payload.hasMoreImages,
+          loading: false,
         },
       };
     case ActionTypes.LOAD_USER_IMAGE_PAGE_ERROR:
       return {
         ...state,
-        error: action.error,
+        viewed: { ...state.viewed, error: action.error },
       };
+    case ActionTypes.LOAD_USER_NOTE_PAGE_START:
+      return { ...state, viewed: { ...state.viewed, loading: true } };
     case ActionTypes.LOAD_USER_NOTE_PAGE_SUCCESS:
       return {
         ...state,
@@ -226,12 +235,13 @@ const userReducer = (state = initialState, action) => {
           ...state.viewed,
           notes: [...state.viewed.notes, ...action.payload.notes],
           hasMoreNotes: action.payload.hasMoreNotes,
+          loading: false,
         },
       };
     case ActionTypes.LOAD_USER_NOTE_PAGE_ERROR:
       return {
         ...state,
-        error: action.error,
+        viewed: { ...state.viewed, loading: false, error: action.error },
       };
     case ActionTypes.CLEAR_USER_DATA:
       return {

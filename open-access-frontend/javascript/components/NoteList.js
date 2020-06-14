@@ -13,9 +13,9 @@ const useStyles = makeStyles((theme) => ({
   },
   contentList: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     flexWrap: "wrap",
-    maxWidth: 1260,
+    width: 1248,
     padding: 0,
   },
 }));
@@ -34,9 +34,25 @@ const NoteList = ({ loading, notes, hasMore, loadMore }) => {
   };
 
   const noteListHTML = loading
-    ? Array.from({ length: 8 }).map((preview, i) => {
-        return <PreviewPlaceholder key={i} />;
-      })
+    ? notes
+        .map((note) => {
+          return (
+            <ContentPreview
+              contentType="note"
+              id={note._id}
+              user={note.user}
+              caption={note.caption}
+              commentCount={note.commentCount}
+              uploadedAt={note.uploadedAt}
+              key={note._id}
+            />
+          );
+        })
+        .concat(
+          Array.from({ length: 8 }).map((preview, i) => {
+            return <PreviewPlaceholder key={i} />;
+          })
+        )
     : notes.map((note, i) => {
         return (
           <ContentPreview
@@ -52,8 +68,10 @@ const NoteList = ({ loading, notes, hasMore, loadMore }) => {
       });
 
   return (
-    <div className={classes.container}>
-      <div className={classes.contentList}>{noteListHTML}</div>
+    <div className={`${classes.container} content-container`}>
+      <div className={`${classes.contentList} content-list`}>
+        {noteListHTML}
+      </div>
       {hasMore && (
         <div>
           <CustomButton text="Load more" onClick={_loadMore} />

@@ -13,9 +13,9 @@ const styles = (theme) => ({
   },
   contentList: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     flexWrap: "wrap",
-    maxWidth: 1260,
+    width: 1248,
     padding: 0,
   },
 });
@@ -40,9 +40,26 @@ class VideoList extends Component {
   render() {
     const { classes, loading, hasMore } = this.props;
     const videoListHTML = loading
-      ? Array.from({ length: 8 }).map((preview, i) => {
-          return <PreviewPlaceholder key={i} />;
-        })
+      ? this.props.videos
+          .map((video) => {
+            return (
+              <ContentPreview
+                contentType="video"
+                user={video.user}
+                id={video._id}
+                thumbUrl={video.thumbUrl}
+                title={video.title}
+                viewCount={video.viewCount}
+                uploadedAt={video.uploadedAt}
+                key={video._id}
+              />
+            );
+          })
+          .concat(
+            Array.from({ length: 2 }).map((preview, i) => {
+              return <PreviewPlaceholder key={i} />;
+            })
+          )
       : this.props.videos.map((video, i) => {
           return (
             <ContentPreview
@@ -59,8 +76,8 @@ class VideoList extends Component {
         });
 
     return (
-      <div className={classes.container}>
-        <div className={classes.contentList}>
+      <div className={`${classes.container} content-container`}>
+        <div className={`${classes.contentList} content-list`}>
           {videoListHTML}
           <br />
         </div>

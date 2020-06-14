@@ -7,7 +7,9 @@ const TabPanel = withStyles((theme) => ({
   container: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    width: "100%",
+    minHeight: 1200,
   },
   hide: {
     display: "none",

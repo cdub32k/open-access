@@ -85,17 +85,23 @@ const ContentPreview = ({
 
   return (
     <Card
-      className={classes.container}
+      className={`${classes.container} content-preview`}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       elevation={elevation}
     >
       <Link to={`${linkPrefix}/${id}`} className={classes.link}>
         {contentType != "note" && (
-          <CardMedia className={classes.thumb} image={thumbUrl} />
+          <CardMedia
+            className={
+              `${classes.thumb} content-thumb` +
+              (contentType == "image" ? " image-thumb" : "")
+            }
+            image={thumbUrl}
+          />
         )}
         {contentType == "note" && (
-          <CardContent className={classes.thumb}>
+          <CardContent className={`${classes.thumb} content-thumb`}>
             <div style={{ fontSize: 14 }}>{truncateNotePreview(caption)}</div>
           </CardContent>
         )}

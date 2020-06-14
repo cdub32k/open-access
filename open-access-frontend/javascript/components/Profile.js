@@ -46,6 +46,7 @@ class Profile extends Component {
   render() {
     const { username } = this.props.match.params;
     const {
+      initialLoad,
       loading,
       classes,
       videos,
@@ -70,21 +71,23 @@ class Profile extends Component {
     } = this.props;
     const { selectedTab } = this.state;
     return (
-      <div className={classes.container}>
-        <ProfileHeader loading={loading} />
+      <div className={`${classes.container} profile-container`}>
+        <ProfileHeader loading={initialLoad} />
         <Tabs
           value={selectedTab}
           onChange={this.changeTab}
           indicatorColor="primary"
           textColor="inherit"
-          className={classes.tabHeaders}
+          className={`${classes.tabHeaders} content-list`}
+          variant="scrollable"
+          scrollButtons="on"
         >
-          <Tab label={`Videos (${num2str(videoCount)})`} />
-          <Tab label={`Images (${num2str(imageCount)})`} />
-          <Tab label={`Notes (${num2str(noteCount)})`} />
-          <Tab label={`Comments (${num2str(commentCount)})`} />
-          <Tab label={`Likes (${num2str(likeCount)})`} />
-          <Tab label={`Dislikes (${num2str(dislikeCount)})`} />
+          <Tab label={`Videos (${num2str(videoCount)})`} wrapped={true} />
+          <Tab label={`Images (${num2str(imageCount)})`} wrapped={true} />
+          <Tab label={`Notes (${num2str(noteCount)})`} wrapped={true} />
+          <Tab label={`Comments (${num2str(commentCount)})`} wrapped={true} />
+          <Tab label={`Likes (${num2str(likeCount)})`} wrapped={true} />
+          <Tab label={`Dislikes (${num2str(dislikeCount)})`} wrapped={true} />
         </Tabs>
         <TabPanel selectedTab={selectedTab} index={0}>
           {mineUsername == username && (
@@ -156,6 +159,7 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => ({
   mineUsername: state.user.username,
+  initialLoad: state.user.loading,
   loading: state.user.viewed.loading,
   username: state.user.viewed.username,
   videos: state.user.viewed.videos,

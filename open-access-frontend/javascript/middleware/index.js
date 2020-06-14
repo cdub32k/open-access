@@ -846,19 +846,20 @@ export default [
         })
         .then((res) => {});
     } else if (action.type == ActionTypes.LOAD_USER_VIDEO_PAGE_START) {
+      next(action);
       const { username, page } = action.payload;
 
-      const cachedQ = apolloCache.readQuery({
-        query: parse(USER_VIDEO_PAGE_QUERY),
-        variables: { username, page },
-      });
-      if (cachedQ)
-        return next(
-          ActionCreators.loadUserVideoPageSuccess(
-            cachedQ.videoSearch.videos,
-            cachedQ.videoSearch.hasMore
-          )
-        );
+      // const cachedQ = apolloCache.readQuery({
+      //   query: parse(USER_VIDEO_PAGE_QUERY),
+      //   variables: { username, page },
+      // });
+      // if (cachedQ)
+      //   return next(
+      //     ActionCreators.loadUserVideoPageSuccess(
+      //       cachedQ.videoSearch.videos,
+      //       cachedQ.videoSearch.hasMore
+      //     )
+      //   );
 
       axios
         .post("/api", {
@@ -868,11 +869,11 @@ export default [
         .then((res) => {
           const videoData = res.data.data;
 
-          apolloCache.writeQuery({
-            query: parse(USER_VIDEO_PAGE_QUERY),
-            variables: { username, page },
-            data: { ...videoData },
-          });
+          // apolloCache.writeQuery({
+          //   query: parse(USER_VIDEO_PAGE_QUERY),
+          //   variables: { username, page },
+          //   data: { ...videoData },
+          // });
 
           next(
             ActionCreators.loadUserVideoPageSuccess(
@@ -948,19 +949,8 @@ export default [
           next(ActionCreators.loadUserDislikesPageError(error));
         });
     } else if (action.type == ActionTypes.LOAD_USER_IMAGE_PAGE_START) {
+      next(action);
       const { username, page } = action.payload;
-
-      const cachedQ = apolloCache.readQuery({
-        query: parse(USER_IMAGE_PAGE_QUERY),
-        variables: { username, page },
-      });
-      if (cachedQ)
-        return next(
-          ActionCreators.loadUserImagePageSuccess(
-            cachedQ.imageSearch.images,
-            cachedQ.imageSearch.hasMore
-          )
-        );
 
       axios
         .post("/api", {
@@ -969,12 +959,6 @@ export default [
         })
         .then((res) => {
           const imageData = res.data.data;
-
-          apolloCache.writeQuery({
-            query: parse(USER_IMAGE_PAGE_QUERY),
-            variables: { username, page },
-            data: { ...imageData },
-          });
 
           next(
             ActionCreators.loadUserImagePageSuccess(
@@ -987,19 +971,8 @@ export default [
           next(ActionCreators.loadUserImagePageError(error));
         });
     } else if (action.type == ActionTypes.LOAD_USER_NOTE_PAGE_START) {
+      next(action);
       const { username, page } = action.payload;
-
-      const cachedQ = apolloCache.readQuery({
-        query: parse(USER_NOTE_PAGE_QUERY),
-        variables: { username, page },
-      });
-      if (cachedQ)
-        return next(
-          ActionCreators.loadUserNotePageSuccess(
-            cachedQ.noteSearch.notes,
-            cachedQ.noteSearch.hasMore
-          )
-        );
 
       axios
         .post("/api", {
@@ -1008,12 +981,6 @@ export default [
         })
         .then((res) => {
           const noteData = res.data.data;
-
-          apolloCache.writeQuery({
-            query: parse(USER_NOTE_PAGE_QUERY),
-            variables: { username, page },
-            data: { ...noteData },
-          });
 
           next(
             ActionCreators.loadUserNotePageSuccess(

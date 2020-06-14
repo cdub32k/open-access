@@ -14,9 +14,9 @@ const styles = (theme) => ({
   },
   contentList: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     flexWrap: "wrap",
-    maxWidth: 1260,
+    width: 1248,
     padding: 0,
   },
 });
@@ -46,9 +46,26 @@ class ImageList extends Component {
     const { classes, loading, hasMore } = this.props;
 
     const imageListHTML = loading
-      ? Array.from({ length: 8 }).map((preview, i) => {
-          return <PreviewPlaceholder key={i} />;
-        })
+      ? this.props.images
+          .map((image) => {
+            return (
+              <ContentPreview
+                contentType="image"
+                user={image.user}
+                id={image._id}
+                title={image.title}
+                thumbUrl={image.url}
+                likeCount={image.likeCount}
+                uploadedAt={image.uploadedAt}
+                key={image._id}
+              />
+            );
+          })
+          .concat(
+            Array.from({ length: 8 }).map((preview, i) => {
+              return <PreviewPlaceholder key={i} />;
+            })
+          )
       : this.props.images.map((image, i) => {
           return (
             <ContentPreview
@@ -65,8 +82,10 @@ class ImageList extends Component {
         });
 
     return (
-      <div className={classes.container}>
-        <div className={classes.contentList}>{imageListHTML}</div>
+      <div className={`${classes.container} content-container`}>
+        <div className={`${classes.contentList} content-list`}>
+          {imageListHTML}
+        </div>
         {hasMore && (
           <div>
             <CustomButton text="Load more" onClick={this.loadMore} />

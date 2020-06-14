@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const PreviewPlaceholder = () => {
   const classes = useStyles();
   return (
-    <Card className={classes.container}>
+    <Card className={`${classes.container} content-preview`}>
       <CardContent className={classes.thumb} />
       <CardHeader
         className={classes.previewDetailsContainer}
