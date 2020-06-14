@@ -205,3 +205,32 @@ a:visited {
     padding-bottom: 100% !important;
   }
 }
+
+// ANIMATIONS
+
+@keyframes pulse-light {
+  0% {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  50% {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  100% {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+@keyframes pulse-dark {
+  0% {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+
+  50% {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  100% {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}

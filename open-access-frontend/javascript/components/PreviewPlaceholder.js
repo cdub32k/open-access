@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "18px 6px",
     display: "inline-block",
     position: "relative",
+    animation: "pulse-light 1s infinite",
     backgroundColor: "rgba(0, 0, 0, 0.03)",
   },
   thumb: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     height: 44,
     width: "50%",
     lineHeight: 0,
+    animation: "pulse-dark 1s infinite",
     backgroundColor: "rgba(0, 0, 0, 0.08)",
   },
   previewDetails: {
@@ -43,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     height: 22,
     width: "75%",
     marginTop: 8,
+    animation: "pulse-dark 1s infinite",
     backgroundColor: "rgba(0, 0, 0, 0.08)",
   },
 }));

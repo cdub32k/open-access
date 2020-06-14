@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: theme.palette.primary.dark,
     },
+    margin: 12,
     maxWidth: 225,
     color: theme.palette.text.light,
   },

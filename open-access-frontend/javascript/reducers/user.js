@@ -150,6 +150,8 @@ const userReducer = (state = initialState, action) => {
         ...state,
         error: action.error,
       };
+    case ActionTypes.LOAD_USER_COMMENTS_PAGE_START:
+      return { ...state, viewed: { ...state.viewed, loading: true } };
     case ActionTypes.LOAD_USER_COMMENTS_PAGE_SUCCESS:
       return {
         ...state,
@@ -157,13 +159,16 @@ const userReducer = (state = initialState, action) => {
           ...state.viewed,
           comments: [...state.viewed.comments, ...action.payload.comments],
           hasMoreComments: action.payload.hasMoreComments,
+          loading: false,
         },
       };
     case ActionTypes.LOAD_USER_COMMENTS_PAGE_ERROR:
       return {
         ...state,
-        error: action.error,
+        viewed: { ...state.viewed, error: action.error },
       };
+    case ActionTypes.LOAD_USER_LIKES_PAGE_START:
+      return { ...state, viewed: { ...state.viewed, loading: true } };
     case ActionTypes.LOAD_USER_LIKES_PAGE_SUCCESS:
       return {
         ...state,
@@ -171,13 +176,16 @@ const userReducer = (state = initialState, action) => {
           ...state.viewed,
           likes: [...state.viewed.likes, ...action.payload.likes],
           hasMoreLikes: action.payload.hasMoreLikes,
+          loading: false,
         },
       };
     case ActionTypes.LOAD_USER_LIKES_PAGE_ERROR:
       return {
         ...state,
-        error: action.error,
+        viewed: { ...state.viewed, error: action.error },
       };
+    case ActionTypes.LOAD_USER_DISLIKES_PAGE_START:
+      return { ...state, viewed: { ...state.viewed, loading: true } };
     case ActionTypes.LOAD_USER_DISLIKES_PAGE_SUCCESS:
       return {
         ...state,
@@ -185,12 +193,13 @@ const userReducer = (state = initialState, action) => {
           ...state.viewed,
           dislikes: [...state.viewed.dislikes, ...action.payload.dislikes],
           hasMoreDislikes: action.payload.hasMoreDislikes,
+          loading: false,
         },
       };
     case ActionTypes.LOAD_USER_DISLIKES_PAGE_ERROR:
       return {
         ...state,
-        error: action.error,
+        viewed: { ...state.viewed, error: action.error },
       };
     case ActionTypes.LOAD_USER_VIDEO_PAGE_START:
       return { ...state, viewed: { ...state.viewed, loading: true } };

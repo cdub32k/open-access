@@ -204,6 +204,7 @@ const USER_LIKES_PAGE_QUERY = `
             title
             thumbUrl
           }
+          createdAt
         }
         ... on ImageLike {
           _id
@@ -212,12 +213,14 @@ const USER_LIKES_PAGE_QUERY = `
             title
             thumbUrl
           }
+          createdAt
         }
         ... on NoteLike {
           _id
           note {
             _id
           }
+          createdAt
         }
       }
     }
@@ -234,6 +237,7 @@ const USER_DISLIKES_PAGE_QUERY = `
             title
             thumbUrl
           }
+          createdAt
         }
         ... on ImageDislike {
           _id
@@ -242,12 +246,14 @@ const USER_DISLIKES_PAGE_QUERY = `
             title
             thumbUrl
           }
+          createdAt
         }
         ... on NoteDislike {
           _id
           note {
             _id
           }
+          createdAt
         }
       }
     }
@@ -886,6 +892,7 @@ export default [
           next(ActionCreators.loadUserVideoPageError(error));
         });
     } else if (action.type == ActionTypes.LOAD_USER_COMMENTS_PAGE_START) {
+      next(action);
       const { username, page } = action.payload;
 
       axios
@@ -907,6 +914,7 @@ export default [
           next(ActionCreators.loadUserCommentsPageError(error));
         });
     } else if (action.type == ActionTypes.LOAD_USER_LIKES_PAGE_START) {
+      next(action);
       const { username, page } = action.payload;
 
       axios
@@ -928,6 +936,7 @@ export default [
           next(ActionCreators.loadUserLikesPageError(error));
         });
     } else if (action.type == ActionTypes.LOAD_USER_DISLIKES_PAGE_START) {
+      next(action);
       const { username, page } = action.payload;
 
       axios
