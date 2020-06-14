@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SearchResultsPage = ({
+  loading,
   loadVideoSearchResults,
   loadImageSearchResults,
   loadNoteSearchResults,
@@ -55,9 +56,15 @@ const SearchResultsPage = ({
   useEffect(() => {
     if (videos.length == 0) loadVideoSearchResults(s, h);
     return () => {
-      newsfeedVideoSubscriptions.forEach((sub) => sub.unsubscribe());
-      newsfeedImageSubscriptions.forEach((sub) => sub.unsubscribe());
-      newsfeedNoteSubscriptions.forEach((sub) => sub.unsubscribe());
+      Object.values(newsfeedVideoSubscriptions).forEach((sub) =>
+        sub.unsubscribe()
+      );
+      Object.values(newsfeedImageSubscriptions).forEach((sub) =>
+        sub.unsubscribe()
+      );
+      Object.values(newsfeedNoteSubscriptions).forEach((sub) =>
+        sub.unsubscribe()
+      );
     };
   }, []);
 
@@ -81,21 +88,21 @@ const SearchResultsPage = ({
           <Tab label="Notes" />
         </Tabs>
         <TabPanel selectedTab={tab} index={0}>
-          <NewsFeedItems items={videos} type="video" />
+          <NewsFeedItems items={videos} type="video" loading={loading} />
           <CustomButton
             text="Load more"
             onClick={() => loadVideoSearchResults(s, h)}
           />
         </TabPanel>
         <TabPanel selectedTab={tab} index={1}>
-          <NewsFeedItems items={images} type="image" />
+          <NewsFeedItems items={images} type="image" loading={loading} />
           <CustomButton
             text="Load more"
             onClick={() => loadImageSearchResults(s, h)}
           />
         </TabPanel>
         <TabPanel selectedTab={tab} index={2}>
-          <NewsFeedItems items={notes} type="note" />
+          <NewsFeedItems items={notes} type="note" loading={loading} />
           <CustomButton
             text="Load more"
             onClick={() => loadNoteSearchResults(s, h)}
@@ -107,6 +114,7 @@ const SearchResultsPage = ({
 };
 
 const mapStateToProps = (state) => ({
+  loading: state.feed.loading,
   videos: state.feed.videos,
   images: state.feed.images,
   notes: state.feed.notes,

@@ -7,13 +7,18 @@ const useStyles = makeStyles((theme) => ({
   control: {
     flexGrow: 1,
     maxWidth: 600,
+    width: "100%",
+    display: "inline",
   },
   textField: {
     width: "100%",
-    margin: "12px 0",
   },
   input: {
     color: theme.palette.dark.main,
+    width: "100%",
+    "& input": {
+      padding: 13,
+    },
   },
 }));
 

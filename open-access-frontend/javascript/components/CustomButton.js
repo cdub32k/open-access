@@ -1,6 +1,7 @@
 import React from "react";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -13,10 +14,25 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 225,
     color: theme.palette.text.light,
   },
+  icon: {
+    display: "inline",
+  },
 }));
 
-const CustomButton = ({ onClick, text, ...rest }) => {
+const CustomButton = ({ onClick, text, Icon, ...rest }) => {
   const classes = useStyles();
+  if (Icon)
+    return (
+      <IconButton
+        className={classes.icon}
+        color="primary"
+        onClick={onClick}
+        disableRipple
+        {...rest}
+      >
+        <Icon />
+      </IconButton>
+    );
   return (
     <Button
       className={classes.button}

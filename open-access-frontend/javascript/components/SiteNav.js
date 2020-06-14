@@ -12,6 +12,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Badge from "@material-ui/core/Badge";
+import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { Link } from "react-router-dom";
@@ -27,10 +28,9 @@ const useStyles = makeStyles((theme) => {
     container: {
       backgroundColor: "transparent",
       maxWidth: 1450,
+      height: 116,
+      justifyContent: "center",
       margin: "auto",
-    },
-    grow: {
-      flexGrow: 1,
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -209,7 +209,9 @@ const SiteNav = ({
   return (
     <AppBar position="static" elevation={0} className={classes.container}>
       <Toolbar>
-        <MainLogo />
+        <Box display={{ xs: "none", md: "block" }}>
+          <MainLogo />
+        </Box>
         {renderMobileMenu}
         {renderMenu}
         {renderNotifsMenu}
@@ -231,7 +233,6 @@ const SiteNav = ({
         {loggedIn && (
           <Fragment>
             <SearchBar />
-            <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton onClick={handleNotifsMenuOpen} color="inherit">
                 <Badge

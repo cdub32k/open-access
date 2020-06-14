@@ -1361,6 +1361,7 @@ export default [
             );
         });
     } else if (action.type == ActionTypes.LOAD_VIDEO_SEARCH_RESULTS_START) {
+      next(action);
       const { page, query, hashtag } = action.payload;
       let lastOldest =
         store.getState().feed.videos.length > 0
@@ -1383,6 +1384,7 @@ export default [
         })
         .catch((error) => ActionCreators.loadVideoSearchResultsError(error));
     } else if (action.type == ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_START) {
+      next(action);
       const { page, query, hashtag } = action.payload;
       let lastOldest =
         store.getState().feed.images.length > 0
@@ -1405,6 +1407,7 @@ export default [
         })
         .catch((error) => ActionCreators.loadImageSearchResultsError(error));
     } else if (action.type == ActionTypes.LOAD_NOTE_SEARCH_RESULTS_START) {
+      next(action);
       const { page, query, hashtag } = action.payload;
       let lastOldest =
         store.getState().feed.notes.length > 0

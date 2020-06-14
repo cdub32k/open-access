@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 
+import SearchIcon from "@material-ui/icons/Search";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CustomInput from "./CustomInput";
@@ -9,7 +10,28 @@ import CustomButton from "./CustomButton";
 import { parseHashtags, removeHashtags } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
-  container: {},
+  container: {
+    height: 40,
+    display: "flex",
+    flexGrow: 1,
+    marginRight: 42,
+  },
+  input: {
+    width: "100%",
+    "& div": { borderRadius: "4px 0 0 4px", borderRight: 0 },
+    flexGrow: 1,
+  },
+  button: {
+    borderRadius: 0,
+    height: 41,
+    width: 80,
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.light.main,
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.light.dark,
+    },
+  },
 }));
 
 const SearchBar = (props) => {
@@ -18,6 +40,7 @@ const SearchBar = (props) => {
   });
   const classes = useStyles();
   const [redirect, setRedirect] = useState(false);
+
   const [query, setQuery] = useState("");
 
   if (redirect) {
@@ -38,14 +61,22 @@ const SearchBar = (props) => {
     return <Redirect to={link} />;
   }
   return (
-    <div className={`${classes.container} search-bar`}>
+    <form
+      className={`${classes.container} search-bar`}
+      onSubmit={() => setRedirect(true)}
+    >
       <CustomInput
         value={query}
         name="query"
         onChange={(e) => setQuery(e.target.value)}
+        className={classes.input}
       />
-      <CustomButton text="Search" onClick={() => setRedirect(true)} />
-    </div>
+      <CustomButton
+        Icon={SearchIcon}
+        onClick={() => setRedirect(true)}
+        className={classes.button}
+      />
+    </form>
   );
 };
 

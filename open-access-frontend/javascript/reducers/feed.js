@@ -262,9 +262,34 @@ const feedReducer = (state = initialState, action) => {
         };
       }
       return state;
-    case ActionTypes.LOAD_NEWSFEED_VIDEO_START:
-      const vidSub2 = subscribeToNewsfeedVideoUpdates();
+    case ActionTypes.LOAD_VIDEO_SEARCH_RESULTS_START:
+      //let searchSub = subscribeToNewsfeedVideoUpdates();
 
+      return {
+        ...state,
+        loading: true,
+        //videoSubscriptions: { ...state.videoSubscriptions, main: searchSub },
+      };
+    case ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_START:
+      //const searchSub = subscribeToNewsfeedVideoUpdates();
+
+      return {
+        ...state,
+        loading: true,
+        //videoSubscriptions: { ...state.videoSubscriptions, main: searchSub },
+      };
+    case ActionTypes.LOAD_NOTE_SEARCH_RESULTS_START:
+      //const searchSub = subscribeToNewsfeedVideoUpdates();
+
+      return {
+        ...state,
+        loading: true,
+        //videoSubscriptions: { ...state.videoSubscriptions, main: searchSub },
+      };
+    case ActionTypes.LOAD_NEWSFEED_VIDEO_START:
+      if (state.videoSubscriptions.main) return { ...state, loading: true };
+
+      const vidSub2 = subscribeToNewsfeedVideoUpdates();
       return {
         ...state,
         loading: true,
@@ -283,9 +308,9 @@ const feedReducer = (state = initialState, action) => {
         error: action.error,
       };
     case ActionTypes.LOAD_NEWSFEED_IMAGES_START:
-      /// will remove this (only runs in middleware eventually)
-      const imgSub2 = subscribeToNewsfeedImageUpdates();
+      if (state.imageSubscriptions.main) return { ...state, loading: true };
 
+      const imgSub2 = subscribeToNewsfeedImageUpdates();
       return {
         ...state,
         loading: true,
@@ -305,9 +330,9 @@ const feedReducer = (state = initialState, action) => {
         error: action.error,
       };
     case ActionTypes.LOAD_NEWSFEED_NOTES_START:
-      /// will remove this (only runs in middleware eventually)
-      const noteSub2 = subscribeToNewsfeedNoteUpdates();
+      if (state.noteSubscriptions.main) return { ...state, loading: true };
 
+      const noteSub2 = subscribeToNewsfeedNoteUpdates();
       return {
         ...state,
         loading: true,
