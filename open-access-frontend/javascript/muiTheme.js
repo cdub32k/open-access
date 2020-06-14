@@ -8,6 +8,9 @@ const dark = "#1D1A05";
 const darkLight = "#51490e";
 const light = "#FFF";
 const lightDark = "#fffbbd";
+
+const defaultTheme = createMuiTheme();
+
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -49,7 +52,7 @@ const theme = createMuiTheme({
   typography: {
     h1: { color: dark, whiteSpace: "pre-wrap" },
     h2: { color: dark, fontSize: 42, fontWeight: 700, whiteSpace: "pre-wrap" },
-    h3: { color: dark, fontSize: 34, whiteSpace: "pre-wrap" },
+    h3: { color: dark, fontSize: 28, whiteSpace: "pre-wrap" },
     h4: {
       fontSize: 18,
       fontWeight: 700,
@@ -79,6 +82,9 @@ const theme = createMuiTheme({
     fontFamily: ["Montserrat", "sans-serif"].join(","),
   },
   globalClasses: {
+    inputContainer: {
+      margin: `${defaultTheme.spacing(2)}px 0 0 0`,
+    },
     icon: {
       fill: dark,
     },

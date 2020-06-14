@@ -11,6 +11,7 @@ import PreviewImage from "./PreviewImage";
 import CommentsSection from "./CommentsSection";
 import MediaOwnerActions from "./MediaOwnerActions";
 import CustomInput from "./CustomInput";
+import Error from "./Error";
 import { getCommentId } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +42,8 @@ const ImagePage = ({
   hasMoreComments,
   updateImage,
 }) => {
+  if (error) return <Error />;
+
   const [newTitle, setNewTitle] = useState(title);
   const [newCaption, setNewCaption] = useState(caption);
 

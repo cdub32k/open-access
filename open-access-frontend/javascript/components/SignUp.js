@@ -51,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     left: "50%",
     transform: "translateX(-50%)",
   },
+  ...theme.globalClasses,
 }));
 
 const SignUp = ({ error, signupStart, ...rest }) => {
@@ -163,7 +164,7 @@ const SignUp = ({ error, signupStart, ...rest }) => {
                 User Info
               </Typography>
               <Grid container justify="center">
-                <Grid item xs={12}>
+                <Grid className={classes.inputContainer} item xs={12}>
                   <CustomInput
                     value={email}
                     name="email"
@@ -174,7 +175,7 @@ const SignUp = ({ error, signupStart, ...rest }) => {
                 </Grid>
               </Grid>
               <Grid container justify="center">
-                <Grid item xs={12}>
+                <Grid className={classes.inputContainer} item xs={12}>
                   <CustomInput
                     value={username}
                     name="username"
@@ -187,7 +188,7 @@ const SignUp = ({ error, signupStart, ...rest }) => {
                 </Grid>
               </Grid>
               <Grid container justify="center">
-                <Grid item xs={12}>
+                <Grid className={classes.inputContainer} item xs={12}>
                   <CustomInput
                     value={password}
                     name="password"

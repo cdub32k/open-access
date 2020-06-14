@@ -9,6 +9,7 @@ import apolloClient from "../apollo";
 import { parse } from "graphql";
 
 import { removeNull } from "../utils/helpers";
+import { API_TOKEN_NAME, REFRESH_TOKEN_NAME } from "../constants";
 
 const initialState = {
   active: false,
@@ -70,8 +71,8 @@ const userReducer = (state = initialState, action) => {
       return { ...state, error: null };
     case ActionTypes.LOGIN_SUCCESS: {
       let { token, refreshToken } = action.payload;
-      localStorage.setItem("open-access-api-token", token);
-      localStorage.setItem("open-access-api-refresh-token", refreshToken);
+      localStorage.setItem(API_TOKEN_NAME, token);
+      localStorage.setItem(REFRESH_TOKEN_NAME, refreshToken);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       axios.defaults.headers.common["x-refresh-token"] = refreshToken;
       let decodedToken = jwt_decode(token);
@@ -90,13 +91,12 @@ const userReducer = (state = initialState, action) => {
       };
     }
     case ActionTypes.LOGIN_ERROR:
-      localStorage.removeItem("open-access-api-token");
+      localStorage.removeItem(API_TOKEN_NAME);
+      localStorage.removeItem(REFRESH_TOKEN_NAME);
       return { ...state, loggedIn: false, error: action.error };
     case ActionTypes.AUTO_LOGIN: {
-      const token = localStorage.getItem("open-access-api-token");
-      const refreshToken = localStorage.getItem(
-        "open-access-api-refresh-token"
-      );
+      const token = localStorage.getItem(API_TOKEN_NAME);
+      const refreshToken = localStorage.getItem(REFRESH_TOKEN_NAME);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       axios.defaults.headers.common["x-refresh-token"] = refreshToken;
       let decodedToken = jwt_decode(token);
@@ -114,7 +114,8 @@ const userReducer = (state = initialState, action) => {
       };
     }
     case ActionTypes.LOGOUT:
-      localStorage.removeItem("open-access-api-token");
+      localStorage.removeItem(API_TOKEN_NAME);
+      localStorage.removeItem(REFRESH_TOKEN_NAME);
       state.notificationsSubscription &&
         state.notificationsSubscription.unsubscribe();
       return { ...initialState };
@@ -123,7 +124,7 @@ const userReducer = (state = initialState, action) => {
     case ActionTypes.GET_USER_INFO_SUCCESS:
       return {
         ...state,
-        viewed: { ...state.viewed, ...action.payload.userInfo },
+        viewed: { ...state.viewed, ...action.payload.userInfo, loading: false },
         loading: false,
       };
     case ActionTypes.GET_USER_INFO_ERROR:

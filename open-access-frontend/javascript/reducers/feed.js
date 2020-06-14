@@ -21,6 +21,10 @@ const initialState = {
   imageSubscriptions: {},
   noteSubscriptions: {},
 
+  hasMoreVideos: false,
+  hasMoreImages: false,
+  hasMoreNotes: false,
+
   searchQuery: "",
 };
 
@@ -301,6 +305,7 @@ const feedReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         videos: [...state.videos, ...action.payload.videos],
+        hasMoreVideos: action.payload.hasMore,
       };
     case ActionTypes.LOAD_NEWSFEED_VIDEO_ERROR:
       return {
@@ -322,6 +327,7 @@ const feedReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         images: [...state.images, ...action.payload.images],
+        hasMoreImages: action.payload.hasMore,
       };
     case ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_ERROR:
     case ActionTypes.LOAD_NEWSFEED_IMAGES_ERROR:
@@ -344,6 +350,7 @@ const feedReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         notes: [...state.notes, ...action.payload.notes],
+        hasMoreNotes: action.payload.hasMore,
       };
     case ActionTypes.LOAD_NOTE_SEARCH_RESULTS_ERROR:
     case ActionTypes.LOAD_NEWSFEED_NOTES_ERROR:

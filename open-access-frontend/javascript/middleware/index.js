@@ -793,8 +793,12 @@ export default [
         .then((res) => {
           const videoData = res.data.data;
 
+          if (!videoData || res.data.errors || !videoData.video)
+            next(ActionCreators.getVideoInfoError("NOT FOUND"));
+
           next(ActionCreators.getVideoInfoSuccess(videoData.video));
-        });
+        })
+        .catch((e) => next(ActionCreators.getVideoInfoError(e)));
     } else if (action.type == ActionTypes.RECORD_VIDEO_VIEW_START) {
       axios
         .post("/api", {
@@ -1014,8 +1018,12 @@ export default [
         .then((res) => {
           const imageData = res.data.data;
 
+          if (!imageData || res.data.errors || !imageData.image)
+            next(ActionCreators.getImageInfoError("NOT FOUND"));
+
           next(ActionCreators.getImageInfoSuccess(imageData.image));
-        });
+        })
+        .catch((e) => next(ActionCreators.getImageInfoError(e)));
     } else if (action.type == ActionTypes.POST_IMAGE_COMMENT_START) {
       axios
         .post("/api", {
@@ -1043,9 +1051,11 @@ export default [
         })
         .then((res) => {
           const noteData = res.data.data;
-
+          if (!noteData || res.data.errors || !noteData.note)
+            next(ActionCreators.getNoteInfoError("NOT FOUND"));
           next(ActionCreators.getNoteInfoSuccess(noteData.note));
-        });
+        })
+        .catch((e) => next(ActionCreators.getNoteInfoError(e)));
     } else if (action.type == ActionTypes.POST_NOTE_COMMENT_START) {
       axios
         .post("/api", {

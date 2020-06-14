@@ -24,8 +24,9 @@ const useStyles = makeStyles((theme) => ({
     transform: "translateX(-50%)",
   },
   btn: {
-    marginTop: 18,
+    marginTop: 12,
   },
+  ...theme.globalClasses,
 }));
 
 const Login = ({ error, loginStart }) => {
@@ -59,7 +60,7 @@ const Login = ({ error, loginStart }) => {
           User not found!
         </Typography>
       )}
-      <Grid item xs={12} style={{ marginBottom: 18 }}>
+      <Grid item xs={12} style={{ marginBottom: 12 }}>
         <Typography variant="h3" color="primary">
           Sign in
         </Typography>
@@ -68,7 +69,7 @@ const Login = ({ error, loginStart }) => {
         <form>
           <FormGroup>
             <Grid container justify="center">
-              <Grid item xs={12}>
+              <Grid className={classes.inputContainer} item xs={12}>
                 <CustomInput
                   name="username"
                   label="Username"
@@ -77,7 +78,7 @@ const Login = ({ error, loginStart }) => {
               </Grid>
             </Grid>
             <Grid container justify="center">
-              <Grid item xs={12}>
+              <Grid className={classes.inputContainer} item xs={12}>
                 <CustomInput
                   name="password"
                   label="Password"

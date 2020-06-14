@@ -12,6 +12,7 @@ import PreviewVideoPlayer from "./PreviewVideoPlayer";
 import CommentsSection from "./CommentsSection";
 import MediaOwnerActions from "./MediaOwnerActions";
 import { getCommentId } from "../utils/helpers";
+import Error from "./Error";
 
 const useStyles = makeStyles((theme) => ({
   ownerActions: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 const VideoPage = ({
   loading,
+  error,
   user,
   title,
   caption,
@@ -43,6 +45,8 @@ const VideoPage = ({
   clearVideoData,
   hasMoreComments,
 }) => {
+  if (error) return <Error />;
+
   const { videoId } = match.params;
   let c = getCommentId(location.search);
   useEffect(() => {
@@ -103,6 +107,7 @@ const VideoPage = ({
 
 const mapStateToProps = (state) => ({
   loading: state.video.loading,
+  error: state.video.error,
   user: state.video.user,
   title: state.video.title,
   caption: state.video.caption,

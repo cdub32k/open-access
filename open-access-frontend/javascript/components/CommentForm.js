@@ -15,9 +15,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     maxWidth: 600,
   },
-  textField: {
-    marginRight: 12,
-  },
+  textField: {},
 }));
 
 const CommentForm = ({

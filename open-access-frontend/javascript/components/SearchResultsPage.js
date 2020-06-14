@@ -40,6 +40,9 @@ const SearchResultsPage = ({
   videos,
   images,
   notes,
+  hasMoreVideos,
+  hasMoreNotes,
+  hasMoreImages,
   location,
 }) => {
   let s = getSearchQuery(location.search);
@@ -89,24 +92,30 @@ const SearchResultsPage = ({
         </Tabs>
         <TabPanel selectedTab={tab} index={0}>
           <NewsFeedItems items={videos} type="video" loading={loading} />
-          <CustomButton
-            text="Load more"
-            onClick={() => loadVideoSearchResults(s, h)}
-          />
+          {hasMoreVideos && (
+            <CustomButton
+              text="Load more"
+              onClick={() => loadVideoSearchResults(s, h)}
+            />
+          )}
         </TabPanel>
         <TabPanel selectedTab={tab} index={1}>
           <NewsFeedItems items={images} type="image" loading={loading} />
-          <CustomButton
-            text="Load more"
-            onClick={() => loadImageSearchResults(s, h)}
-          />
+          {hasMoreImages && (
+            <CustomButton
+              text="Load more"
+              onClick={() => loadImageSearchResults(s, h)}
+            />
+          )}
         </TabPanel>
         <TabPanel selectedTab={tab} index={2}>
           <NewsFeedItems items={notes} type="note" loading={loading} />
-          <CustomButton
-            text="Load more"
-            onClick={() => loadNoteSearchResults(s, h)}
-          />
+          {hasMoreNotes && (
+            <CustomButton
+              text="Load more"
+              onClick={() => loadNoteSearchResults(s, h)}
+            />
+          )}
         </TabPanel>
       </Grid>
     </Grid>
@@ -121,6 +130,9 @@ const mapStateToProps = (state) => ({
   newsfeedVideoSubscriptions: state.feed.videoSubscriptions,
   newsfeedImageSubscriptions: state.feed.imageSubscriptions,
   newsfeedNoteSubscriptions: state.feed.noteSubscriptions,
+  hasMoreVideos: state.feed.hasMoreVideos,
+  hasMoreImages: state.feed.hasMoreImages,
+  hasMoreNotes: state.feed.hasMoreNotes,
 });
 
 const mapDispatchToProps = (dispatch) => ({

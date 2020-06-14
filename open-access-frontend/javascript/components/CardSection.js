@@ -29,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
     margin: `${theme.spacing(2)}px 0`,
   },
   ccInput: {
-    height: 51.25,
+    height: 40,
     border: `2px solid ${theme.palette.secondary.main}`,
-    paddingTop: 15,
+    paddingTop: 12,
     marginTop: theme.spacing(2),
   },
 }));

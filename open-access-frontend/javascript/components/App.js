@@ -189,6 +189,14 @@ const Home = (props) => (
     }
   </DynamicImport>
 );
+//import NotFound from "./NotFound";
+const NotFound = (props) => (
+  <DynamicImport load={() => import("./404")}>
+    {(Component) =>
+      Component == null ? <p>Loading...</p> : <Component {...props} />
+    }
+  </DynamicImport>
+);
 
 class App extends Component {
   constructor(props) {
@@ -307,9 +315,11 @@ class App extends Component {
                 )}
               />
               <Route
+                exact
                 path="/"
                 render={(props) => <AuthRedirect {...props} component={Home} />}
               />
+              <Route path="*" component={NotFound} />
             </Switch>
           </div>
         </div>

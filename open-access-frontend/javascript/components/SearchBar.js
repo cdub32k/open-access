@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     borderRadius: 0,
-    height: 41,
+    height: 40,
     width: 80,
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.light.main,

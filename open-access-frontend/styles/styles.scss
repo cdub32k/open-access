@@ -51,6 +51,13 @@ a:visited {
   border: 2px solid $black !important;
 }
 
+.MuiInputLabel-outlined.MuiInputLabel-shrink {
+  transform: translate(14px, -5px) scale(0.8) !important;
+}
+.MuiOutlinedInput-multiline {
+  padding: 13px !important;
+}
+
 //Stripe form styles:
 .StripeElement {
   height: 40px;

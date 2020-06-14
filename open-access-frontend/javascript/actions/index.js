@@ -537,10 +537,10 @@ export const ActionCreators = {
       payload: { query, hashtag },
     };
   },
-  loadVideoSearchResultsSuccess: (videos) => {
+  loadVideoSearchResultsSuccess: (videos, hasMore) => {
     return {
       type: ActionTypes.LOAD_VIDEO_SEARCH_RESULTS_SUCCESS,
-      payload: { videos },
+      payload: { videos, hasMore },
     };
   },
   loadVideoSearchResultsError: (error) => {
@@ -552,10 +552,10 @@ export const ActionCreators = {
       payload: { query, hashtag },
     };
   },
-  loadImageSearchResultsSuccess: (images) => {
+  loadImageSearchResultsSuccess: (images, hasMore) => {
     return {
       type: ActionTypes.LOAD_IMAGE_SEARCH_RESULTS_SUCCESS,
-      payload: { images },
+      payload: { images, hasMore },
     };
   },
   loadImageSearchResultsError: (error) => {
@@ -567,10 +567,10 @@ export const ActionCreators = {
       payload: { query, hashtag },
     };
   },
-  loadNoteSearchResultsSuccess: (notes) => {
+  loadNoteSearchResultsSuccess: (notes, hasMore) => {
     return {
       type: ActionTypes.LOAD_NOTE_SEARCH_RESULTS_SUCCESS,
-      payload: { notes },
+      payload: { notes, hasMore },
     };
   },
   loadNoteSearchResultsError: (error) => {

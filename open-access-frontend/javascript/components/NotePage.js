@@ -12,6 +12,7 @@ import PreviewNote from "./PreviewNote";
 import CommentForm from "./CommentForm";
 import CommentsSection from "./CommentsSection";
 import MediaOwnerActions from "./MediaOwnerActions";
+import Error from "./Error";
 import { getCommentId } from "../utils/helpers";
 
 const useStyles = makeStyles((theme) => ({
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NotePage = ({
   loading,
+  error,
   user,
   caption,
   likeCount,
@@ -39,6 +41,8 @@ const NotePage = ({
   clearNoteData,
   hasMoreComments,
 }) => {
+  if (error) return <Error />;
+
   const { noteId } = match.params;
   let c = getCommentId(location.search);
   useEffect(() => {
@@ -94,6 +98,7 @@ const NotePage = ({
 
 const mapStateToProps = (state) => ({
   loading: state.note.loading,
+  error: state.note.error,
   user: state.note.user,
   caption: state.note.caption,
   likeCount: state.note.likeCount,
