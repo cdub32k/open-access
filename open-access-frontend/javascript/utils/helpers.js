@@ -157,3 +157,10 @@ export function convertHashtagsToLinks(str) {
     (match) => `<a href='/search?h=${match.slice(1)}'>${match}</a>`
   );
 }
+
+export function parseVideoTimestampsToLinks(str) {
+  return str.replace(
+    /(?:([0-5]?[0-9]):)?([0-5]?[0-9]):([0-5][0-9])/g,
+    (match, h, m, s) => `<a onclick="vidJump(${h},${m},${s})">${match}</a>`
+  );
+}

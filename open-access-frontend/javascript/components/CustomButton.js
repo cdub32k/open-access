@@ -19,12 +19,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CustomButton = ({ onClick, text, Icon, ...rest }) => {
+const CustomButton = ({ onClick, text, Icon, className, ...rest }) => {
   const classes = useStyles();
   if (Icon)
     return (
       <IconButton
-        className={classes.icon}
+        className={`${classes.icon} ${className}`}
         color="primary"
         onClick={onClick}
         disableRipple
@@ -35,7 +35,7 @@ const CustomButton = ({ onClick, text, Icon, ...rest }) => {
     );
   return (
     <Button
-      className={classes.button}
+      className={`${classes.button} ${className}`}
       onClick={onClick}
       variant="contained"
       color="primary"

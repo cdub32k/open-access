@@ -1,6 +1,6 @@
 import DB from "../database";
 
-const perPage = 2;
+const perPage = 4;
 
 import {
   VIDEO_MEDIA_TYPE_ID,

@@ -56,7 +56,7 @@ class VideoList extends Component {
             );
           })
           .concat(
-            Array.from({ length: 2 }).map((preview, i) => {
+            Array.from({ length: 4 }).map((preview, i) => {
               return <PreviewPlaceholder key={i} />;
             })
           )

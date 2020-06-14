@@ -27,7 +27,7 @@ const NewsFeedItems = ({ items, type, loading }) => {
           return <NewsFeedItem key={item._id} item={item} />;
         })
         .concat(
-          Array.from({ length: 8 }).map((preview, i) => {
+          Array.from({ length: 4 }).map((preview, i) => {
             return <PreviewNewsfeedItem key={i} type={type} />;
           })
         )

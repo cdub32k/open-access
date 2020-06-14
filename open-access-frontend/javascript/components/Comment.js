@@ -14,7 +14,12 @@ import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ThumbDownOutline from "@material-ui/icons/ThumbDownOutlined";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { date2rel, num2str, convertHashtagsToLinks } from "../utils/helpers";
+import {
+  date2rel,
+  num2str,
+  convertHashtagsToLinks,
+  parseVideoTimestampsToLinks,
+} from "../utils/helpers";
 
 import CustomInput from "./CustomInput";
 import MediaOwnerActions from "./MediaOwnerActions";
@@ -143,6 +148,9 @@ let Comment = ({
   const likeIcon = liked ? <FavoriteIcon /> : <FavoriteBorderIcon />;
   const dislikeIcon = disliked ? <ThumbDownIcon /> : <ThumbDownOutline />;
 
+  body = convertHashtagsToLinks(body);
+  if (type == "video") body = parseVideoTimestampsToLinks(body);
+
   return (
     <div className={classes.container} style={replyStyle.container}>
       {highlighted && (
@@ -167,7 +175,7 @@ let Comment = ({
             style={{ whiteSpace: "pre-wrap" }}
             variant="body1"
             dangerouslySetInnerHTML={{
-              __html: convertHashtagsToLinks(body),
+              __html: body,
             }}
           ></Typography>
         </div>

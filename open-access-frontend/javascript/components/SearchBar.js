@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   button: {
+    padding: 0,
     borderRadius: 0,
     height: 40,
     width: 80,

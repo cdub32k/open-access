@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ImagePage = ({
   loading,
+  error,
   user,
   title,
   caption,
@@ -137,6 +138,7 @@ const ImagePage = ({
 
 const mapStateToProps = (state) => ({
   loading: state.image.loading,
+  error: state.image.error,
   user: state.image.user,
   title: state.image.title,
   caption: state.image.caption,

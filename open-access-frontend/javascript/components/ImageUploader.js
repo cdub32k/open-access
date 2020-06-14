@@ -9,6 +9,7 @@ import "react-image-crop/lib/ReactCrop.scss";
 import Typography from "@material-ui/core/Typography";
 import FormGroup from "@material-ui/core/FormGroup";
 import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { withStyles } from "@material-ui/core/styles";
 
 import CustomInput from "./CustomInput";
@@ -16,6 +17,7 @@ import CustomButton from "./CustomButton";
 
 class ImageUploader extends Component {
   state = {
+    loading: false,
     croppedImage: null,
     imageSrc: null,
     crop: {
@@ -112,6 +114,10 @@ class ImageUploader extends Component {
   onSubmitHandler = (e) => {
     e.preventDefault();
 
+    this.setState({
+      loading: true,
+    });
+
     const data = new FormData();
     data.append("image", this.state.croppedImage);
     data.append("title", this.state.title);
@@ -144,7 +150,7 @@ class ImageUploader extends Component {
               <Typography color="primary" variant="h3">
                 Upload Image
               </Typography>
-              <FormGroup style={{ marginTop: 48 }}>
+              <FormGroup style={{ marginTop: 32 }}>
                 <input
                   hidden
                   ref={this.imageInput}
@@ -171,28 +177,38 @@ class ImageUploader extends Component {
                 />
               )}
             </Grid>
-            <Grid item xs={12} sm={8} lg={6} style={{ marginTop: 48 }}>
-              <CustomInput
-                name="title"
-                label="Title"
-                value={title}
-                onChange={this.onTextChange}
-              />
-              <CustomInput
-                multiline={true}
-                rows={3}
-                name="caption"
-                label="Caption"
-                value={caption}
-                onChange={this.onTextChange}
-              />
-              {imageSrc && title && caption && (
-                <CustomButton
-                  style={{ marginTop: 24 }}
-                  text="Upload"
-                  type="submit"
+            <Grid item xs={12} sm={8} lg={6} style={{ marginTop: 32 }}>
+              <div className={classes.inputContainer}>
+                <CustomInput
+                  name="title"
+                  label="Title"
+                  value={title}
+                  onChange={this.onTextChange}
+                />
+              </div>
+              <div className={classes.inputContainer}>
+                <CustomInput
+                  multiline={true}
+                  rows={3}
+                  name="caption"
+                  label="Caption"
+                  value={caption}
+                  onChange={this.onTextChange}
+                />
+              </div>
+              {this.state.loading && (
+                <CircularProgress
+                  style={{ margin: "28px 0", display: "block" }}
+                  disableShrink
                 />
               )}
+
+              <CustomButton
+                disabled={!imageSrc || !title || !caption}
+                style={{ marginTop: 24, marginLeft: 0 }}
+                text="Upload"
+                type="submit"
+              />
             </Grid>
           </Grid>
         </form>
@@ -208,6 +224,7 @@ const styles = (theme) => ({
     justifyContent: "space-between",
     margin: "auto",
   },
+  ...theme.globalClasses,
 });
 
 const mapStateToProps = (state) => ({

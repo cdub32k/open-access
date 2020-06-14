@@ -4,8 +4,10 @@ import { Redirect } from "react-router-dom";
 
 import axios from "axios";
 
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+
 import CustomInput from "./CustomInput";
 import CustomButton from "./CustomButton";
 
@@ -26,10 +28,14 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 24,
     display: "inline-block",
   },
+  btn: {
+    margin: `${theme.spacing(2)}px 0`,
+  },
 }));
 
 const NoteUploader = ({ username }) => {
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
   const [caption, setCaption] = useState("");
   const [goToProfile, setGoToProfile] = useState(false);
   const [noteId, setNoteId] = useState(null);
@@ -39,6 +45,7 @@ const NoteUploader = ({ username }) => {
   };
 
   const onSubmitHandler = () => {
+    setLoading(true);
     axios
       .post("/api", {
         query: `
@@ -76,7 +83,18 @@ const NoteUploader = ({ username }) => {
           rows={3}
           inputProps={{ maxLength: 420 }}
         />
-        <CustomButton text="Post" onClick={onSubmitHandler} />
+        {loading && (
+          <CircularProgress
+            style={{ margin: "28px 0", display: "block" }}
+            disableShrink
+          />
+        )}
+        <CustomButton
+          disabled={!caption}
+          className={classes.btn}
+          text="Post"
+          onClick={onSubmitHandler}
+        />
       </form>
     </div>
   );

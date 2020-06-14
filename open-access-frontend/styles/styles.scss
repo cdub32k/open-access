@@ -24,6 +24,7 @@ body,
 }
 
 a {
+  cursor: pointer !important;
   text-decoration: none;
 }
 a,
@@ -56,6 +57,9 @@ a:visited {
 }
 .MuiOutlinedInput-multiline {
   padding: 13px !important;
+}
+.MuiInputBase-inputMultiline {
+  height: 1.1876em !important;
 }
 
 //Stripe form styles:
