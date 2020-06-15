@@ -36,8 +36,8 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
   },
   avatar: {
-    width: 44,
-    height: 44,
+    width: 49,
+    height: 49,
     marginRight: 16,
   },
   textSection: {
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   },
   actionSection: {
     "& svg": { fontSize: 12 },
-    "& span": { fontSize: 11, marginLeft: -5 },
+    "& button ~ span": { fontSize: 11, marginLeft: -5 },
   },
   highlighted: {
     fontSize: 11,

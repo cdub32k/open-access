@@ -39,9 +39,6 @@ const GET_USER_INFO_QUERY = `
       profilePic
       displayName
       bio
-      country
-      city
-      state
       joinedAt
       videos {
         _id
@@ -449,6 +446,7 @@ const GET_USER_NOTIFICATIONS_QUERY = `
         body
         sender
         read
+        commentId
         createdAt
       }
     }
@@ -698,6 +696,7 @@ export default [
         })
         .catch((err) => next(ActionCreators.getUserInfoError(err)));
     } else if (action.type == ActionTypes.GET_USER_ACCOUNT_INFO_START) {
+      next(action);
       axios
         .post("/api", {
           query: `
@@ -708,9 +707,6 @@ export default [
                 username
                 displayName
                 phoneNumber
-                country
-                state
-                city
                 bio
               }
             }
@@ -721,6 +717,7 @@ export default [
         })
         .catch((err) => next(ActionCreators.getUserAccountInfoError(err)));
     } else if (action.type == ActionTypes.UPDATE_ACCOUNT_INFO_START) {
+      next(action);
       axios
         .put("/users", action.payload.userInfo)
         .then((res) => {

@@ -37,8 +37,8 @@ const useStyles = makeStyles({
     padding: 8,
   },
   avatar: {
-    width: 44,
-    height: 44,
+    width: 49,
+    height: 49,
     marginRight: 8,
   },
 });

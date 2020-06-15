@@ -25,6 +25,12 @@ const styles = (theme) => ({
     marginTop: 0,
     marginBottom: 80,
     display: "inline-block",
+    [theme.breakpoints.down("sm")]: {
+      margin: "24px 12px",
+      width: "calc(100% - 24px);",
+      marginTop: 0,
+      marginBottom: 80,
+    },
   },
   summary: {
     display: "flex",

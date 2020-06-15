@@ -94,7 +94,7 @@ router.post("/profile/upload", profUpload, async (req, res) => {
     let img = sharp(req.files["image"][0].path);
     const metaData = await img.metadata();
 
-    let small = await img.resize(96, 96);
+    let small = await img.resize(98, 98);
     small.toFile(
       `public/img/${req.username}/small-thumb-${req.files["image"][0].filename}`
     );

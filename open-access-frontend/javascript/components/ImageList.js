@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
+import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 
 import ContentPreview from "./ContentPreview";
@@ -43,10 +44,10 @@ class ImageList extends Component {
   };
 
   render() {
-    const { classes, loading, hasMore } = this.props;
+    const { classes, loading, images, hasMore } = this.props;
 
-    const imageListHTML = loading
-      ? this.props.images
+    let imageListHTML = loading
+      ? images
           .map((image) => {
             return (
               <ContentPreview
@@ -66,7 +67,7 @@ class ImageList extends Component {
               return <PreviewPlaceholder key={i} />;
             })
           )
-      : this.props.images.map((image, i) => {
+      : images.map((image, i) => {
           return (
             <ContentPreview
               contentType="image"
@@ -80,6 +81,11 @@ class ImageList extends Component {
             />
           );
         });
+
+    if (!loading && (!images || images.length == 0))
+      imageListHTML = (
+        <Typography variant="body1">Nothing to show here (yet)</Typography>
+      );
 
     return (
       <div className={`${classes.container} content-container`}>

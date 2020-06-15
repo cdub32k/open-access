@@ -19,6 +19,20 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: 0,
     right: 56,
+    backgroundColor: "rgba(255,255,255,0.4)",
+    borderRadius: "50%",
+    [theme.breakpoints.down("sm")]: {
+      right: 12,
+    },
+  },
+  imageSection: {
+    position: "relative",
+    [theme.breakpoints.up("md")]: {
+      paddingRight: 32,
+    },
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: 0,
+    },
   },
 }));
 
@@ -71,12 +85,7 @@ const ImagePage = ({
 
   return (
     <Grid container>
-      <Grid
-        item
-        xs={12}
-        md={8}
-        style={{ paddingRight: 32, position: "relative" }}
-      >
+      <Grid item xs={12} md={8} className={classes.imageSection}>
         {loading ? (
           <PreviewImage />
         ) : (

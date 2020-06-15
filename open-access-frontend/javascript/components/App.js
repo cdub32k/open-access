@@ -242,7 +242,7 @@ class App extends Component {
                 path="/note/:noteId"
                 render={(props) => (
                   <UnAuthRedirect
-                    key={props.match.params.noteId}
+                    key={`${props.match.params.noteId} ${props.location.search}`}
                     {...props}
                     component={NotePage}
                   />
@@ -258,7 +258,7 @@ class App extends Component {
                 path="/image/:imageId"
                 render={(props) => (
                   <UnAuthRedirect
-                    key={props.match.params.imageId}
+                    key={`${props.match.params.imageId} ${props.location.search}`}
                     {...props}
                     component={ImagePage}
                   />
@@ -274,7 +274,7 @@ class App extends Component {
                 path="/video-player/:videoId"
                 render={(props) => (
                   <UnAuthRedirect
-                    key={props.match.params.videoId}
+                    key={`${props.match.params.videoId} ${props.location.search}`}
                     {...props}
                     component={VideoPage}
                   />

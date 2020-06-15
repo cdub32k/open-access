@@ -20,6 +20,13 @@ const useStyles = makeStyles((theme) => ({
 const NewsFeedItems = ({ items, type, loading }) => {
   const classes = useStyles();
 
+  if (!loading && (!items || items.length == 0))
+    return (
+      <Grid container style={{ justifyContent: "center" }}>
+        <Typography variant="body1">Nothing to show here (yet)</Typography>
+      </Grid>
+    );
+
   const listHtml = loading
     ? items
         .map((item) => {

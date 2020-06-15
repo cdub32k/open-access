@@ -16,6 +16,10 @@ const useStyles = makeStyles((theme) => ({
     width: "calc(100% - 48px);",
     margin: 24,
     display: "inline-block",
+    [theme.breakpoints.down("sm")]: {
+      margin: 12,
+      width: "calc(100% - 24px);",
+    },
   },
   text: {
     height: 19,

@@ -61,8 +61,7 @@ const imageReducer = (state = initialState, action) => {
       return { ...state, loading: true };
     case ActionTypes.GET_IMAGE_INFO_SUCCESS:
       let hasMoreComments = true;
-      if (action.payload.imageData.comments.length < 10)
-        hasMoreComments = false;
+      if (action.payload.imageData.comments.length < 4) hasMoreComments = false;
       if (
         action.payload.imageData.comments[0] &&
         action.payload.imageData.comments[0].replies
@@ -148,7 +147,7 @@ const imageReducer = (state = initialState, action) => {
       };
     case ActionTypes.LOAD_MORE_IMAGE_COMMENTS_SUCCESS:
       hasMoreComments = true;
-      if (action.payload.items.length < 10) hasMoreComments = false;
+      if (action.payload.items.length < 4) hasMoreComments = false;
       return {
         ...state,
         comments: [...state.comments, ...action.payload.items],

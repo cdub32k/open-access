@@ -132,25 +132,33 @@ const userReducer = (state = initialState, action) => {
         ...state,
         viewed: { ...state.viewed, error: action.error },
       };
+    case ActionTypes.GET_USER_ACCOUNT_INFO_START:
+      return { ...state, loading: true };
     case ActionTypes.GET_USER_ACCOUNT_INFO_SUCCESS:
       return {
         ...state,
         ...action.payload.userData,
+        loading: false,
       };
     case ActionTypes.GET_USER_ACCOUNT_INFO_ERROR:
       return {
         ...state,
         error: action.error,
+        loading: false,
       };
+    case ActionTypes.UPDATE_ACCOUNT_INFO_START:
+      return { ...state, loading: true };
     case ActionTypes.UPDATE_ACCOUNT_INFO_SUCCESS:
       return {
         ...state,
         ...action.payload.userData,
+        loading: false,
       };
     case ActionTypes.UPDATE_ACCOUNT_INFO_ERROR:
       return {
         ...state,
         error: action.error,
+        loading: false,
       };
     case ActionTypes.LOAD_USER_COMMENTS_PAGE_START:
       return { ...state, viewed: { ...state.viewed, loading: true } };

@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   thumb: {
     height: 169,
     width: 300,
+    padding: 0,
   },
   previewDetailsContainer: {
     position: "absolute",
@@ -54,7 +55,7 @@ const PreviewPlaceholder = () => {
   const classes = useStyles();
   return (
     <Card className={`${classes.container} content-preview`}>
-      <CardContent className={classes.thumb} />
+      <CardContent className={`${classes.thumb} preview-placeholder-thumb`} />
       <CardHeader
         className={classes.previewDetailsContainer}
         avatar={<Avatar />}

@@ -9,6 +9,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import FormGroup from "@material-ui/core/FormGroup";
 import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { withStyles } from "@material-ui/core/styles";
 
 import CustomInput from "./CustomInput";
@@ -134,6 +135,7 @@ class Account extends Component {
     e.preventDefault();
 
     this.props.updateAccountInfo({ ...this.state, profilePic: undefined });
+    this.setState({ editInfo: false });
   };
 
   editInfo = () => {
@@ -141,9 +143,6 @@ class Account extends Component {
       displayName: this.props.displayName,
       email: this.props.email,
       phoneNumber: this.props.phoneNumber,
-      country: this.props.country,
-      city: this.props.city,
-      state: this.props.state,
       bio: this.props.bio,
       editInfo: true,
     });
@@ -151,12 +150,10 @@ class Account extends Component {
 
   render() {
     const {
+      loading,
       profilePic,
       username,
       email,
-      country,
-      state,
-      city,
       phoneNumber,
       displayName,
       bio,
@@ -232,32 +229,30 @@ class Account extends Component {
             </FormGroup>
           </form>
         </div>
+        {loading && (
+          <CircularProgress style={{ marginBottom: 28 }} disableShrink />
+        )}
         <Grid className={classes.sectionsContainer} container>
           <Grid className={classes.section} item xs={12} md={6}>
             {!editInfo && (
               <Fragment>
-                <Typography variant="body1">
-                  <b>Display name:</b> {displayName}
-                </Typography>
-                <Typography variant="body1">
-                  <b>Email:</b> {email}
-                </Typography>
-                <Typography variant="body1">
-                  <b>Phone Number:</b> {phoneNumber}
-                </Typography>
-                <Typography variant="body1">
-                  <b>Country:</b> {country}
-                </Typography>
-                <Typography variant="body1">
-                  <b>City:</b> {city}
-                </Typography>
-                <Typography variant="body1">
-                  <b>State:</b> {state}
-                </Typography>
-                <Typography variant="body1">
-                  <b>Bio:</b> {bio}
-                </Typography>
                 <a onClick={this.editInfo}>edit</a>
+                <Typography variant="body1">
+                  <b>Display name</b>
+                  <br /> {displayName}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Email</b>
+                  <br /> {email}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Phone Number</b>
+                  <br /> {phoneNumber}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Bio</b>
+                  <br /> {bio}
+                </Typography>
               </Fragment>
             )}
             {editInfo && (
@@ -267,7 +262,7 @@ class Account extends Component {
                     label="Display Name"
                     name="displayName"
                     placeholder={displayName || ""}
-                    value={displayName}
+                    value={this.state.displayName}
                     onChange={this.onTextChange}
                   />
                 </div>
@@ -276,7 +271,7 @@ class Account extends Component {
                     label="Email"
                     name="email"
                     placeholder={email || ""}
-                    value={email}
+                    value={this.state.email}
                     onChange={this.onTextChange}
                   />
                 </div>
@@ -285,47 +280,19 @@ class Account extends Component {
                     label="Phone Number"
                     name="phoneNumber"
                     placeholder={phoneNumber || ""}
-                    value={phoneNumber}
-                    onChange={this.onTextChange}
-                  />
-                </div>
-                <div className={classes.inputContainer}>
-                  <CustomInput
-                    label="Country"
-                    name="country"
-                    placeholder={country || ""}
-                    value={country}
-                    onChange={this.onTextChange}
-                  />
-                </div>
-                <div className={classes.inputContainer}>
-                  <CustomInput
-                    placeholder={city}
-                    label="City"
-                    name="city"
-                    placeholder={city || ""}
-                    value={city}
-                    onChange={this.onTextChange}
-                  />
-                </div>
-                <div className={classes.inputContainer}>
-                  <CustomInput
-                    label="State"
-                    name="state"
-                    placeholder={state || ""}
-                    value={state}
+                    value={this.state.phoneNumber}
                     onChange={this.onTextChange}
                   />
                 </div>
                 <div className={classes.inputContainer}>
                   <CustomInput
                     label="Bio"
-                    value={bio}
+                    value={this.state.bio}
                     name="bio"
                     placeholder={bio || ""}
                     multiline={true}
-                    rows={3}
                     onChange={this.onTextChange}
+                    inputProps={{ maxLength: 420 }}
                   />
                 </div>
                 <div className={classes.inputContainer}>
@@ -343,9 +310,11 @@ class Account extends Component {
               </form>
             )}
           </Grid>
-          <Grid className={classes.section} item xs={12} md={6}>
-            <Link to={"/payment"}>Payment Info</Link>
-          </Grid>
+          {!editInfo && (
+            <Grid className={classes.section} item xs={12} md={6}>
+              <Link to={"/payment"}>Payment Info</Link>
+            </Grid>
+          )}
         </Grid>
       </div>
     );
@@ -353,13 +322,11 @@ class Account extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  loading: state.user.loading,
   profilePic: state.user.profilePic,
   username: state.user.username,
   email: state.user.email,
   displayName: state.user.displayName,
-  city: state.user.city,
-  state: state.user.state,
-  country: state.user.country,
   phoneNumber: state.user.phoneNumber,
   bio: state.user.bio,
 });

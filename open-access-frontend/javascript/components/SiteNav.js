@@ -196,12 +196,12 @@ const SiteNav = ({
         }
 
         return (
-          <MenuItem key={notif._id} onClick={handleNotifsMenuClose}>
-            <Link to={contentUrl}>
+          <Link key={notif._id} to={contentUrl}>
+            <MenuItem onClick={handleNotifsMenuClose}>
               {`${msg} `}
               {`${notif.target} ${date2rel(notif.createdAt)}`}
-            </Link>
-          </MenuItem>
+            </MenuItem>
+          </Link>
         );
       })}
     </Menu>

@@ -19,6 +19,20 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: 0,
     right: 56,
+    backgroundColor: "rgba(255,255,255,0.4)",
+    borderRadius: "50%",
+    [theme.breakpoints.down("sm")]: {
+      right: 12,
+    },
+  },
+  playerSection: {
+    position: "relative",
+    [theme.breakpoints.up("md")]: {
+      paddingRight: 32,
+    },
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: 0,
+    },
   },
 }));
 
@@ -57,12 +71,7 @@ const VideoPage = ({
   const classes = useStyles();
   return (
     <Grid container>
-      <Grid
-        item
-        xs={12}
-        md={8}
-        style={{ paddingRight: 32, position: "relative" }}
-      >
+      <Grid item xs={12} md={8} className={classes.playerSection}>
         {loading ? (
           <PreviewVideoPlayer />
         ) : (

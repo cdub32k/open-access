@@ -63,8 +63,7 @@ const videoReducer = (state = initialState, action) => {
       return { ...state, loading: true };
     case ActionTypes.GET_VIDEO_INFO_SUCCESS:
       let hasMoreComments = true;
-      if (action.payload.videoData.comments.length < 10)
-        hasMoreComments = false;
+      if (action.payload.videoData.comments.length < 4) hasMoreComments = false;
       if (
         action.payload.videoData.comments[0] &&
         action.payload.videoData.comments[0].replies
@@ -152,7 +151,7 @@ const videoReducer = (state = initialState, action) => {
       };
     case ActionTypes.LOAD_MORE_VIDEO_COMMENTS_SUCCESS:
       hasMoreComments = true;
-      if (action.payload.items.length < 10) hasMoreComments = false;
+      if (action.payload.items.length < 4) hasMoreComments = false;
       return {
         ...state,
         comments: [...state.comments, ...action.payload.items],

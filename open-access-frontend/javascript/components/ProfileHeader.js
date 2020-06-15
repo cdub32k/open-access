@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
 import Modal from "@material-ui/core/Modal";
@@ -15,21 +16,19 @@ import PreviewProfileHeader from "./PreviewProfileHeader";
 const useStyles = makeStyles((theme) => ({
   container: {
     marginBottom: 32,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "50%",
-    border: `4px solid ${theme.palette.primary.main}`,
-    width: 280,
-    height: 280,
-    backgroundColor: theme.palette.background.main,
+    width: "100%",
+    maxWidth: 600,
+    alignSelf: "flex-start",
   },
-  large: {
-    width: 100,
-    height: 100,
+  avatarContainer: {
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: 18,
+  },
+  avatar: {
+    width: 300,
+    height: 300,
     border: `4px solid ${theme.palette.secondary.main}`,
-    marginBottom: 12,
     cursor: "pointer",
   },
   bio: {
@@ -44,6 +43,18 @@ const useStyles = makeStyles((theme) => ({
     border: `4px solid ${theme.palette.secondary.main}`,
     boxShadow: theme.shadows[5],
     padding: 0,
+    maxWidth: "95%",
+    maxHeight: "95%",
+    "& img": {
+      width: "100%",
+    },
+  },
+  textContainer: {
+    height: "100%",
+    maxHeight: 300,
+    textAlign: "center",
+    overflowY: "scroll",
+    padding: "0 12px",
   },
 }));
 
@@ -52,9 +63,6 @@ const ProfileHeader = ({
   username,
   displayName,
   bio,
-  country,
-  state,
-  city,
   joinedAt,
   loading,
 }) => {
@@ -72,16 +80,22 @@ const ProfileHeader = ({
   return loading ? (
     <PreviewProfileHeader />
   ) : (
-    <div className={classes.container}>
-      <Avatar src={profilePic} onClick={handleOpen} className={classes.large} />
-      <Typography variant="h4">{displayName}</Typography>
-      <Typography variant="body2">@{username}</Typography>
-      <Typography variant="body2">
-        Member since {dayjs(joinedAt).format("MMM YYYY")}
-      </Typography>
-      <Typography variant="body1" className={classes.bio}>
-        {bio}
-      </Typography>
+    <Grid container className={classes.container}>
+      <Grid className={classes.avatarContainer} item xs={12} md={6}>
+        <img src={profilePic} onClick={handleOpen} className={classes.avatar} />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <div className={`${classes.textContainer} profile-header-text`}>
+          <Typography variant="h4">{displayName}</Typography>
+          <Typography variant="body1">@{username}</Typography>
+          <Typography variant="body2">
+            Member since {dayjs(joinedAt).format("MMM YYYY")}
+          </Typography>
+          <Typography variant="body1" className={classes.bio}>
+            {bio}
+          </Typography>
+        </div>
+      </Grid>
       <Modal
         className={classes.modal}
         open={open}
@@ -94,11 +108,11 @@ const ProfileHeader = ({
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <img src={profilePic} width="300" height="300" />
+            <img src={profilePic} />
           </div>
         </Fade>
       </Modal>
-    </div>
+    </Grid>
   );
 };
 
@@ -107,9 +121,6 @@ const mapStateToProps = (state) => ({
   username: state.user.viewed.username,
   displayName: state.user.viewed.displayName,
   bio: state.user.viewed.bio,
-  country: state.user.viewed.country,
-  state: state.user.viewed.state,
-  city: state.user.viewed.city,
   joinedAt: state.user.viewed.joinedAt,
 });
 

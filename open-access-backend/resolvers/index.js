@@ -1570,6 +1570,7 @@ const resolvers = {
 
   Note: {
     user: async ({ username }, args, context, info) => {
+      if (!username) return null;
       let user = await DB.User.findOne({ username }).lean();
       user.profilePic = user.smallPic;
       return user;
@@ -1618,6 +1619,7 @@ const resolvers = {
 
   NoteComment: {
     user: async ({ username }, args, context) => {
+      if (!username) return null;
       let user = await DB.User.findOne({ username }).lean();
       user.profilePic = user.smallPic;
       return user;
@@ -1646,6 +1648,7 @@ const resolvers = {
 
   Image: {
     user: async ({ username }, args, context, info) => {
+      if (!username) return null;
       let user = await DB.User.findOne({ username }).lean();
       user.profilePic = user.smallPic;
       return user;
@@ -1698,6 +1701,7 @@ const resolvers = {
 
   ImageComment: {
     user: async ({ username }, args, context) => {
+      if (!username) return null;
       let user = await DB.User.findOne({ username }).lean();
       user.profilePic = user.smallPic;
       return user;
@@ -1726,6 +1730,7 @@ const resolvers = {
 
   Video: {
     user: async ({ username }, args, context, info) => {
+      if (!username) return null;
       let user = await DB.User.findOne({ username }).lean();
       user.profilePic = user.smallPic;
       return user;
@@ -1780,6 +1785,7 @@ const resolvers = {
 
   VideoComment: {
     user: async ({ username }, args, context) => {
+      if (!username) return null;
       let user = await DB.User.findOne({ username }).lean();
       user.profilePic = user.smallPic;
       return user;

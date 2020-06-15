@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 import ContentPreview from "./ContentPreview";
@@ -33,7 +34,7 @@ const NoteList = ({ loading, notes, hasMore, loadMore }) => {
     setPage(page + 1);
   };
 
-  const noteListHTML = loading
+  let noteListHTML = loading
     ? notes
         .map((note) => {
           return (
@@ -66,6 +67,11 @@ const NoteList = ({ loading, notes, hasMore, loadMore }) => {
           />
         );
       });
+
+  if (!loading && (!notes || notes.length == 0))
+    noteListHTML = (
+      <Typography variant="body1">Nothing to show here (yet)</Typography>
+    );
 
   return (
     <div className={`${classes.container} content-container`}>

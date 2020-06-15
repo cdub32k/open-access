@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 
+import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 
 import ContentPreview from "./ContentPreview";
@@ -38,9 +39,9 @@ class VideoList extends Component {
   };
 
   render() {
-    const { classes, loading, hasMore } = this.props;
-    const videoListHTML = loading
-      ? this.props.videos
+    const { classes, loading, videos, hasMore } = this.props;
+    let videoListHTML = loading
+      ? videos
           .map((video) => {
             return (
               <ContentPreview
@@ -60,7 +61,7 @@ class VideoList extends Component {
               return <PreviewPlaceholder key={i} />;
             })
           )
-      : this.props.videos.map((video, i) => {
+      : videos.map((video, i) => {
           return (
             <ContentPreview
               contentType="video"
@@ -74,6 +75,11 @@ class VideoList extends Component {
             />
           );
         });
+
+    if (!loading && (!videos || videos.length == 0))
+      videoListHTML = (
+        <Typography variant="body1">Nothing to show here (yet)</Typography>
+      );
 
     return (
       <div className={`${classes.container} content-container`}>

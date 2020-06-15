@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -33,6 +34,13 @@ const UserCommentList = ({ loading, comments, hasMore, loadMore }) => {
     setPage(page + 1);
   };
 
+  if (!loading && (!comments || comments.length == 0))
+    return (
+      <div className={`${classes.container} user-comments-list content-list`}>
+        <Typography variant="body1">Nothing to show here (yet)</Typography>
+      </div>
+    );
+
   return (
     <div className={`${classes.container} user-comments-list content-list`}>
       {comments.map((comment, i) => {
@@ -47,7 +55,11 @@ const UserCommentList = ({ loading, comments, hasMore, loadMore }) => {
       )}
       {hasMore && (
         <div>
-          <CustomButton text="Load more" onClick={_loadMore} />
+          <CustomButton
+            text="Load more"
+            onClick={_loadMore}
+            style={{ marginLeft: 0 }}
+          />
         </div>
       )}
     </div>

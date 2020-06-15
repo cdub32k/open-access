@@ -12,6 +12,7 @@ import CustomButton from "./CustomButton";
 const useStyles = makeStyles((theme) => ({
   container: {
     width: "100%",
+    padding: 12,
   },
   section: {
     paddingRight: 32,

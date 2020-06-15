@@ -61,7 +61,7 @@ const noteReducer = (state = initialState, action) => {
       return { ...state, loading: true };
     case ActionTypes.GET_NOTE_INFO_SUCCESS:
       let hasMoreComments = true;
-      if (action.payload.noteData.comments.length < 10) hasMoreComments = false;
+      if (action.payload.noteData.comments.length < 4) hasMoreComments = false;
       if (
         action.payload.noteData.comments[0] &&
         action.payload.noteData.comments[0].replies
@@ -147,7 +147,7 @@ const noteReducer = (state = initialState, action) => {
       };
     case ActionTypes.LOAD_MORE_NOTE_COMMENTS_SUCCESS:
       hasMoreComments = true;
-      if (action.payload.items.length < 10) hasMoreComments = false;
+      if (action.payload.items.length < 4) hasMoreComments = false;
       return {
         ...state,
         comments: [...state.comments, ...action.payload.items],

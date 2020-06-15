@@ -91,12 +91,12 @@ router.put("/comments/:id", async (req, res) => {
 
 router.delete("/comments/:id", async (req, res) => {
   try {
-    const vComment = await VideoComment.findOne({
+    const vComment = await Comment.findOne({
       _id: req.params.id,
       mediaType: VIDEO_MEDIA_TYPE_ID,
     });
-    let video = await Video.findOne({
-      _id: vComment.videoId,
+    let video = await Media.findOne({
+      _id: vComment.mediaId,
       mediaType: VIDEO_MEDIA_TYPE_ID,
     });
     let totalDecr = 1;

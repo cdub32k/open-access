@@ -38,6 +38,13 @@ const UserLikeList = ({ loading, likes, hasMore, loadMore }) => {
     setPage(page + 1);
   };
 
+  if (!loading && (!likes || likes.length == 0))
+    return (
+      <div className={`${classes.container} user-comments-list`}>
+        <Typography variant="body1">Nothing to show here (yet)</Typography>
+      </div>
+    );
+
   return (
     <div className={`${classes.container} user-comments-list`}>
       {likes.map((like, i) => {
@@ -84,7 +91,11 @@ const UserLikeList = ({ loading, likes, hasMore, loadMore }) => {
       )}
       {hasMore && (
         <div>
-          <CustomButton text="Load more" onClick={_loadMore} />
+          <CustomButton
+            text="Load more"
+            onClick={_loadMore}
+            style={{ marginLeft: 0 }}
+          />
         </div>
       )}
     </div>
