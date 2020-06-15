@@ -1570,7 +1570,9 @@ const resolvers = {
 
   Note: {
     user: async ({ username }, args, context, info) => {
-      return await DB.User.findOne({ username }).lean();
+      let user = await DB.User.findOne({ username }).lean();
+      user.profilePic = user.smallPic;
+      return user;
     },
     liked: async ({ _id, username }, args, context, info) => {
       return await DB.Like.exists({
@@ -1616,7 +1618,9 @@ const resolvers = {
 
   NoteComment: {
     user: async ({ username }, args, context) => {
-      return await DB.User.findOne({ username }).lean();
+      let user = await DB.User.findOne({ username }).lean();
+      user.profilePic = user.smallPic;
+      return user;
     },
     liked: async ({ _id, username }, args, context, info) => {
       return await DB.CommentLike.exists({
@@ -1642,7 +1646,9 @@ const resolvers = {
 
   Image: {
     user: async ({ username }, args, context, info) => {
-      return await DB.User.findOne({ username }).lean();
+      let user = await DB.User.findOne({ username }).lean();
+      user.profilePic = user.smallPic;
+      return user;
     },
     liked: async ({ _id, username }, args, context, info) => {
       return await DB.Like.exists({
@@ -1692,7 +1698,9 @@ const resolvers = {
 
   ImageComment: {
     user: async ({ username }, args, context) => {
-      return await DB.User.findOne({ username }).lean();
+      let user = await DB.User.findOne({ username }).lean();
+      user.profilePic = user.smallPic;
+      return user;
     },
     liked: async ({ _id, username }, args, context, info) => {
       return await DB.CommentLike.exists({
@@ -1718,7 +1726,9 @@ const resolvers = {
 
   Video: {
     user: async ({ username }, args, context, info) => {
-      return await DB.User.findOne({ username }).lean();
+      let user = await DB.User.findOne({ username }).lean();
+      user.profilePic = user.smallPic;
+      return user;
     },
     liked: async ({ _id, username }, args, context, info) => {
       return await DB.Like.exists({
@@ -1770,7 +1780,9 @@ const resolvers = {
 
   VideoComment: {
     user: async ({ username }, args, context) => {
-      return await DB.User.findOne({ username }).lean();
+      let user = await DB.User.findOne({ username }).lean();
+      user.profilePic = user.smallPic;
+      return user;
     },
     liked: async ({ _id, username }, args, context, info) => {
       return await DB.CommentLike.exists({

@@ -691,6 +691,9 @@ export default [
         .then((res) => {
           const userData = res.data.data;
 
+          if (!userData || res.data.errors || !userData.user)
+            next(ActionCreators.getUserInfoError("NOT FOUND"));
+
           next(ActionCreators.getUserInfoSuccess(userData.user));
         })
         .catch((err) => next(ActionCreators.getUserInfoError(err)));

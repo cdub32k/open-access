@@ -6,6 +6,10 @@ let userSchema = new mongoose.Schema(
       type: String,
       default: "http://localhost:5000/img/default-profile.png",
     },
+    smallPic: {
+      type: String,
+      default: "http://localhost:5000/img/default-profile.png",
+    },
     username: {
       type: String,
       unique: true,

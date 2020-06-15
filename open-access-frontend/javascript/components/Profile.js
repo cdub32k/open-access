@@ -16,6 +16,7 @@ import UserCommentList from "./UserCommentList";
 import UserLikeList from "./UserLikeList";
 import CustomButton from "./CustomButton";
 import TabPanel from "./TabPanel";
+import Error from "./Error";
 
 import { num2str } from "../utils/helpers";
 
@@ -48,6 +49,7 @@ class Profile extends Component {
     const {
       initialLoad,
       loading,
+      error,
       classes,
       videos,
       images,
@@ -69,6 +71,9 @@ class Profile extends Component {
       dislikeCount,
       mineUsername,
     } = this.props;
+
+    if (error) return <Error />;
+
     const { selectedTab } = this.state;
     return (
       <div className={`${classes.container} profile-container`}>
@@ -161,6 +166,7 @@ const mapStateToProps = (state) => ({
   mineUsername: state.user.username,
   initialLoad: state.user.loading,
   loading: state.user.viewed.loading,
+  error: state.user.viewed.error,
   username: state.user.viewed.username,
   videos: state.user.viewed.videos,
   images: state.user.viewed.images,

@@ -1,4 +1,5 @@
 import React, { Component, Fragment, createRef } from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 
@@ -28,6 +29,7 @@ class Account extends Component {
         height: 300,
         aspect: 1 / 1,
       },
+      editInfo: false,
     };
 
     this.imageInput = createRef();
@@ -134,6 +136,19 @@ class Account extends Component {
     this.props.updateAccountInfo({ ...this.state, profilePic: undefined });
   };
 
+  editInfo = () => {
+    this.setState({
+      displayName: this.props.displayName,
+      email: this.props.email,
+      phoneNumber: this.props.phoneNumber,
+      country: this.props.country,
+      city: this.props.city,
+      state: this.props.state,
+      bio: this.props.bio,
+      editInfo: true,
+    });
+  };
+
   render() {
     const {
       profilePic,
@@ -148,10 +163,10 @@ class Account extends Component {
       classes,
     } = this.props;
 
-    const { imageSrc, crop } = this.state;
+    const { imageSrc, crop, editInfo } = this.state;
 
     return (
-      <div>
+      <div className={classes.container}>
         <Typography variant="h3" color="primary">
           Your Account
         </Typography>
@@ -217,59 +232,121 @@ class Account extends Component {
             </FormGroup>
           </form>
         </div>
-
-        <form onSubmit={this.onSubmitHandler}>
-          <CustomInput
-            label="Display Name"
-            name="displayName"
-            placeholder={displayName || ""}
-            onChange={this.onTextChange}
-          />
-          <br />
-          <CustomInput
-            label="Phone Number"
-            name="phoneNumber"
-            placeholder={phoneNumber || ""}
-            onChange={this.onTextChange}
-          />
-          <br />
-          <CustomInput
-            label="Country"
-            name="country"
-            placeholder={country || ""}
-            onChange={this.onTextChange}
-          />
-          <br />
-          <CustomInput
-            placeholder={city}
-            label="City"
-            name="city"
-            placeholder={city || ""}
-            onChange={this.onTextChange}
-          />
-          <br />
-          <CustomInput
-            label="State"
-            name="state"
-            placeholder={state || ""}
-            onChange={this.onTextChange}
-          />
-          <br />
-          <CustomInput
-            label="Bio"
-            name="bio"
-            placeholder={bio || ""}
-            multiline={true}
-            rows={3}
-            onChange={this.onTextChange}
-          />
-          <br />
-          <CustomButton
-            style={{ marginTop: 32 }}
-            type="submit"
-            text="Update Info"
-          />
-        </form>
+        <Grid className={classes.sectionsContainer} container>
+          <Grid className={classes.section} item xs={12} md={6}>
+            {!editInfo && (
+              <Fragment>
+                <Typography variant="body1">
+                  <b>Display name:</b> {displayName}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Email:</b> {email}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Phone Number:</b> {phoneNumber}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Country:</b> {country}
+                </Typography>
+                <Typography variant="body1">
+                  <b>City:</b> {city}
+                </Typography>
+                <Typography variant="body1">
+                  <b>State:</b> {state}
+                </Typography>
+                <Typography variant="body1">
+                  <b>Bio:</b> {bio}
+                </Typography>
+                <a onClick={this.editInfo}>edit</a>
+              </Fragment>
+            )}
+            {editInfo && (
+              <form onSubmit={this.onSubmitHandler}>
+                <div className={classes.inputContainer}>
+                  <CustomInput
+                    label="Display Name"
+                    name="displayName"
+                    placeholder={displayName || ""}
+                    value={displayName}
+                    onChange={this.onTextChange}
+                  />
+                </div>
+                <div className={classes.inputContainer}>
+                  <CustomInput
+                    label="Email"
+                    name="email"
+                    placeholder={email || ""}
+                    value={email}
+                    onChange={this.onTextChange}
+                  />
+                </div>
+                <div className={classes.inputContainer}>
+                  <CustomInput
+                    label="Phone Number"
+                    name="phoneNumber"
+                    placeholder={phoneNumber || ""}
+                    value={phoneNumber}
+                    onChange={this.onTextChange}
+                  />
+                </div>
+                <div className={classes.inputContainer}>
+                  <CustomInput
+                    label="Country"
+                    name="country"
+                    placeholder={country || ""}
+                    value={country}
+                    onChange={this.onTextChange}
+                  />
+                </div>
+                <div className={classes.inputContainer}>
+                  <CustomInput
+                    placeholder={city}
+                    label="City"
+                    name="city"
+                    placeholder={city || ""}
+                    value={city}
+                    onChange={this.onTextChange}
+                  />
+                </div>
+                <div className={classes.inputContainer}>
+                  <CustomInput
+                    label="State"
+                    name="state"
+                    placeholder={state || ""}
+                    value={state}
+                    onChange={this.onTextChange}
+                  />
+                </div>
+                <div className={classes.inputContainer}>
+                  <CustomInput
+                    label="Bio"
+                    value={bio}
+                    name="bio"
+                    placeholder={bio || ""}
+                    multiline={true}
+                    rows={3}
+                    onChange={this.onTextChange}
+                  />
+                </div>
+                <div className={classes.inputContainer}>
+                  <CustomButton
+                    style={{ marginTop: 32, marginLeft: 0 }}
+                    type="submit"
+                    text="Update Info"
+                  />
+                  <CustomButton
+                    style={{ marginTop: 32, marginLeft: 0 }}
+                    onClick={() => this.setState({ editInfo: false })}
+                    text="Cancel"
+                  />
+                </div>
+              </form>
+            )}
+          </Grid>
+          <Grid className={classes.section} item xs={12} md={6}>
+            <Link to={"/payment"}>Payment Info</Link>
+          </Grid>
+        </Grid>
       </div>
     );
   }
@@ -295,12 +372,27 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const styles = (theme) => ({
+  container: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  sectionsContainer: {
+    maxWidth: 800,
+  },
+  section: {
+    padding: "0 24px",
+    marginBottom: 54,
+    maxWidth: 400,
+  },
   large: {
     width: 200,
     height: 200,
     border: `4px solid ${theme.palette.secondary.main}`,
     marginBottom: 12,
   },
+  ...theme.globalClasses,
 });
 
 export default withStyles(styles)(

@@ -10,6 +10,8 @@ import {
 } from "../constants";
 import { deleteReplies, parseHashtags } from "../utils/helpers";
 
+import sharp from "sharp";
+
 const { Media, View, Like, Dislike, Comment, User } = require("../database");
 
 const router = require("express").Router();
@@ -38,11 +40,21 @@ router.post("/upload", upload, async (req, res) => {
       parseHashtags(req.body.caption)
     );
 
+    let img = sharp(req.files["thumb"][0].path);
+    const metaData = await img.metadata();
+
+    if (metaData.width > 856) {
+      img = await img.resize(856, 482);
+    }
+    img.toFile(
+      `public/vid/${req.username}/thumb-${req.files["thumb"][0].filename}`
+    );
+
     const video = await Media.create({
       mediaType: VIDEO_MEDIA_TYPE_ID,
       username,
       url: `http://localhost:5000/vid/${req.username}/${req.files["video"][0].filename}`,
-      thumbUrl: `http://localhost:5000/vid/${req.username}/${req.files["thumb"][0].filename}`,
+      thumbUrl: `http://localhost:5000/vid/${req.username}/thumb-${req.files["thumb"][0].filename}`,
       title: req.body.title,
       caption: req.body.caption,
       hashtags,

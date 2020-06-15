@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import sharp from "sharp";
+
 import fs from "fs";
 import multer from "multer";
 import pubsub from "../PubSub";
@@ -36,10 +38,20 @@ router.post("/upload", upload, async (req, res) => {
       parseHashtags(req.body.caption)
     );
 
+    let img = sharp(req.files["image"][0].path);
+    const metaData = await img.metadata();
+
+    if (metaData.width > 856) {
+      img = await img.resize(856, 856);
+    }
+    img.toFile(
+      `public/img/${req.username}/thumb-${req.files["image"][0].filename}`
+    );
+
     const image = await Media.create({
       mediaType: IMAGE_MEDIA_TYPE_ID,
       username,
-      url: `http://localhost:5000/img/${req.username}/${req.files["image"][0].filename}`,
+      url: `http://localhost:5000/img/${req.username}/thumb-${req.files["image"][0].filename}`,
       title: req.body.title,
       caption: req.body.caption,
       hashtags,
@@ -55,7 +67,7 @@ router.post("/upload", upload, async (req, res) => {
 
     return res.send({ image: { _id: image._id } });
   } catch (error) {
-    return res.status(500).send({ error: "Something went wrong" + error });
+    return res.status(500).send({ error: "Something went wrong" });
   }
 });
 
@@ -78,7 +90,25 @@ const profUpload = multer({ storage: profStorage }).fields([
 router.post("/profile/upload", profUpload, async (req, res) => {
   try {
     const user = await User.findOne({ username: req.username });
-    user.profilePic = `http://localhost:5000/img/${req.username}/${req.files["image"][0].filename}`;
+
+    let img = sharp(req.files["image"][0].path);
+    const metaData = await img.metadata();
+
+    let small = await img.resize(96, 96);
+    small.toFile(
+      `public/img/${req.username}/small-thumb-${req.files["image"][0].filename}`
+    );
+
+    if (metaData.width > 856) {
+      img = await img.resize(856, 856);
+    }
+
+    img.toFile(
+      `public/img/${req.username}/thumb-${req.files["image"][0].filename}`
+    );
+
+    user.profilePic = `http://localhost:5000/img/${req.username}/thumb-${req.files["image"][0].filename}`;
+    user.smallPic = `http://localhost:5000/img/${req.username}/small-thumb-${req.files["image"][0].filename}`;
     await user.save();
 
     res.send({ user });
