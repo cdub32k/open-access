@@ -164,3 +164,7 @@ export function parseVideoTimestampsToLinks(str) {
     (match, h, m, s) => `<a onclick="vidJump(${h},${m},${s})">${match}</a>`
   );
 }
+
+export function printCentsToCurreny(cents) {
+  return "$" + (parseFloat(cents) / 100).toFixed(2);
+}

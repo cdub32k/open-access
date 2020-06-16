@@ -135,6 +135,7 @@ const typeDefs = gql`
   }
 
   type Charge {
+    _id: String
     amount: Int
     refunded: Boolean
     createdAt: Date
@@ -142,6 +143,7 @@ const typeDefs = gql`
   }
 
   type MoSub {
+    _id: String
     amount: Int
     terminated: Boolean
     terminatedAt: Date

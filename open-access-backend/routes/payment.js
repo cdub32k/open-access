@@ -105,9 +105,12 @@ router.delete("/subscription", async (req, res) => {
     const stripeSubObj = await stripe.subscriptions.retrieve(subId);
     await stripe.subscriptions.update(subId, { cancel_at_period_end: true });
     await sub.save();
-
     let user = await User.findOne({ username });
-    user.activeUntil = new Date(stripeSubObj.current_period_end);
+    let periodEnd = new Date(stripeSubObj.current_period_end * 1000);
+    let trialEnd = new Date(stripeSubObj.trial_end * 1000);
+
+    user.activeUntil = trialEnd > periodEnd ? trialEnd : periodEnd;
+
     await user.save();
 
     return res.status(200).send(true);

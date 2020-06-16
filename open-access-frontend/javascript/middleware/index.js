@@ -67,12 +67,16 @@ const GET_USER_INFO_QUERY = `
 const GET_USER_PAYMENT_INFO_QUERY = `
   query UserPaymentInfo($username: String!) {
     user(username: $username) {
+      active
+      activeUntil
+      
       charges {
         amount
         createdAt
-        stripePaymentIntentId
+        _id
       }
       subscriptions {
+        _id
         amount
         terminated
         terminatedAt
@@ -1135,6 +1139,7 @@ export default [
         })
         .catch((error) => next(ActionCreators.loadNewsfeedNotesError(error)));
     } else if (action.type == ActionTypes.LOAD_USER_PAYMENT_INFO_START) {
+      next(action);
       axios
         .post("/api", {
           query: GET_USER_PAYMENT_INFO_QUERY,

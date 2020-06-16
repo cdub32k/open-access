@@ -280,15 +280,26 @@ const userReducer = (state = initialState, action) => {
         ...state,
         notifications: [action.payload.notification, ...state.notifications],
       };
+
+    case ActionTypes.LOAD_USER_PAYMENT_INFO_START:
+      return { ...state, loading: true };
     case ActionTypes.LOAD_USER_PAYMENT_INFO_SUCCESS:
       return {
         ...state,
-        payment: { ...action.payload },
+        active: action.payload.active,
+        activeUntil: action.payload.activeUntil,
+        payment: {
+          ...state.payment,
+          charges: action.payload.charges,
+          subscriptions: action.payload.subscriptions,
+        },
+        loading: false,
       };
     case ActionTypes.LOAD_USER_PAYMENT_INFO_ERROR:
       return {
         ...state,
         error: action.error,
+        loading: false,
       };
     default:
       return { ...state };
