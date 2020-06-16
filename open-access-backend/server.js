@@ -48,7 +48,7 @@ const verifyTokenMiddleware = (req, res, next) => {
       if (!refreshToken) return res.status(403).send({ error: "Forbidden" });
 
       const { username } = jwt.decode(refreshToken);
-      let user = await User.findOne({ username });
+      let user = await User.findOne({ username }).lean();
       jwt.verify(
         refreshToken,
         process.env.JWT_REFRESH_SECRET + user.passwordHash,
@@ -58,7 +58,7 @@ const verifyTokenMiddleware = (req, res, next) => {
             { username, email: user.email, profilePic: user.profilePic },
             process.env.JWT_SECRET,
             {
-              expiresIn: "20s",
+              expiresIn: "10m",
             }
           );
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import CardActions from "@material-ui/core/CardActions";
 import IconButton from "@material-ui/core/IconButton";
@@ -46,4 +46,4 @@ const ContentActions = ({
   );
 };
 
-export default withStyles(styles)(ContentActions);
+export default withStyles(styles)(memo(ContentActions));

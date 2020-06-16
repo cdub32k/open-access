@@ -99,6 +99,11 @@ const Payment = ({
         <Typography className={classes.header} variant="h3">
           Payment Status
         </Typography>
+        {!active && (
+          <Typography variant="h5">
+            Your account became inactive on {date2str(activeUntil)}
+          </Typography>
+        )}
         {active && activeUntil && (
           <Typography variant="h5">
             Account will be active until {date2str(activeUntil)}
@@ -117,7 +122,7 @@ const Payment = ({
           <CircularProgress style={{ margin: "28px 0" }} disableShrink />
         )}
       </Grid>
-      {activeUntil && (
+      {(activeUntil || !active) && (
         <Grid className={classes.newPayment} item xs={12}>
           <Typography variant="h5">
             Make a new payment (1 month or subsribe)

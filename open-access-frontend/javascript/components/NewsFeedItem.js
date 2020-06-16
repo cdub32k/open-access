@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 
@@ -182,4 +182,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewsFeedItem);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(NewsFeedItem));

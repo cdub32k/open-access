@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { memo } from "react";
 import ReactPlayer from "react-player";
 
 import Avatar from "@material-ui/core/Avatar";
@@ -48,4 +48,4 @@ const PreviewImage = () => {
   );
 };
 
-export default PreviewImage;
+export default memo(PreviewImage);

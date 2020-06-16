@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Redirect } from "react-router-dom";
 
 import SearchIcon from "@material-ui/icons/Search";
@@ -81,4 +81,4 @@ const SearchBar = (props) => {
   );
 };
 
-export default SearchBar;
+export default memo(SearchBar);

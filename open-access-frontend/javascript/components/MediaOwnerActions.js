@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 import { Redirect } from "react-router-dom";
@@ -190,4 +190,4 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreators.deleteComment(type, _id, commentCount)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OwnerActions);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(OwnerActions));

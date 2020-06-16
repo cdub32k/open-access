@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { memo } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -71,4 +71,4 @@ const PreviewPlaceholder = () => {
   );
 };
 
-export default PreviewPlaceholder;
+export default memo(PreviewPlaceholder);

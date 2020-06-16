@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 import ReactPlayer from "react-player";
@@ -151,4 +151,4 @@ const mapStateToProps = (state) => ({
   subscription: state.video.subscription,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayer);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(VideoPlayer));

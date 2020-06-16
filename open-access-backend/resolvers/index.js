@@ -21,7 +21,16 @@ const resolvers = {
     user: async (parent, { username }, { req: { authorized } }, info) => {
       if (!authorized) return null;
 
-      const user = await DB.User.findOne({ username }).lean();
+      const user = await DB.User.findOne({ username });
+
+      if (
+        user.active &&
+        user.activeUntil &&
+        new Date(user.activeUntil) < new Date()
+      ) {
+        user.active = false;
+        await user.save();
+      }
 
       return user;
     },

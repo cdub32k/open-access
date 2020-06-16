@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
@@ -67,4 +67,4 @@ const CustomInput = ({ value, name, label, onChange, multiline, ...rest }) => {
   );
 };
 
-export default CustomInput;
+export default memo(CustomInput);

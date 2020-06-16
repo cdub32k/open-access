@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -124,4 +124,4 @@ const mapStateToProps = (state) => ({
   joinedAt: state.user.viewed.joinedAt,
 });
 
-export default connect(mapStateToProps)(ProfileHeader);
+export default connect(mapStateToProps)(memo(ProfileHeader));

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 
 import Typography from "@material-ui/core/Typography";
@@ -48,4 +48,4 @@ const MainLogo = (props) => {
   );
 };
 
-export default MainLogo;
+export default memo(MainLogo);

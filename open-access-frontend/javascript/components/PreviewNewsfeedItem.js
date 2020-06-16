@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
@@ -105,4 +105,4 @@ const PreviewNewsFeedItem = ({ type }) => {
   );
 };
 
-export default PreviewNewsFeedItem;
+export default memo(PreviewNewsFeedItem);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 import { Link } from "react-router-dom";
@@ -286,6 +286,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreators.dislikeComment(type, mediaId, commentId)),
 });
 
-Comment = connect(mapStateToProps, mapDispatchToProps)(Comment);
+Comment = connect(mapStateToProps, mapDispatchToProps)(memo(Comment));
 
 export default Comment;

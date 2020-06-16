@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -47,4 +47,4 @@ const CustomButton = ({ onClick, text, Icon, className, ...rest }) => {
   );
 };
 
-export default CustomButton;
+export default memo(CustomButton);

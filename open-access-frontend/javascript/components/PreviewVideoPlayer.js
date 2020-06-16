@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { memo } from "react";
 import ReactPlayer from "react-player";
 
 import Avatar from "@material-ui/core/Avatar";
@@ -57,4 +57,4 @@ const PreviewVideoPlayer = () => {
   );
 };
 
-export default PreviewVideoPlayer;
+export default memo(PreviewVideoPlayer);

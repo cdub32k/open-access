@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { ActionCreators } from "../actions";
 
@@ -59,7 +59,7 @@ const styles = (theme) => ({
   },
 });
 
-class Image_C extends Component {
+class Image_C extends PureComponent {
   componentDidMount() {
     this.props.subscribeToUpdates(this.props._id);
   }

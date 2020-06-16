@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, memo } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -272,4 +272,4 @@ const mapDispatchToProps = (dispatch) => ({
   markNotificationsRead: () =>
     dispatch(ActionCreators.markNotificationsReadStart()),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(SiteNav);
+export default connect(mapStateToProps, mapDispatchToProps)(memo(SiteNav));
